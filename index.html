@@ -151,6 +151,7 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 .gcard .gumore{font-size:12px}
 .section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:6px 0 14px;flex-wrap:wrap}
 .section-head h2{font-size:34px;color:var(--plum)}
+.bookprog{max-width:440px;margin-top:2px}.bookprog .progress{margin:6px 0 4px}.bookprog .progress i{background:linear-gradient(90deg,#f2a7c3,#e2c27d)}
 /* ---------- modal ---------- */
 .modal{position:fixed;inset:0;z-index:50;background:rgba(43,26,46,.45);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:14px;animation:fade .25s}
 .sheet{background:var(--card);border-radius:22px;max-width:920px;width:100%;max-height:calc(100vh - 28px);overflow:auto;box-shadow:0 30px 80px rgba(0,0,0,.3);position:relative}
@@ -1896,7 +1897,7 @@ function saveDraftToGallery(){const d=draftDesign();let rec=d.id&&GALLERY.find(x
   saveGallery();return rec;}
 /* ---------- encyclopedia ---------- */
 function screenBook(){const t=curTier();
-  app().innerHTML=`<section class="screen"><div class="section-head"><div><div class="opt-label">Gem encyclopedia</div><h2>${S.unlocked.length} of ${GEMS.length} gems discovered</h2></div>
+  app().innerHTML=`<section class="screen"><div class="section-head"><div><div class="opt-label">Gem encyclopedia</div><h2>${S.unlocked.length} of ${GEMS.length} gems discovered</h2>${bookProgressHTML()}</div>
     <div class="muted small">Tap a gem to read where it comes from. Locked gems unlock as you finish atelier levels.</div></div>
     <div class="booktools"><input type="search" id="bookQ" placeholder="Search gems, minerals, places or birth months (e.g. Brazil, July)" aria-label="Search the encyclopedia" autocomplete="off" value="${esc(BOOK_F.q)}">
       <div class="seg" id="bookSeg" role="group" aria-label="Show">${[['all','All'],['found','Discovered'],['locked','Locked'],['fav','♥ Favourites']].map(([v,l])=>`<button data-bf="${v}" class="${BOOK_F.show===v?'on':''}" aria-pressed="${BOOK_F.show===v}">${l}</button>`).join('')}</div>
@@ -1918,6 +1919,16 @@ function screenBook(){const t=curTier();
   $('#quizBtn').onclick=()=>{AudioFX.soft();openQuiz();};
   $$('#bookSeg button').forEach(b=>b.onclick=()=>{BOOK_F.show=b.dataset.bf;$$('#bookSeg button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',x===b);});apply();});
   apply();}
+/* encyclopedia: collection progress bar and where the next gems come from (levels or gems-placed milestones) */
+function bookNext(){const locked=GEMS.filter(g=>!S.unlocked.includes(g.id));
+  const lv=locked.filter(g=>msGemAt(g.id)==null&&unlockLevelOf(g.id)===S.level+1).length;
+  const ms=locked.map(g=>msGemAt(g.id)).filter(n=>n!=null&&n>(S.placed||0));const msN=ms.length?Math.min(...ms):null;
+  return{locked:locked.length,lv,msN,msCount:msN==null?0:ms.filter(n=>n===msN).length};}
+function bookProgressHTML(){const n=S.unlocked.length,pct=Math.round(n/GEMS.length*100),nx=bookNext();const parts=[];
+  if(nx.lv)parts.push(`finish <b>level ${S.level}</b> to discover ${nx.lv} gem${nx.lv===1?'':'s'}`);
+  if(nx.msN!=null){const left=nx.msN-(S.placed||0);parts.push(`place <b>${left.toLocaleString('en')} more gem${left===1?'':'s'}</b> (${nx.msN.toLocaleString('en')} in total) to discover ${nx.msCount}`);}
+  const hint=!nx.locked?'✨ You have discovered every gem in the atelier!':parts.length?'Next: '+parts.join(', or ')+'.':'';
+  return `<div class="bookprog"><div class="progress" role="progressbar" aria-label="Gems discovered" aria-valuemin="0" aria-valuemax="${GEMS.length}" aria-valuenow="${n}" aria-valuetext="${n} of ${GEMS.length} gems discovered, ${pct}%"><i style="width:${pct}%"></i></div><div class="small muted" id="bookNext"><b>${pct}%</b> of the collection${hint?' · '+hint:''}</div></div>`;}
 const BOOK_F={q:'',show:'all',sort:'rarity'};let BOOK_REFRESH=null;
 const BOOK_SORTS=[['rarity','Rarity'],['name','A–Z'],['hard','Hardest first'],['soft','Softest first'],['colour','Colour']];
 const hueKey=g=>g.c.s<20?1000+(100-g.c.l):g.c.h;
