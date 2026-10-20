@@ -87,6 +87,12 @@ main{max-width:1280px;margin:0 auto;padding:14px}
 .gemchip{position:relative;border:1px solid var(--line);background:#fff;border-radius:14px;padding:6px 4px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;line-height:1.1;text-align:center;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 .gemchip svg{width:42px;height:42px;pointer-events:none}
 .gemchip.sel{border-color:var(--gold);box-shadow:0 0 0 2px rgba(185,141,62,.35)}
+.palfind{display:flex;gap:6px;align-items:center;margin:0 0 8px}
+.palfind input[type=search]{font:inherit;font-size:13px;flex:1 1 auto;min-width:0;border:1px solid var(--line);border-radius:999px;padding:7px 12px;background:#fff}
+.palfav{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 10px;font-size:13px;color:#c26a8f;cursor:pointer}
+.palfav[aria-pressed="true"]{background:#c26a8f;color:#fff;border-color:#c26a8f}
+.gemchip[hidden]{display:none}
+.palempty{grid-column:1/-1;margin:4px 2px}
 .gemchip .info{position:absolute;top:2px;right:3px;width:18px;height:18px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:11px;line-height:16px;padding:0;color:var(--muted)}
 .tools{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
@@ -1603,10 +1609,21 @@ function gemEditor(stage,getList,h){
   return ed;
 }
 /* palette with tap-to-select and drag-to-place */
-function paletteHTML(sel){const t=curTier();return `<div class="palette">${GEMS_SORTED.filter(g=>S.unlocked.includes(g.id)).map(g=>`<div class="gemchip ${g.id===sel?'sel':''}" data-g="${g.id}" role="button" tabindex="0" title="${esc(g.name)}">${gemSVG(g,t)}<span>${esc(g.name.replace('Watermelon ','').replace(' Tourmaline',' Tourm.'))}</span><button class="info" data-info="${g.id}" aria-label="About ${esc(g.name)}">i</button></div>`).join('')}</div>`;}
+const PAL_F={q:'',fav:false};
+const palNorm=x=>String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function palMatch(g){const q=palNorm(PAL_F.q.trim());return (!PAL_F.fav||isFav(g.id))&&(!q||palNorm(g.name+' | '+g.family).includes(q));}
+function paletteHTML(sel){const t=curTier();const list=GEMS_SORTED.filter(g=>S.unlocked.includes(g.id));const finder=list.length>=10;if(!finder){PAL_F.q='';PAL_F.fav=false;}
+  const n=list.filter(palMatch).length;
+  return `${finder?`<div class="palfind"><input type="search" class="palq" placeholder="Find a gem…" aria-label="Find a gem in your palette by name or mineral" autocomplete="off" value="${esc(PAL_F.q)}"><button type="button" class="palfav" aria-pressed="${PAL_F.fav}" title="Show only your favourite gems" aria-label="Show only favourite gems">♥</button></div>`:''}<div class="palette">${list.map(g=>`<div class="gemchip ${g.id===sel?'sel':''}" data-g="${g.id}" role="button" tabindex="0" title="${esc(g.name)}"${palMatch(g)?'':' hidden'}>${gemSVG(g,t)}<span>${esc(g.name.replace('Watermelon ','').replace(' Tourmaline',' Tourm.'))}</span><button class="info" data-info="${g.id}" aria-label="About ${esc(g.name)}">i</button></div>`).join('')}<p class="palempty small muted" aria-live="polite"${n?' hidden':''}>${palEmptyMsg()}</p></div>`;}
+function palEmptyMsg(){return PAL_F.fav&&!S.favs.some(id=>S.unlocked.includes(id))?'No favourites yet. Tap the i on a gem, then ♡ Favourite.':'No gems match. Try another word.';}
+function palApply(root){let n=0;$$('.gemchip',root).forEach(c=>{c.hidden=!palMatch(GEM[c.dataset.g]);if(!c.hidden)n++;});const e=$('.palempty',root);if(e){e.hidden=!!n;e.textContent=palEmptyMsg();}}
 function bindPalette(root,stage,onSelect,onDrop){
-  root.addEventListener('click',e=>{const b=e.target.closest('[data-info]');if(b){e.stopPropagation();openInfo(b.dataset.info);}});
-  root.addEventListener('keydown',e=>{const c=e.target.closest('.gemchip');if(c&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onSelect(c.dataset.g);}});
+  root.addEventListener('click',e=>{const b=e.target.closest('[data-info]');if(b){e.stopPropagation();openInfo(b.dataset.info);return;}
+    const f=e.target.closest('.palfav');if(f){PAL_F.fav=!PAL_F.fav;f.setAttribute('aria-pressed',PAL_F.fav);AudioFX.soft();palApply(root);}});
+  root.addEventListener('input',e=>{if(e.target.classList.contains('palq')){PAL_F.q=e.target.value;palApply(root);}});
+  root.addEventListener('keydown',e=>{if(e.target.classList.contains('palq')){if(e.key==='Escape'&&e.target.value){e.preventDefault();e.stopPropagation();e.target.value='';PAL_F.q='';palApply(root);}
+      else if(e.key==='Enter'){e.preventDefault();const first=$$('.gemchip',root).find(c=>!c.hidden);if(first)onSelect(first.dataset.g);}return;}
+    const c=e.target.closest('.gemchip');if(c&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onSelect(c.dataset.g);}});
   root.addEventListener('pointerdown',e=>{const chip=e.target.closest('.gemchip');if(!chip||e.target.closest('[data-info]'))return;
     const gid=chip.dataset.g,sx=e.clientX,sy=e.clientY;let ghost=null;
     const move=ev=>{if(!ghost){if(Math.hypot(ev.clientX-sx,ev.clientY-sy)<7)return;ghost=document.createElement('div');ghost.className='ghost';ghost.innerHTML=gemSVG(GEM[gid],curTier());document.body.appendChild(ghost);onSelect(gid,true);}
@@ -1656,6 +1673,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li>Each short level unlocks <b>new, rarer gems</b>. <b>Every gem you place</b> (in levels or your own designs) counts toward milestones (50, 100, 200, 350, 500, 750, 1,000…). Each one upgrades your gems’ realism or unlocks new cute touches: ruffles, hearts, stars, bows and sparkle. Removing gems never lowers your total.</li>
    <li><b>Removing gems:</b> tap a placed gem (or long-press / right-click it), use the 🧽 eraser to drag over several, or Clear all. Undo (or <b>Ctrl+Z</b> / <b>⌘Z</b> on a keyboard) brings them back, and Redo (<b>Ctrl+Shift+Z</b> / <b>⌘⇧Z</b> or <b>Ctrl+Y</b>) puts back what you undid.</li>
    <li><b>Mirror:</b> in the designer, turn on 🪞 Mirror to set every gem on both sides of the dress at once (one Undo removes the pair).</li>
+   <li><b>Finding gems:</b> once you have ten or more, type in <b>Find a gem…</b> above the palette (a name or mineral, like “beryl”) or tap <b>♥</b> to show just your favourites; press Enter to pick the first match.</li>
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
