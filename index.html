@@ -76,6 +76,8 @@ main{max-width:1280px;margin:0 auto;padding:14px}
 .stage-hud{position:absolute;left:12px;right:12px;top:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
 .stage-hud > *{pointer-events:auto}
 .tag{background:rgba(255,253,249,.88);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px;backdrop-filter:blur(6px)}
+.mirrortag{font:inherit;font-size:13px;color:inherit;cursor:pointer;transition:background .2s,color .2s}
+.mirrortag[aria-pressed="true"]{background:var(--plum);color:#fff;border-color:var(--plum)}
 .progress{height:8px;background:#efe3d8;border-radius:99px;overflow:hidden;margin:8px 0 4px}
 .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e2c27d,#b98d3e);border-radius:99px;transition:width .4s}
 .muted{color:var(--muted)} .small{font-size:13px}
@@ -1480,7 +1482,7 @@ function showInfoQueue(ids,done){if(!ids.length){done&&done();return;}openInfo(i
 function createStage(host,dress,opts){
   host.innerHTML=`<div class="stagewrap"><svg class="stage" viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg"><defs><g></g></defs>
     <rect width="400" height="640" fill="url(#stage-bg)"/><ellipse cx="200" cy="628" rx="170" ry="14" fill="url(#stage-floor)"/>
-    <g class="dress"></g><g class="guides" fill="none" stroke="none"></g><g class="spots"></g><g class="gems"></g><g class="fx"></g></svg><div class="stage-hud"></div></div>`;
+    <g class="dress"></g><g class="guides" fill="none" stroke="none"></g><line class="mirror-line" x1="200" y1="70" x2="200" y2="610" stroke="#b98d3e" stroke-width="1.2" stroke-dasharray="4 4" opacity="0" pointer-events="none"/><g class="spots"></g><g class="gems"></g><g class="fx"></g></svg><div class="stage-hud"></div></div>`;
   const wrap=host.firstChild, svg=$('svg',wrap), defs=$('defs',svg);
   const st={wrap,svg,hud:$('.stage-hud',wrap),dress:null,G:null,syms:new Set(),spots:[],onTap:null};
   st.setDress=d=>{st.dress=d;const {G,markup}=dressBody(d,'st');st.G=G;
@@ -1505,6 +1507,7 @@ function createStage(host,dress,opts){
   let down=null,lp=null,erasingNow=false,lastLP=0;st.erasing=false;
   const P2=(x,y)=>st.toSvg(x,y);
   st.setErasing=on=>{st.erasing=on;wrap.classList.toggle('erasing',on);};
+  st.setMirror=on=>{const l=$('.mirror-line',svg);if(l)l.setAttribute('opacity',on?'.55':'0');};
   svg.addEventListener('pointerdown',e=>{if(e.button===2)return;down={x:e.clientX,y:e.clientY,t:Date.now()};clearTimeout(lp);
     if(st.erasing){erasingNow=true;try{svg.setPointerCapture(e.pointerId);}catch(_){}const p=P2(e.clientX,e.clientY);st.onErase&&st.onErase(p,'start');e.preventDefault();return;}
     lp=setTimeout(()=>{if(!down)return;const p=P2(down.x,down.y);down=null;lastLP=Date.now();p&&st.onLongPress&&st.onLongPress(p);},560);});
@@ -1522,6 +1525,7 @@ function gemEditor(stage,getList,h){
   const hist=[];let group=null;
   const ed={hist,
     pushAdd(q){hist.push({a:'add',q});if(hist.length>300)hist.shift();},
+    pushAdds(qs){hist.push({a:'adds',qs});if(hist.length>300)hist.shift();},
     hit(p,pad){const l=getList();let bi=-1,bd=1e9;for(let i=l.length-1;i>=0;i--){const q=l[i];const d=Math.hypot(q.x-p.x,q.y-p.y)-q.s/2;if(d<bd){bd=d;bi=i;}}return bi>=0&&bd<=pad?bi:-1;},
     hitCenter(p){const l=getList();for(let i=l.length-1;i>=0;i--){const q=l[i];if(Math.hypot(q.x-p.x,q.y-p.y)<=Math.max(4,q.s*.38))return i;}return -1;},
     remove(i){const l=getList();const q=l.splice(i,1)[0];h.onRemove&&h.onRemove(q);const it={q,i};if(group)group.push(it);else hist.push({a:'del',items:[it]});stage.renderGems(l);h.changed();return q;},
@@ -1533,6 +1537,7 @@ function gemEditor(stage,getList,h){
     undo(){const l=getList();const x=hist.pop();
       if(!x){const q=l.pop();if(!q)return false;h.onRemove&&h.onRemove(q);}
       else if(x.a==='add'){const i=l.lastIndexOf(x.q);if(i>=0){l.splice(i,1);h.onRemove&&h.onRemove(x.q);}}
+      else if(x.a==='adds'){x.qs.forEach(q=>{const i=l.lastIndexOf(q);if(i>=0){l.splice(i,1);h.onRemove&&h.onRemove(q);}});}
       else for(let k=x.items.length-1;k>=0;k--){const it=x.items[k];l.splice(Math.min(it.i,l.length),0,it.q);h.onRestore&&h.onRestore(it.q);}
       stage.renderGems(l);h.changed();return true;}};
   stage.onErase=(p,ph)=>ed.eraseAt(p,ph);
@@ -1589,6 +1594,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li>In <b>Atelier levels</b>, fill every glowing marked spot to finish the design. Gems set off the marks still earn a few sparkle points.</li>
    <li>Each short level unlocks <b>new, rarer gems</b>. <b>Every gem you place</b> (in levels or your own designs) counts toward milestones (50, 100, 200, 350, 500, 750, 1,000…). Each one upgrades your gems’ realism or unlocks new cute touches: ruffles, hearts, stars, bows and sparkle. Removing gems never lowers your total.</li>
    <li><b>Removing gems:</b> tap a placed gem (or long-press / right-click it), use the 🧽 eraser to drag over several, or Clear all. Undo (or <b>Ctrl+Z</b> / <b>⌘Z</b> on a keyboard) brings them back.</li>
+   <li><b>Mirror:</b> in the designer, turn on 🪞 Mirror to set every gem on both sides of the dress at once (one Undo removes the pair).</li>
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
@@ -1682,7 +1688,8 @@ function screenDesign(arg){
   const stage=createStage($('#stageHost'),D.dress);stage.renderGems(D.gems);
   const ed=gemEditor(stage,()=>D.gems,{changed:()=>persist()});UNDO_FN=()=>ed.undo();
   ON_MS=()=>renderTab();
-  const info=()=>{$('#dinfo').textContent=`${D.gems.length} gem${D.gems.length===1?'':'s'} set${D.id?' · saved in gallery':''}`;stage.hud.innerHTML=`<span class="tag">${mode==='erase'?'🧽 Eraser':'💎 '+esc(GEM[sel].name)+(cut!=='natural'?' · '+CUTS.find(c=>c[0]===cut)[1]:'')}</span><span class="tag">${D.gems.length} gems</span>`;};
+  const info=()=>{$('#dinfo').textContent=`${D.gems.length} gem${D.gems.length===1?'':'s'} set${D.id?' · saved in gallery':''}`;stage.hud.innerHTML=`<span class="tag">${mode==='erase'?'🧽 Eraser':'💎 '+esc(GEM[sel].name)+(cut!=='natural'?' · '+CUTS.find(c=>c[0]===cut)[1]:'')}</span><button class="tag mirrortag" id="mirrorBtn" aria-pressed="${S.mirror?'true':'false'}" title="Mirror: each gem you set is also set on the other side of the dress">🪞 Mirror ${S.mirror?'on':'off'}</button><span class="tag">${D.gems.length} gems</span>`;
+    $('#mirrorBtn').onclick=()=>{S.mirror=!S.mirror;stage.setMirror(S.mirror);AudioFX.soft();save();info();toast(S.mirror?'🪞 Mirror on: gems are set on both sides':'Mirror off');};};
   const persist=()=>{D.sel=sel;save();info();};
   const opt=(key,label)=>`<div class="opt-label">${label}</div><div class="chips">${DRESS_OPTS[key].map(([v,l])=>`<button class="chip ${D.dress[key]===v?'on':''}" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
   const renderTab=()=>{$$('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
@@ -1731,9 +1738,11 @@ function screenDesign(arg){
     if(mode==='erase'){ed.eraseAt(p,'start');ed.eraseAt(null,'end');return;}
     if(!drop){const hc=ed.hitCenter(p);if(hc>=0){ed.removeWithToast(hc);return;}}
     if(!stage.onFabric(p.x,p.y)){toast('Set your gems on the dress fabric');return;}
-    const q={g:sel,x:+p.x.toFixed(1),y:+p.y.toFixed(1),s:size,t:curTier()};if(cut!=='natural'&&cutsFor(GEM[sel]).includes(cut))q.c=cut;D.gems.push(q);ed.pushAdd(q);stage.addGem(q);AudioFX.chime();countPlaced(1);
-    const pts=Math.max(1,Math.round(GEM[sel].value*.2));S.points+=pts;stage.float(cx,cy,'+'+pts);hud();persist();};
-  stage.onTap=place;
+    const q={g:sel,x:+p.x.toFixed(1),y:+p.y.toFixed(1),s:size,t:curTier()};if(cut!=='natural'&&cutsFor(GEM[sel]).includes(cut))q.c=cut;
+    const qs=[q];if(S.mirror&&Math.abs(q.x-200)>Math.max(3,size*.45)){const mx=+(400-q.x).toFixed(1);if(stage.onFabric(mx,q.y))qs.push(Object.assign({},q,{x:mx}));}
+    qs.forEach(m=>{D.gems.push(m);stage.addGem(m);});if(qs.length>1)ed.pushAdds(qs);else ed.pushAdd(q);AudioFX.chime();countPlaced(qs.length);
+    const pts=Math.max(1,Math.round(GEM[sel].value*.2))*qs.length;S.points+=pts;stage.float(cx,cy,'+'+pts);hud();persist();};
+  stage.onTap=place;stage.setMirror(!!S.mirror);
   $$('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderTab();});
   $('#dname').oninput=e=>{D.name=e.target.value;persist();};
   $('#saveBtn').onclick=()=>{saveDraftToGallery();toast('Saved to your gallery ✨');info();};
