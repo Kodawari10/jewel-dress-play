@@ -46,6 +46,7 @@ header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:
 .btn.primary{background:linear-gradient(135deg,#3b2440,#6b3d63);color:#fff;border:none}
 .btn.gold{background:linear-gradient(135deg,#d9b56c,#b98d3e);color:#fff;border:none}
 .btn.small{padding:7px 13px;font-size:13px}
+.btn.surprise{display:block;width:100%;margin:2px 0 10px}
 .btn:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none}
 main{max-width:1280px;margin:0 auto;padding:14px}
 .screen{animation:fade .35s ease}
@@ -1404,6 +1405,16 @@ function msIndex(n){let i=0;while(msAt(i+1).n<=n)i++;return i;}
 const perkLabel=pk=>{const [k,v]=pk.split(':');const o=EXTRA_OPTS[k].find(x=>x[0]===v);return o?o[1]:v;};
 function extraUnlockAt(k,v){if(v==='none'||(k==='bow'&&v==='waist')||(k==='trim'&&v==='pearls'))return 0;const m=MILESTONES.find(m=>m.perks.includes(k+':'+v));return m?m.n:0;}
 const extraUnlocked=(k,v)=>extraUnlockAt(k,v)<=(S.placed||0);
+/* 🎲 Surprise me: a random but coordinated dress (only cute touches already unlocked); gems are left untouched */
+const SURPRISE_FABS=['satin','charmeuse','chiffon','organza','tulle','chantilly','velvet','brocade','damask','taffeta','crepe','georgette','jersey','sequin','lame'];
+function surpriseDress(d,r){r=r||Math.random;const pick=a=>a[Math.min(a.length-1,Math.floor(r()*a.length))];
+  ['silhouette','neckline','sleeves','length'].forEach(k=>{d[k]=pick(DRESS_OPTS[k])[0];});
+  const E=d.extras=Object.assign(DEFAULT_EXTRAS(),d.extras||{});
+  Object.keys(EXTRA_OPTS).forEach(k=>{const ok=EXTRA_OPTS[k].filter(([v])=>v!=='none'&&extraUnlockAt(k,v)<=(S.placed||0));E[k]=ok.length&&r()<.6?pick(ok)[0]:'none';});
+  E.bc=r()<.4?'auto':pick(RIBBONS.slice(1));
+  const c1=pick(FABRIC_COLORS),c2=r()<.65?c1:pick(FABRIC_COLORS),f1=pick(SURPRISE_FABS),f2=r()<.5?f1:pick(SURPRISE_FABS);
+  d.parts={bodice:{f:f1,c:c1},skirt:{f:f2,c:c2},sleeves:{f:f1,c:c1},overlay:r()<.5?{f:'none',c:'#ffffff'}:{f:pick(OVERLAYS.slice(1)),c:r()<.6?c2:'#fbf7ef'}};
+  return d;}
 function styledDress(d){const c=normDress(JSON.parse(JSON.stringify(d)));const E=c.extras;
   Object.keys(EXTRA_OPTS).forEach(k=>{const opts=EXTRA_OPTS[k].map(o=>o[0]);let i=opts.indexOf(E[k]);if(i<0)i=0;while(i>0&&!extraUnlocked(k,opts[i]))i--;E[k]=opts[i];});return c;}
 const SKEY='jewel-dress-v1', GKEY='jewel-dress-gallery-v1';
@@ -1618,7 +1629,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>Removing gems:</b> tap a placed gem (or long-press / right-click it), use the 🧽 eraser to drag over several, or Clear all. Undo (or <b>Ctrl+Z</b> / <b>⌘Z</b> on a keyboard) brings them back.</li>
    <li><b>Mirror:</b> in the designer, turn on 🪞 Mirror to set every gem on both sides of the dress at once (one Undo removes the pair).</li>
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined.</li>
-   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG.</li></ol>
+   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${TIERS.map((t,i)=>`<div style="text-align:center;width:110px"><div style="width:70px;height:70px;margin:auto">${gemSVG(GEM.diamond,i)}</div><b style="font-family:var(--serif);font-size:17px">${t.name}</b><div class="small muted">${MILESTONES.find(m=>m.tier===i).n.toLocaleString('en')}+ gems</div></div>`).join('')}</div></div>`);}
 /* ---------- level play ---------- */
@@ -1719,7 +1730,7 @@ function screenDesign(arg){
     if(tab==='design'){const PP=D.dress.parts,cp=PP[part];const flist=part==='overlay'?OVERLAYS:FAB_ORDER;
       const EX=D.dress.extras;
       const xopt=(k,label)=>`<div class="opt-label">${label}</div><div class="chips">${EXTRA_OPTS[k].map(([v,l])=>{const at=extraUnlockAt(k,v);const lk=at>(S.placed||0);return `<button class="chip ${EX[k]===v?'on':''} ${lk?'locked-chip':''}" data-x="${k}" data-xv="${v}" ${lk?`data-at="${at}" title="Unlocks at ${at} gems placed"`:''}>${lk?'🔒 ':''}${l}</button>`;}).join('')}</div>`;
-      tb.innerHTML=opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length')+
+      tb.innerHTML=`<button class="btn small surprise" id="surpriseBtn" title="Random dress style, fabrics and colours (your gems stay)">🎲 Surprise me</button>`+opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length')+
       `<div class="opt-label" style="margin-top:6px;color:#c26a8f">♡ Cute touches</div>`+xopt('bow','Bows')+xopt('ruffle','Ruffles')+xopt('trim','Hem trim')+xopt('sparkle','Sparkle')+
       `<div class="opt-label">Ribbon &amp; trim colour</div><div class="ribbons">${RIBBONS.map(c=>`<button class="sw ${c==='auto'?'auto':''} ${(EX.bc||'auto')===c?'on':''}" data-bc="${c}" ${c==='auto'?'title="Match the dress"':`style="background:${c}"`} aria-label="Ribbon ${c}"></button>`).join('')}</div>`+
       `<div class="opt-label">Fabric for…</div><div class="seg" id="partSeg">${DRESS_PARTS.map(([k,l])=>`<button data-part="${k}" class="${part===k?'on':''}">${l}</button>`).join('')}</div>
@@ -1738,6 +1749,8 @@ function screenDesign(arg){
       $('#cpick').onchange=()=>renderTab();
       const sa=$('#sameAll');sa&&(sa.onclick=()=>{['bodice','skirt','sleeves'].forEach(k=>PP[k]={f:cp.f,c:cp.c});stage.setDress(D.dress);persist();toast(FABRICS[cp.f].name+' everywhere');});
       $('#toGems').onclick=()=>{tab='gems';renderTab();};
+      $('#surpriseBtn').onclick=()=>{const prev=JSON.parse(JSON.stringify(D.dress));surpriseDress(D.dress);stage.setDress(D.dress);AudioFX.chime();persist();renderTab();
+        toastAct('🎲 A surprise design! Your gems stay put','Undo',()=>{D.dress=prev;stage.setDress(D.dress);AudioFX.soft();persist();if(SCREEN==='design'&&tab==='design')renderTab();},5000);};
     }else{
       const cuts=cutsFor(GEM[sel]);if(!cuts.includes(cut))cut='natural';
       tb.innerHTML=`<div class="opt-label">Cut</div><div class="seg cutseg" id="cutSeg">${CUTS.filter(c=>cuts.includes(c[0])).map(([v,l])=>`<button data-cut="${v}" class="${cut===v?'on':''}" title="${l}">${gemSVG(GEM[sel],curTier(),'cutic',v)}<span>${v==='natural'?'Classic':l}</span></button>`).join('')}</div>
