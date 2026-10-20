@@ -1,5 +1,5 @@
 /* Offline cache for Jewel Dress */
-const CACHE = 'jewel-dress-v1';
+const CACHE = 'jewel-dress-v2';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png',
   './js/starknet-config.js', './js/starknet-abi.js', './js/starknet.js', './js/vendor/get-starknet-core.js', './js/vendor/starkzap.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });

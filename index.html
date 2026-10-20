@@ -72,7 +72,7 @@ main{max-width:1280px;margin:0 auto;padding:14px}
 .progress{height:8px;background:#efe3d8;border-radius:99px;overflow:hidden;margin:8px 0 4px}
 .progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e2c27d,#b98d3e);border-radius:99px;transition:width .4s}
 .muted{color:var(--muted)} .small{font-size:13px}
-.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px;max-height:min(52vh,480px);overflow-y:auto;padding:2px 4px 2px 2px;overscroll-behavior:contain;scrollbar-width:thin}
 .gemchip{position:relative;border:1px solid var(--line);background:#fff;border-radius:14px;padding:6px 4px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;line-height:1.1;text-align:center;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
 .gemchip svg{width:42px;height:42px;pointer-events:none}
 .gemchip.sel{border-color:var(--gold);box-shadow:0 0 0 2px rgba(185,141,62,.35)}
@@ -82,6 +82,14 @@ main{max-width:1280px;margin:0 auto;padding:14px}
 .seg button{border:none;background:none;padding:7px 11px;font-size:13px}
 .seg button.on{background:var(--plum);color:#fff}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+#partSeg{display:flex;margin:4px 0 8px}#partSeg button{flex:1;padding:7px 4px}
+.fabchips .chip{font-size:12px;padding:5px 9px}
+.fabinfo{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;margin:0 0 12px}
+.fabinfo .fabsw{width:76px;height:38px;flex:none;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.fabinfo p{margin:3px 0 0;line-height:1.35}
+.cutseg{display:flex;flex-wrap:wrap;border-radius:14px;margin:4px 0 10px}
+.cutseg button{display:flex;flex-direction:column;align-items:center;padding:5px 6px;font-size:10.5px;min-width:52px}
+.cutseg .cutic{width:28px;height:28px}
 .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13px}
 .chip.on{background:var(--plum);border-color:var(--plum);color:#fff}
 .opt-label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-top:4px}
@@ -146,7 +154,7 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
   .infocard{grid-template-columns:1fr}.infocard .gemside{border-radius:22px 22px 0 0}.infocard .gemside svg{width:170px;height:170px}
   .kv{grid-template-columns:1fr}.kv dt{padding-top:6px}
   .brand small{display:none}.pill.hide-m{display:none}
-  .palette{grid-template-columns:repeat(auto-fill,minmax(58px,1fr))}
+  .palette{grid-template-columns:repeat(auto-fill,minmax(58px,1fr));max-height:300px}
 }
 </style>
 </head>
@@ -216,13 +224,13 @@ const GEMS = [
   mohs:3, mohsTxt:'2.5–4.5',
   fact:'Pearls are the only classic gems made by a living animal. Almost all pearls today are cultured.',
   src:[{n:'Persian Gulf (historic natural pearls)',lat:26.2,lon:50.6},{n:'Japan (Akoya cultured pearls)',lat:34.3,lon:136.8},{n:'French Polynesia (Tahitian pearls)',lat:-17.6,lon:-149.4},{n:'NW Australia (South Sea pearls)',lat:-17.9,lon:122.2},{n:'Indonesia & the Philippines',lat:-2.0,lon:121.0},{n:'China (freshwater pearls)',lat:29.5,lon:120.0}]},
- {id:'topaz', name:'Topaz', cut:'pear', c:{h:28,s:82,l:58}, value:30,
+ {id:'topaz', name:'Blue Topaz', cut:'pear', c:{h:198,s:70,l:62}, value:22,
   family:'Topaz (aluminium fluorosilicate)',
   ety:'Possibly from Topazios, an island in the Red Sea named by the ancient Greeks. Ironically that island’s green stone was probably peridot.',
-  color:'Pure topaz is colourless. Golden-orange "imperial" topaz owes its pink-red tones to chromium; most blue topaz is treated by irradiation and heat.',
+  color:'Pure topaz is colourless. Natural blue topaz is usually pale; nearly all vivid blue topaz is colourless topaz treated by irradiation and heat.',
   mohs:8, mohsTxt:'8',
-  fact:'Ouro Preto in Brazil is famous for the warm golden-orange "imperial topaz".',
-  src:[{n:'Ouro Preto, Minas Gerais, Brazil',lat:-20.4,lon:-43.5},{n:'Katlang, Pakistan (pink topaz)',lat:34.3,lon:72.1},{n:'Ural Mountains, Russia',lat:58.0,lon:60.5},{n:'Sri Lanka',lat:6.8,lon:80.4},{n:'Nigeria',lat:9.5,lon:8.5}]},
+  fact:'Blue topaz is the state gem of Texas, where natural blue topaz is found in Mason County.',
+  src:[{n:'Minas Gerais, Brazil',lat:-18.0,lon:-42.5},{n:'Sri Lanka',lat:6.8,lon:80.4},{n:'Nigeria',lat:9.5,lon:8.5},{n:'Mason County, Texas, USA',lat:30.7,lon:-99.2},{n:'Ural Mountains, Russia',lat:58.0,lon:60.5}]},
  {id:'aquamarine', name:'Aquamarine', cut:'emerald', c:{h:192,s:55,l:68}, value:30,
   family:'Beryl (beryllium aluminium silicate)',
   ety:'From the Latin aqua marina, "sea water".',
@@ -328,10 +336,223 @@ const GEMS = [
   mohs:10, mohsTxt:'10',
   fact:'Most diamonds formed 150–250 km deep, over a billion years ago, and reached the surface in kimberlite volcanic pipes.',
   src:[{n:'Botswana (Jwaneng, Orapa)',lat:-23.5,lon:25.0},{n:'Yakutia, Siberia, Russia',lat:62.5,lon:114.0},{n:'Northwest Territories, Canada',lat:64.7,lon:-110.6},{n:'Kimberley, South Africa',lat:-28.7,lon:24.8},{n:'DR Congo (Mbuji-Mayi)',lat:-6.1,lon:23.6},{n:'Angola',lat:-9.0,lon:20.4},{n:'Argyle, Western Australia (pink diamonds, closed 2020)',lat:-16.7,lon:128.4}]},
+ {id:'smokyquartz', name:'Smoky Quartz', cut:'emerald', c:{h:30,s:28,l:36}, value:12,
+  family:'Quartz (silicon dioxide, SiO₂)',
+  ety:'Named for its smoky brown to grey colour. In Scotland it is called cairngorm, after the Cairngorm Mountains.',
+  color:'Brown to grey from natural radiation in the rock acting on traces of aluminium in the quartz.',
+  mohs:7, mohsTxt:'7',
+  fact:'Cairngorm, the smoky quartz of the Scottish Highlands, is regarded as Scotland’s national gem.',
+  src:[{n:'Swiss Alps',lat:46.6,lon:8.6},{n:'Cairngorm Mountains, Scotland',lat:57.1,lon:-3.6},{n:'Pikes Peak, Colorado, USA',lat:38.8,lon:-105.0},{n:'Minas Gerais, Brazil',lat:-18.0,lon:-43.5},{n:'Madagascar',lat:-19.0,lon:47.0}]},
+ {id:'rosequartz', name:'Rose Quartz', cut:'cabochon', fx:'glow', c:{h:350,s:55,l:82}, value:12,
+  family:'Quartz (silicon dioxide, SiO₂)',
+  ety:'Named for its soft rose-pink colour.',
+  color:'Pink from microscopic fibres of a dumortierite-like mineral inside the quartz, which also make it milky rather than clear.',
+  mohs:7, mohsTxt:'7',
+  fact:'Rose quartz usually grows as large masses rather than crystals, so it is mostly polished into cabochons, beads and carvings.',
+  src:[{n:'Minas Gerais, Brazil',lat:-17.8,lon:-41.5},{n:'Madagascar',lat:-20.3,lon:46.6},{n:'Black Hills, South Dakota, USA',lat:43.9,lon:-103.5}]},
+ {id:'onyx', name:'Black Onyx', cut:'cabochon', fx:'glass', c:{h:260,s:8,l:9}, value:16,
+  family:'Chalcedony (microcrystalline quartz)',
+  ety:'From the Greek ónyx, "fingernail" or "claw".',
+  color:'True onyx is chalcedony with straight, parallel bands. Most uniformly black onyx in jewellery is chalcedony that has been dyed.',
+  mohs:6.75, mohsTxt:'6.5–7',
+  fact:'Banded onyx has been carved into cameos since ancient Rome, using the contrast between its light and dark layers.',
+  src:[{n:'Rio Grande do Sul, Brazil',lat:-29.7,lon:-52.4},{n:'Uruguay',lat:-30.9,lon:-55.5},{n:'Gujarat, India',lat:22.3,lon:70.8}]},
+ {id:'carnelian', name:'Carnelian', cut:'cabochon', fx:'glow', c:{h:16,s:78,l:46}, value:16,
+  family:'Chalcedony (microcrystalline quartz)',
+  ety:'Probably from the Latin cornum, the cornel cherry, whose translucent red fruit resembles the stone.',
+  color:'Orange to red from iron oxides spread through the chalcedony.',
+  mohs:6.75, mohsTxt:'6.5–7',
+  fact:'Carnelian beads from India were traded to Mesopotamia more than 4,000 years ago, and Romans carved it into signet rings.',
+  src:[{n:'Gujarat, India',lat:21.6,lon:73.0},{n:'Rio Grande do Sul, Brazil',lat:-29.5,lon:-52.0},{n:'Uruguay',lat:-30.5,lon:-56.5}]},
+ {id:'aventurine', name:'Green Aventurine', cut:'cabochon', fx:'glitter', glit:'#d9f7e4', c:{h:140,s:40,l:42}, value:18,
+  family:'Quartzite (quartz rock) with fuchsite mica',
+  ety:'From the Italian a ventura, "by chance", after aventurine glass, a sparkling glass that Venetian glassmakers discovered by accident.',
+  color:'Green from tiny flakes of fuchsite, a chromium-bearing mica, which also make it glitter (aventurescence).',
+  mohs:6.75, mohsTxt:'6.5–7',
+  fact:'The shimmering effect of reflective platelets inside a stone is called "aventurescence", named after this stone.',
+  src:[{n:'India',lat:24.0,lon:79.0},{n:'Minas Gerais, Brazil',lat:-18.5,lon:-44.0}]},
+ {id:'hematite', name:'Hematite', cut:'cabochon', fx:'metal', c:{h:220,s:8,l:30}, value:18,
+  family:'Iron oxide (Fe₂O₃)',
+  ety:'From the Greek haima, "blood": when powdered or scratched on unglazed porcelain it leaves a blood-red streak.',
+  color:'Metallic silver-grey to black; iron is part of its formula. Its powder is red.',
+  mohs:5.75, mohsTxt:'5–6.5',
+  fact:'Hematite is one of the world’s main iron ores, and red ochre (powdered hematite) was used in prehistoric cave paintings. Much "hematite" jewellery today is a synthetic look-alike.',
+  src:[{n:'Iron Quadrangle, Minas Gerais, Brazil',lat:-20.1,lon:-44.0},{n:'Cumbria, England',lat:54.5,lon:-3.4},{n:'Pilbara, Western Australia',lat:-22.5,lon:118.5}]},
+ {id:'obsidian', name:'Obsidian', cut:'cabochon', fx:'glass', c:{h:250,s:10,l:10}, value:18,
+  family:'Volcanic glass (not a mineral: it has no crystal structure)',
+  ety:'From the Latin obsidianus: Pliny the Elder wrote that a Roman named Obsius found a similar stone in Ethiopia.',
+  color:'Black from tiny crystals of magnetite and other iron-bearing minerals in the glass; some show a gold or rainbow sheen.',
+  mohs:5.25, mohsTxt:'5–5.5',
+  fact:'It forms when lava cools too fast to crystallise. A freshly broken obsidian edge can be sharper than a steel scalpel.',
+  src:[{n:'Hidalgo & Jalisco, Mexico',lat:20.1,lon:-98.6},{n:'Glass Buttes, Oregon, USA',lat:43.55,lon:-120.07},{n:'Obsidian Cliff, Yellowstone, USA',lat:44.75,lon:-110.73},{n:'Armenia',lat:40.3,lon:44.6},{n:'Lipari, Aeolian Islands, Italy',lat:38.48,lon:14.95},{n:'Iceland',lat:64.0,lon:-19.0}]},
+ {id:'sodalite', name:'Sodalite', cut:'cabochon', fx:'veins', vein:'rgba(255,255,255,.75)', c:{h:226,s:60,l:36}, value:22,
+  family:'Sodium aluminium silicate with chlorine (feldspathoid)',
+  ety:'Named for its sodium content.',
+  color:'Royal blue, often streaked with white veins of calcite. It resembles lapis lazuli but rarely has golden pyrite flecks.',
+  mohs:5.75, mohsTxt:'5.5–6',
+  fact:'Sodalite was first described in 1811 from rocks in Greenland.',
+  src:[{n:'Bancroft, Ontario, Canada',lat:45.06,lon:-77.85},{n:'Bahia, Brazil',lat:-15.5,lon:-39.5},{n:'Namibia',lat:-17.2,lon:13.5},{n:'Ilímaussaq, Greenland',lat:60.9,lon:-45.9}]},
+ {id:'chalcedony', name:'Blue Chalcedony', cut:'cabochon', fx:'glow', c:{h:215,s:30,l:76}, value:22,
+  family:'Chalcedony (microcrystalline quartz)',
+  ety:'Probably named after Chalcedon, an ancient Greek town on the Bosphorus, today part of Istanbul.',
+  color:'A soft, milky lavender-blue glow from light scattering in its fine fibrous structure.',
+  mohs:6.75, mohsTxt:'6.5–7',
+  fact:'Agate, onyx and carnelian are all forms of chalcedony.',
+  src:[{n:'Namibia (blue lace agate)',lat:-24.0,lon:17.0},{n:'Eskişehir, Turkey',lat:39.9,lon:30.9},{n:'Rio Grande do Sul, Brazil',lat:-29.5,lon:-52.5}]},
+ {id:'jet', name:'Jet', cut:'cabochon', fx:'glass', c:{h:30,s:10,l:8}, value:24,
+  family:'Organic gem: fossilised wood (a type of lignite)',
+  ety:'From the Old French jaiet, from the Latin gagates, after Gagai, an ancient town in Lycia (in today’s Turkey).',
+  color:'Deep black, from carbon in the fossilised wood. It is warm and very light to wear.',
+  mohs:3.25, mohsTxt:'2.5–4',
+  fact:'Whitby jet became fashionable when Queen Victoria wore it while mourning Prince Albert.',
+  src:[{n:'Whitby, Yorkshire, England',lat:54.49,lon:-0.61},{n:'Asturias, Spain',lat:43.4,lon:-5.8},{n:'Oltu, Erzurum, Turkey',lat:40.55,lon:41.99}]},
+ {id:'malachite', name:'Malachite', cut:'cabochon', fx:'bands', c:{h:150,s:70,l:30}, c2:{h:145,s:60,l:52}, value:28,
+  family:'Copper carbonate hydroxide',
+  ety:'From the Greek molochitis, from molóchē, "mallow", for its leaf-green colour.',
+  color:'Green from copper, which is part of its formula. Its light and dark bands grow in concentric layers.',
+  mohs:3.75, mohsTxt:'3.5–4',
+  fact:'The Malachite Room in the Winter Palace (Hermitage) in St Petersburg is decorated with malachite from the Urals.',
+  src:[{n:'Katanga, DR Congo',lat:-10.7,lon:25.5},{n:'Copperbelt, Zambia',lat:-12.8,lon:28.2},{n:'Ural Mountains, Russia',lat:56.4,lon:60.2}]},
+ {id:'amber', name:'Amber', cut:'cabochon', fx:'amber', c:{h:36,s:92,l:50}, value:28,
+  family:'Organic gem: fossilised tree resin',
+  ety:'From the Arabic ʿanbar, which originally meant ambergris.',
+  color:'Golden yellow to orange and brown: the colour of the ancient resin itself.',
+  mohs:2.25, mohsTxt:'2–2.5',
+  fact:'Baltic amber is roughly 40–45 million years old and sometimes holds insects trapped in the resin. Amber is so light it floats in very salty water.',
+  src:[{n:'Kaliningrad, Russia (Baltic coast)',lat:54.9,lon:20.0},{n:'Gdańsk coast, Poland',lat:54.4,lon:18.6},{n:'Lithuania',lat:55.7,lon:21.1},{n:'Dominican Republic',lat:19.6,lon:-70.7},{n:'Kachin State, Myanmar',lat:26.3,lon:96.6}]},
+ {id:'iolite', name:'Iolite', cut:'oval', c:{h:240,s:45,l:42}, value:30,
+  family:'Cordierite (magnesium aluminium silicate)',
+  ety:'From the Greek íon, "violet".',
+  color:'Violet-blue from iron. It is strongly pleochroic: violet-blue from one side, almost colourless or honey-yellow from another.',
+  mohs:7.25, mohsTxt:'7–7.5',
+  fact:'Legend says Viking navigators used thin slices of a stone like iolite to find the sun on cloudy days, because it filters polarised light.',
+  src:[{n:'Odisha, India',lat:20.0,lon:85.0},{n:'Sri Lanka',lat:7.2,lon:80.6},{n:'Madagascar',lat:-21.0,lon:46.5},{n:'Tanzania',lat:-6.5,lon:36.5},{n:'Myanmar',lat:23.0,lon:96.4},{n:'Brazil',lat:-18.0,lon:-44.0}]},
+ {id:'sunstone', name:'Sunstone', cut:'cabochon', fx:'glitter', glit:'#ffd38a', c:{h:22,s:80,l:56}, value:30,
+  family:'Feldspar (oligoclase or labradorite)',
+  ety:'Named for its warm, sparkling sun-like glow.',
+  color:'Orange-red with a glitter (aventurescence) from tiny platelets of copper (in Oregon) or hematite (in Norway and India).',
+  mohs:6.25, mohsTxt:'6–6.5',
+  fact:'Oregon sunstone, coloured by copper, is the official state gem of Oregon.',
+  src:[{n:'Lake County, Oregon, USA',lat:42.7,lon:-119.9},{n:'Tvedestrand, Norway',lat:58.6,lon:8.9},{n:'India',lat:12.0,lon:79.0}]},
+ {id:'labradorite', name:'Labradorite', cut:'cabochon', fx:'labra', c:{h:210,s:10,l:28}, value:34,
+  family:'Feldspar (plagioclase)',
+  ety:'Named after Labrador, Canada, where it was found in the 18th century on Paul’s Island near Nain.',
+  color:'Dark grey body. The flashes of blue, green and gold (labradorescence) are light interfering in microscopic layers inside the crystal.',
+  mohs:6.25, mohsTxt:'6–6.5',
+  fact:'Especially vivid labradorite from Finland is sold as "spectrolite".',
+  src:[{n:'Labrador, Canada',lat:56.5,lon:-61.7},{n:'Ylämaa, Finland (spectrolite)',lat:60.8,lon:27.9},{n:'Madagascar',lat:-18.5,lon:47.0}]},
+ {id:'coral', name:'Precious Coral', cut:'cabochon', fx:'glow', c:{h:6,s:72,l:52}, value:36,
+  family:'Organic gem: calcium carbonate skeleton of tiny marine animals (Corallium)',
+  ety:'From the Greek korállion.',
+  color:'Red to pink from natural carotenoid pigments in the skeleton.',
+  mohs:3.5, mohsTxt:'3–4',
+  fact:'Torre del Greco near Naples has been the world centre of coral carving for centuries. Precious coral grows very slowly, and harvesting is now strictly regulated.',
+  src:[{n:'Sardinia, Italy (Alghero’s Coral Riviera)',lat:40.56,lon:8.32},{n:'Torre del Greco, Naples, Italy (carving centre)',lat:40.79,lon:14.37},{n:'Kōchi, Japan',lat:33.5,lon:133.5},{n:'Taiwan',lat:23.7,lon:121.0}]},
+ {id:'zircon', name:'Blue Zircon', cut:'brilliant', fx:'fire', fireAmt:.7, c:{h:192,s:70,l:58}, contrast:1.6, value:38,
+  family:'Zirconium silicate (ZrSiO₄). Not the same as synthetic cubic zirconia',
+  ety:'Possibly from the Persian zargun, "gold-coloured".',
+  color:'Zircon occurs in many colours. Most blue zircon is brown zircon that has been heated. Its strong dispersion gives lively fire.',
+  mohs:7, mohsTxt:'6–7.5',
+  fact:'Zircon crystals from the Jack Hills in Western Australia are about 4.4 billion years old: the oldest known pieces of Earth.',
+  src:[{n:'Ratanakiri, Cambodia',lat:13.7,lon:107.0},{n:'Sri Lanka',lat:6.6,lon:80.5},{n:'Myanmar',lat:22.9,lon:96.5},{n:'Jack Hills, Western Australia (oldest crystals)',lat:-26.1,lon:117.0}]},
+ {id:'morganite', name:'Morganite', cut:'cushion', c:{h:12,s:55,l:76}, value:40,
+  family:'Beryl (beryllium aluminium silicate)',
+  ety:'Named in 1911 by George F. Kunz of Tiffany & Co. after the banker and gem collector J. P. Morgan.',
+  color:'Peach to pink from manganese.',
+  mohs:7.75, mohsTxt:'7.5–8',
+  fact:'Morganite is a sister of emerald and aquamarine: all three are beryl.',
+  src:[{n:'Madagascar',lat:-19.9,lon:47.0},{n:'Minas Gerais, Brazil',lat:-17.2,lon:-41.7},{n:'Pala, California, USA',lat:33.4,lon:-117.0},{n:'Afghanistan',lat:35.2,lon:70.8},{n:'Mozambique',lat:-15.4,lon:37.1}]},
+ {id:'kunzite', name:'Kunzite', cut:'emerald', c:{h:310,s:45,l:74}, value:40,
+  family:'Spodumene (lithium aluminium silicate)',
+  ety:'Named after George Frederick Kunz, Tiffany & Co.’s gemmologist, who described it in 1903.',
+  color:'Pink to violet from manganese. Strong sunlight can slowly fade it, so it is called an "evening stone".',
+  mohs:6.75, mohsTxt:'6.5–7',
+  fact:'Kunzite often grows as long, flat crystals, and some gems weigh hundreds of carats.',
+  src:[{n:'Pala, San Diego County, California, USA',lat:33.38,lon:-117.08},{n:'Nuristan, Afghanistan',lat:35.4,lon:70.9},{n:'Minas Gerais, Brazil',lat:-17.0,lon:-42.0},{n:'Madagascar',lat:-20.0,lon:47.1},{n:'Pakistan',lat:35.5,lon:71.8}]},
+ {id:'rhodochrosite', name:'Rhodochrosite', cut:'cabochon', fx:'bands', c:{h:345,s:62,l:58}, c2:{h:350,s:45,l:80}, value:44,
+  family:'Manganese carbonate (MnCO₃)',
+  ety:'From the Greek rhódon, "rose", and chróma, "colour".',
+  color:'Rose-pink to red from manganese, which is part of its formula. Banded rhodochrosite shows pink and pale stripes.',
+  mohs:3.75, mohsTxt:'3.5–4',
+  fact:'Banded rhodochrosite is Argentina’s national gemstone, known as "Rosa del Inca" (Inca rose).',
+  src:[{n:'Capillitas mine, Catamarca, Argentina',lat:-27.3,lon:-66.4},{n:'Sweet Home Mine, Colorado, USA',lat:39.3,lon:-106.1},{n:'N’Chwaning, Kalahari, South Africa',lat:-27.1,lon:22.8},{n:'Peru',lat:-10.6,lon:-76.9}]},
+ {id:'imperialtopaz', name:'Imperial Topaz', cut:'oval', c:{h:22,s:82,l:56}, value:46,
+  family:'Topaz (aluminium fluorosilicate)',
+  ety:'The name is said to come from 19th-century Russia, where pink-orange topaz from the Urals was reserved for the imperial family.',
+  color:'Golden orange to pinkish orange; the pink and red tones come from chromium.',
+  mohs:8, mohsTxt:'8',
+  fact:'Ouro Preto in Brazil is the world’s main source of imperial topaz.',
+  src:[{n:'Ouro Preto, Minas Gerais, Brazil',lat:-20.4,lon:-43.5},{n:'Katlang, Pakistan',lat:34.3,lon:72.1},{n:'Ural Mountains, Russia (historic)',lat:58.0,lon:60.5}]},
+ {id:'fireopal', name:'Fire Opal', cut:'oval', c:{h:20,s:92,l:54}, value:56,
+  family:'Hydrated amorphous silica (SiO₂·nH₂O)',
+  ety:'Named for its fiery orange to red body colour.',
+  color:'Yellow, orange or red from traces of iron oxide. Clear enough to facet; it may or may not show play-of-colour.',
+  mohs:6, mohsTxt:'5.5–6.5',
+  fact:'Mexico is the classic source; the Aztecs used fire opal in mosaics.',
+  src:[{n:'Querétaro, Mexico',lat:20.6,lon:-100.4},{n:'Magdalena, Jalisco, Mexico',lat:20.9,lon:-103.98},{n:'Nayarit, Mexico',lat:21.5,lon:-104.9}]},
+ {id:'tsavorite', name:'Tsavorite', cut:'cushion', c:{h:135,s:72,l:40}, value:70,
+  family:'Garnet group (grossular)',
+  ety:'Named by Tiffany & Co. in 1974 after Tsavo National Park in Kenya. It was first found in Tanzania in 1967 by geologist Campbell Bridges.',
+  color:'Bright green from vanadium and chromium.',
+  mohs:7.25, mohsTxt:'7–7.5',
+  fact:'Tsavorite is a garnet that is rarely treated: its colour is natural.',
+  src:[{n:'Tsavo / Taita-Taveta, Kenya',lat:-3.4,lon:38.4},{n:'Merelani area, Tanzania',lat:-3.6,lon:37.0},{n:'Madagascar',lat:-22.0,lon:46.0}]},
+ {id:'catseye', name:'Cat’s Eye Chrysoberyl', cut:'cabochon', fx:'cat', c:{h:52,s:60,l:52}, value:80,
+  family:'Chrysoberyl (beryllium aluminium oxide)',
+  ety:'"Cat’s eye" for the single line of light like a cat’s pupil. Chrysoberyl is from the Greek chrysós, "golden", and béryllos.',
+  color:'Honey yellow to greenish from iron. The moving line (chatoyancy) is light reflected from fine parallel needle-like inclusions.',
+  mohs:8.5, mohsTxt:'8.5',
+  fact:'In the gem trade, "cat’s eye" on its own means chrysoberyl; other stones must be named, like "cat’s eye tourmaline".',
+  src:[{n:'Sri Lanka',lat:6.7,lon:80.4},{n:'Minas Gerais & Bahia, Brazil',lat:-17.0,lon:-41.0},{n:'Odisha, India',lat:20.3,lon:84.5}]},
+ {id:'blackopal', name:'Black Opal', cut:'cabochon', fx:'opal', c:{h:225,s:30,l:14}, value:90,
+  family:'Hydrated amorphous silica (SiO₂·nH₂O)',
+  ety:'Named for its dark body colour, which makes the flashes of colour look especially vivid.',
+  color:'Dark body tone with brilliant play-of-colour: light diffracted by tiny, regularly stacked silica spheres.',
+  mohs:6, mohsTxt:'5.5–6.5',
+  fact:'Almost all black opal comes from around Lightning Ridge, New South Wales. It is the official gemstone of New South Wales.',
+  src:[{n:'Lightning Ridge, NSW, Australia',lat:-29.43,lon:147.98},{n:'Grawin & Glengarry fields, NSW, Australia',lat:-29.1,lon:147.6}]},
+ {id:'demantoid', name:'Demantoid Garnet', cut:'brilliant', fx:'fire', fireAmt:.9, c:{h:105,s:70,l:42}, contrast:1.4, value:120,
+  family:'Garnet group (andradite)',
+  ety:'From the old Dutch/German demant, "diamond", for its diamond-like fire.',
+  color:'Green from chromium. Its dispersion (0.057) is even higher than diamond’s, so it flashes with fire. Many contain golden "horsetail" inclusions.',
+  mohs:6.75, mohsTxt:'6.5–7',
+  fact:'Discovered in Russia’s Ural Mountains in the 19th century, it was a favourite of the jeweller Fabergé.',
+  src:[{n:'Ural Mountains, Russia',lat:58.0,lon:60.0},{n:'Erongo, Namibia',lat:-21.9,lon:15.3},{n:'Madagascar',lat:-13.3,lon:49.0}]},
+ {id:'padparadscha', name:'Padparadscha Sapphire', cut:'cushion', c:{h:12,s:72,l:66}, value:140,
+  family:'Corundum (aluminium oxide, Al₂O₃)',
+  ety:'From the Sinhalese padmaraga, "lotus colour", for its blend of pink and orange.',
+  color:'A delicate pink-orange from chromium (pink) combined with iron or colour centres (orange).',
+  mohs:9, mohsTxt:'9',
+  fact:'It is one of the rarest and most prized sapphire colours; Sri Lanka is the classic source.',
+  src:[{n:'Sri Lanka',lat:6.7,lon:80.4},{n:'Ilakaka, Madagascar',lat:-22.6,lon:45.3},{n:'Umba Valley, Tanzania',lat:-4.7,lon:38.8}]},
+ {id:'benitoite', name:'Benitoite', cut:'trillion', fx:'fire', fireAmt:.8, c:{h:228,s:72,l:48}, contrast:1.4, value:160,
+  family:'Barium titanium silicate',
+  ety:'Named after San Benito County, California, where it was discovered in 1907.',
+  color:'Sapphire-blue. It has fire close to diamond’s and glows bright blue under ultraviolet light.',
+  mohs:6.25, mohsTxt:'6–6.5',
+  fact:'Gem-quality benitoite has been found only in San Benito County. It is the state gem of California.',
+  src:[{n:'San Benito County, California, USA (the only gem source)',lat:36.37,lon:-120.65}]},
+ {id:'redberyl', name:'Red Beryl', cut:'emerald', c:{h:345,s:70,l:42}, value:180,
+  family:'Beryl (beryllium aluminium silicate)',
+  ety:'Simply "red beryl"; it was once also called "bixbite" after the mineral collector Maynard Bixby.',
+  color:'Raspberry red from manganese.',
+  mohs:7.75, mohsTxt:'7.5–8',
+  fact:'Gem-quality red beryl comes almost only from the Wah Wah Mountains in Utah, and it is far rarer than diamond. Most crystals are tiny.',
+  src:[{n:'Wah Wah Mountains, Utah, USA',lat:38.5,lon:-113.5}]},
+ {id:'painite', name:'Painite', cut:'oval', c:{h:10,s:62,l:34}, value:220,
+  family:'Calcium zirconium aluminium borate',
+  ety:'Named after the British gem dealer Arthur C. D. Pain, who found it in Myanmar in the 1950s.',
+  color:'Brownish red to orange-red from traces of chromium and vanadium.',
+  mohs:8, mohsTxt:'8',
+  fact:'For decades only a handful of painite crystals were known, and it was listed as the rarest mineral on Earth. More have been found since 2001, but clean gems are still extremely rare.',
+  src:[{n:'Mogok, Myanmar',lat:22.9,lon:96.5}]},
 ];
 const GEM = Object.fromEntries(GEMS.map((g,i)=>[g.id,Object.assign(g,{idx:i})]));
 const START_GEMS = ['quartz','amethyst','citrine'];
-const UNLOCK_ORDER = [['garnet','peridot'],['turquoise','pearl'],['topaz','aquamarine'],['moonstone','jade'],['lapis','tourmaline'],['opal','spinel'],['tanzanite','sapphire'],['starsapphire','emerald'],['ruby','alexandrite'],['paraiba','diamond']];
+const UNLOCK_ORDER = [['smokyquartz','rosequartz','garnet'],['peridot','carnelian','onyx'],['aventurine','hematite','obsidian'],['turquoise','pearl','sodalite'],
+ ['topaz','aquamarine','chalcedony'],['moonstone','jade','jet'],['lapis','malachite','amber'],['tourmaline','iolite','sunstone'],['labradorite','coral','zircon'],
+ ['opal','morganite','kunzite'],['spinel','rhodochrosite','imperialtopaz'],['tanzanite','sapphire','fireopal'],['starsapphire','emerald','tsavorite'],
+ ['ruby','catseye','blackopal'],['alexandrite','demantoid','padparadscha'],['paraiba','diamond','benitoite'],['redberyl','painite']];
 const TIERS = [
   {name:'Sketch', desc:'simple flat cut shapes'},
   {name:'Polished', desc:'polished outlines and a bright table facet'},
@@ -339,8 +560,9 @@ const TIERS = [
   {name:'Brilliant', desc:'internal reflections, highlights and glints'},
   {name:'Masterpiece', desc:'fire, living sparkle and gold settings'},
 ];
-const tierForLevel = lv => Math.min(4, Math.floor((lv-1)/2));
+const tierForLevel = lv => Math.min(4, Math.floor((lv-1)/3));
 const unlockLevelOf = id => { if (START_GEMS.includes(id)) return 1; const i = UNLOCK_ORDER.findIndex(a=>a.includes(id)); return i<0?99:i+2; };
+const GEMS_SORTED = GEMS.slice().sort((a,b)=>unlockLevelOf(a.id)-unlockLevelOf(b.id)||a.value-b.value);
 /* =====================================================================
    GEM RENDERER: SVG, unit coordinates (radius ~1), quality tier 0..4
    ===================================================================== */
@@ -356,6 +578,7 @@ const WARPS={
   oval:(x,y)=>[x*0.76,y],
   cushion:(x,y)=>{const r=Math.hypot(x,y),t=Math.atan2(y,x);const f=(0.45+0.55*polyR(4,t,Math.PI/4))*0.86;return[Math.cos(t)*r*f*1.0,Math.sin(t)*r*f];},
   pear:(x,y)=>{const yy=y*1.05+0.05;const k=Math.pow(clamp((y+1)/2,0,1),0.62)*1.05;return[x*k*0.82,yy];},
+  marquise:(x,y)=>[x*0.62*Math.pow(Math.max(0,1-y*y),0.3),y*1.04],
   trillion:(x,y)=>{const r=Math.hypot(x,y),t=Math.atan2(y,x);const f=0.3+0.7*polyR(3,t,-Math.PI/2);return[Math.cos(t)*r*f*0.98,Math.sin(t)*r*f*0.98+0.1];},
 };
 function colorAt(g,y,tierShift){
@@ -402,14 +625,16 @@ function shadeFor(g,f,tier,rnd){
   return hsl(base,dl,tier>=3?6:0);
 }
 /* main: returns inner SVG markup in unit coordinates. p = unique id prefix */
-function gemInner(g,tier,p){
+function gemInner(g,tier,p,cutOv){
+  if(cutOv==='natural'||cutOv===g.cut)cutOv=null;
+  const cut=cutOv||g.cut;
   const rnd=rng(hashStr(g.id+tier));
   const c=g.c, defs=[], body=[];
-  const fx=g.fx||'';
+  const fx=(cutOv&&cutOv!==g.cut&&g.cut!=='cabochon')?(cutOv==='cabochon'?'':(g.fx||'')):(g.fx||'');
   const id=s=>p+'-'+s;
   // soft shadow under the stone
   if(tier>=2) body.push(`<ellipse cx="0.08" cy="1.08" rx="0.82" ry="0.12" fill="rgba(40,20,30,${tier>=4?.22:.14})"/>`);
-  if(g.cut==='pearl'){
+  if(cut==='pearl'){
     defs.push(`<radialGradient id="${id('pb')}" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="${hsl(c,2)}"/><stop offset=".8" stop-color="${hsl(c,-14,-5)}"/><stop offset="1" stop-color="${hsl(c,-26,-10)}"/></radialGradient>`);
     if(tier===0){body.push(`<circle r="0.92" fill="${hsl(c,-4)}" stroke="${hsl(c,-30)}" stroke-width="0.05"/>`);}
     else{
@@ -422,8 +647,8 @@ function gemInner(g,tier,p){
     }
     return{defs:defs.join(''),body:body.join('')};
   }
-  if(g.cut==='cabochon'){
-    const rx=fx==='turquoise'||fx==='lapis'?0.92:0.8, ry=0.98;
+  if(cut==='cabochon'){
+    const rx=['turquoise','lapis','malachite','veins','metal','glass','bands'].includes(fx)?0.92:0.8, ry=0.98;
     const clip=id('cc'); defs.push(`<clipPath id="${clip}"><ellipse rx="${rx}" ry="${ry}"/></clipPath>`);
     if(tier>=4) body.push(`<ellipse rx="${rx+0.1}" ry="${ry+0.1}" fill="url(#${id('gold')})"/>`), defs.push(goldGrad(id('gold')));
     defs.push(`<radialGradient id="${id('dome')}" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="${hsl(c,18)}"/><stop offset=".6" stop-color="${hsl(c,0)}"/><stop offset="1" stop-color="${hsl(c,-20)}"/></radialGradient>`);
@@ -435,6 +660,26 @@ function gemInner(g,tier,p){
       if(fx==='lapis'){for(let i=0;i<5;i++)inner.push(`<ellipse cx="${(rnd()*1.6-.8).toFixed(2)}" cy="${(rnd()*1.6-.8).toFixed(2)}" rx="${(.1+rnd()*.25).toFixed(2)}" ry="${(.04+rnd()*.06).toFixed(2)}" fill="rgba(235,240,255,.35)" transform="rotate(${(rnd()*180).toFixed(0)})"/>`);
         for(let i=0;i<(tier>=3?26:12);i++){const x=rnd()*1.6-.8,y=rnd()*1.8-.9,s=.02+rnd()*.04;inner.push(`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${s.toFixed(3)}" fill="#e8c766"${tier>=4&&rnd()<.4?`><animate attributeName="fill" values="#e8c766;#fff6c8;#e8c766" dur="${(2+rnd()*3).toFixed(1)}s" repeatCount="indefinite"/></circle>`:'/>'}`);}}
       if(fx==='jade'){for(let i=0;i<6;i++)inner.push(`<ellipse cx="${(rnd()*1.4-.7).toFixed(2)}" cy="${(rnd()*1.6-.8).toFixed(2)}" rx="${(.2+rnd()*.3).toFixed(2)}" ry="${(.15+rnd()*.25).toFixed(2)}" fill="${hsl(c,12+rnd()*10,0,.35)}"/>`);}
+      if(fx==='veins'){let d='';for(let i=0;i<6;i++){let x=-1+rnd()*2,y=-1+rnd()*2;d+=`M${P(x,y)}`;for(let j=0;j<4;j++){x+=(rnd()-.5)*.7;y+=(rnd()-.5)*.7;d+=` Q${P(x+(rnd()-.5)*.3,y+(rnd()-.5)*.3)} ${P(x,y)}`;}}
+        inner.push(`<path d="${d}" fill="none" stroke="${g.vein||'#fff'}" stroke-width="${tier>=3?.05:.07}" stroke-linecap="round" opacity="${tier>=3?.8:.6}"/>`);}
+      if(fx==='bands'){const c2=g.c2||{h:c.h,s:c.s,l:c.l+20};const cx=(rnd()-.5)*.6,cy=.3+rnd()*.4;for(let i=12;i>0;i--){const r=i*.17;inner.push(`<ellipse cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" rx="${(r*1.15).toFixed(2)}" ry="${r.toFixed(2)}" fill="${hsl(i%2?c:c2,(i%3)*3)}" transform="rotate(${(rnd()*20-10).toFixed(0)} ${cx.toFixed(2)} ${cy.toFixed(2)})"/>`);}}
+      if(fx==='glitter'){const n=tier>=4?60:tier>=3?40:22;for(let i=0;i<n;i++){const x=rnd()*1.7-.85,y=rnd()*1.9-.95,s=.025+rnd()*.035,a=rnd()*180;
+        inner.push(`<rect x="${(x-s/2).toFixed(3)}" y="${(y-s/2).toFixed(3)}" width="${s.toFixed(3)}" height="${(s*.6).toFixed(3)}" fill="${g.glit||'#fff'}" transform="rotate(${a.toFixed(0)} ${x.toFixed(2)} ${y.toFixed(2)})" opacity="${(.4+rnd()*.6).toFixed(2)}">${tier>=4&&rnd()<.35?`<animate attributeName="opacity" values=".2;1;.2" dur="${(1.5+rnd()*2.5).toFixed(1)}s" repeatCount="indefinite"/>`:''}</rect>`);}}
+      if(fx==='glow'){defs.push(`<radialGradient id="${id('glw')}" cx="62%" cy="68%" r="55%"><stop offset="0" stop-color="${hsl(c,16,8)}" stop-opacity=".9"/><stop offset="1" stop-color="${hsl(c,16)}" stop-opacity="0"/></radialGradient>`);
+        inner.push(`<ellipse cx=".15" cy=".3" rx=".7" ry=".65" fill="url(#${id('glw')})"/>`);}
+      if(fx==='amber'){defs.push(`<radialGradient id="${id('amb')}" cx="55%" cy="60%" r="60%"><stop offset="0" stop-color="#ffe08a" stop-opacity=".85"/><stop offset="1" stop-color="#ffe08a" stop-opacity="0"/></radialGradient>`);
+        inner.push(`<ellipse cx=".1" cy=".2" rx=".75" ry=".7" fill="url(#${id('amb')})"/>`);
+        inner.push(`<path d="M-.8,-.2 C-.3,-.4 .2,.1 .8,-.1 M-.8,.35 C-.2,.2 .3,.55 .8,.4" fill="none" stroke="${hsl(c,-18,0,.35)}" stroke-width=".05"/>`);
+        for(let i=0;i<(tier>=3?7:4);i++){const x=rnd()*1.2-.6,y=rnd()*1.4-.7,r=.025+rnd()*.05;inner.push(`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${r.toFixed(3)}" fill="rgba(255,250,220,.55)" stroke="rgba(120,60,0,.3)" stroke-width=".01"/>`);}}
+      if(fx==='metal'){defs.push(`<linearGradient id="${id('met')}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f6fa"/><stop offset=".25" stop-color="#7d8592"/><stop offset=".5" stop-color="#2a2e36"/><stop offset=".7" stop-color="#9aa2ae"/><stop offset="1" stop-color="#1c1f25"/></linearGradient>`);
+        inner.push(`<ellipse rx="1" ry="1" fill="url(#${id('met')})" opacity="${tier>=3?.9:.7}"/>`);}
+      if(fx==='glass'&&tier>=3){inner.push(`<path d="M-.7,.4 Q0,.95 .7,.4" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width=".06"/>`);}
+      if(fx==='cat'){defs.push(`<filter id="${id('cb')}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation=".035"/></filter><linearGradient id="${id('cl')}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity="${tier>=3?.95:.6}"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`);
+        inner.push(`<g filter="url(#${id('cb')})"><rect x="-.06" y="-1" width=".12" height="2" fill="url(#${id('cl')})">${tier>=4?'<animate attributeName="x" values="-.2;.08;-.2" dur="6s" repeatCount="indefinite"/>':''}</rect></g>`);}
+      if(fx==='labra'){defs.push(`<filter id="${id('lb')}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${tier>=4?.06:.1}"/></filter>`);
+        const cols=['#2f7bff','#29d1c5','#7be06a','#ffc93c','#3a5bff'];const bands=[];
+        for(let i=0;i<(tier>=3?6:4);i++){const y=-.8+i*.32+rnd()*.1;bands.push(`<path d="M-1,${y.toFixed(2)} C-.3,${(y-.25).toFixed(2)} .3,${(y+.3).toFixed(2)} 1,${(y-.05).toFixed(2)} L1,${(y+.2).toFixed(2)} C.3,${(y+.45).toFixed(2)} -.3,${(y+.05).toFixed(2)} -1,${(y+.22).toFixed(2)}Z" fill="${cols[i%cols.length]}" opacity=".8">${tier>=3?`<animate attributeName="opacity" values=".15;.9;.15" dur="${(3+rnd()*3).toFixed(1)}s" begin="${(rnd()*2).toFixed(1)}s" repeatCount="indefinite"/>`:''}</path>`);}
+        inner.push(`<g filter="url(#${id('lb')})">${bands.join('')}</g>`);}
       if(fx==='opal'){defs.push(`<filter id="${id('blur')}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${tier>=4?.035:.07}"/></filter>`);
         const hues=[120,170,200,280,40,330,90,190];const n=tier>=4?26:tier>=3?18:10;const fl=[];
         for(let i=0;i<n;i++){const x=rnd()*1.6-.8,y=rnd()*1.8-.9,r=.12+rnd()*.2,h=hues[i%hues.length];
@@ -456,10 +701,10 @@ function gemInner(g,tier,p){
     return{defs:defs.join(''),body:body.join('')};
   }
   // ---- faceted stones ----
-  const mesh=g.cut==='emerald'?stepFacets():brilliantFacets(WARPS[g.cut]||WARPS.brilliant);
+  const mesh=cut==='emerald'?stepFacets():brilliantFacets(WARPS[cut]||WARPS.brilliant);
   const fillCol=hsl(g.bicolor?g.bicolor[0]:colorAt(g,0),0);
   if(tier>=4){defs.push(goldGrad(id('gold')));
-    const pr=[];const outl=mesh.outline;const n=g.cut==='emerald'?[0,2,4,6]:g.cut==='pear'?[0,22,42]:g.cut==='trillion'?[0,21,43]:[8,24,40,56];
+    const pr=[];const outl=mesh.outline;const n=cut==='emerald'?[0,2,4,6]:cut==='pear'?[0,22,42]:cut==='trillion'?[0,21,43]:cut==='marquise'?[0,32]:[8,24,40,56];
     n.forEach(i=>{const q=outl[Math.min(i,outl.length-1)];const L=Math.hypot(q[0],q[1])||1;const x=q[0]/L*(L+.06),y=q[1]/L*(L+.06);pr.push(`<circle cx="${x.toFixed(3)}" cy="${y.toFixed(3)}" r=".12" fill="url(#${id('gold')})" stroke="#8a6526" stroke-width=".015"/>`);});
     body.push(`<polygon points="${poly(mesh.outline.map(q=>[q[0]*1.06,q[1]*1.06]))}" fill="url(#${id('gold')})" stroke="#8a6526" stroke-width=".02"/>`);
     var prongs=pr.join('');
@@ -478,7 +723,7 @@ function gemInner(g,tier,p){
   defs.push(`<linearGradient id="${id('tab')}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${hsl(colorAt(g,-.5),18)}"/><stop offset=".5" stop-color="${hsl(colorAt(g,0),4)}"/><stop offset="1" stop-color="${hsl(colorAt(g,.5),-10)}"/></linearGradient>`);
   body.push(`<polygon points="${poly(mesh.table)}" fill="${tier>=2?`url(#${id('tab')})`:hsl(colorAt(g,0),12)}" stroke="${stroke}" stroke-width="${tier>=3?.012:.02}"/>`);
   if(tier>=3){ // internal reflections: pavilion facets seen through the table
-    const ref=g.cut==='emerald'
+    const ref=cut==='emerald'
       ? mesh.rings.slice(1).map((r,i)=>`<polygon points="${poly(r.map(q=>[q[0]*.6,q[1]*.6]))}" fill="none" stroke="${hsl(colorAt(g,0),i%2?-25:28,0,.55)}" stroke-width=".03"/>`).join('')
         + `<polygon points="${poly(mesh.rings[3].map(q=>[q[0]*.35,q[1]*.35]))}" fill="${hsl(colorAt(g,0),-22,0,.5)}"/>`
       : mesh.table.map((q,i)=>{const n=mesh.table[(i+1)%mesh.table.length];const m=[(q[0]+n[0])/2*.55,(q[1]+n[1])/2*.55];return `<polygon points="${poly([[0,0],[q[0]*.96,q[1]*.96],m])}" fill="${hsl(colorAt(g,0),-20*Math.min(g.contrast||1,2),0,.55)}"/><polygon points="${poly([[0,0],m,[n[0]*.96,n[1]*.96]])}" fill="${hsl(colorAt(g,0),16,0,.45)}"/>`;}).join('')+`<polygon points="${poly(mesh.table.map(q=>[q[0]*.22,q[1]*.22]))}" fill="${hsl(colorAt(g,0),-10,0,.6)}"/>`;
@@ -489,20 +734,20 @@ function gemInner(g,tier,p){
     body.push(`<polygon points="${poly(mesh.outline)}" fill="url(#${id('lit')})"/>`);
   }
   if(g.fx==='alexandrite'&&tier>=2){ // colour change layer
-    const g2=Object.assign({},g,{c:g.c2,fx:''});
+    const g2=Object.assign({},g,{c:g.c2,fx:'',cut});
     const facs2=mesh.facets.map(f=>`<polygon points="${poly(f.pts)}" fill="${shadeFor(g2,f,tier,rng(hashStr(f.k+f.a)))}"/>`).join('')+`<polygon points="${poly(mesh.table)}" fill="${hsl(g.c2,10)}"/>`;
     body.push(`<g opacity="0">${facs2}<animate attributeName="opacity" values="0;0;.92;.92;0" keyTimes="0;.3;.5;.8;1" dur="8s" repeatCount="indefinite"/></g>`);
   }
   if(tier>=3){ // specular highlights
-    const t0=mesh.table[g.cut==='emerald'?0:7]||mesh.table[0], t1=mesh.table[g.cut==='emerald'?7:0];
+    const t0=mesh.table[cut==='emerald'?0:7]||mesh.table[0], t1=mesh.table[cut==='emerald'?7:0];
     body.push(`<polygon points="${poly([t0,t1,[t1[0]*.55+0.05,t1[1]*.55+0.12],[t0[0]*.6,t0[1]*.6+0.1]])}" fill="#fff" opacity=".55"/>`);
     body.push(`<ellipse cx="-.42" cy="-.5" rx=".16" ry=".07" fill="#fff" opacity=".85" transform="rotate(-40 -.42 -.5)"/>`);
   }
   if(tier>=4){ // fire (dispersion) + living sparkle
-    const fire=g.fx==='fire'?1:0.25; const ff=[];
+    const fire=g.fireAmt||(g.fx==='fire'?1:0.25); const ff=[];
     const hues=[0,30,55,120,190,230,280];
     const cand=mesh.facets.filter(f=>f.k!=='ugird'||rnd()<.3);
-    const nf=Math.round(cand.length*(g.fx==='fire'?.45:.12));
+    const nf=Math.round(cand.length*(g.fx==='fire'?.45*fire:.12));
     for(let i=0;i<nf;i++){const f=cand[Math.floor(rnd()*cand.length)];const h=hues[Math.floor(rnd()*hues.length)];
       ff.push(`<polygon points="${poly(f.pts)}" fill="hsl(${h},95%,60%)" opacity="0"><animate attributeName="opacity" values="0;${(.5*fire+.25).toFixed(2)};0" dur="${(1.4+rnd()*2.6).toFixed(1)}s" begin="${(rnd()*3).toFixed(2)}s" repeatCount="indefinite"/></polygon>`);}
     body.push(`<g style="mix-blend-mode:screen">${ff.join('')}</g>`);
@@ -514,8 +759,11 @@ function gemInner(g,tier,p){
 }
 function goldGrad(i){return `<linearGradient id="${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".35" stop-color="#e2c27d"/><stop offset=".65" stop-color="#b98d3e"/><stop offset="1" stop-color="#f3dc9a"/></linearGradient>`;}
 let _gemUid=0;
-function gemSVG(g,tier,cls){const p='gm'+(++_gemUid);const r=gemInner(g,tier,p);return `<svg class="${cls||''}" viewBox="-1.3 -1.3 2.6 2.6" aria-label="${g.name}"><defs>${r.defs}</defs>${r.body}</svg>`;}
-function gemSymbol(g,tier,prefix){const p=prefix+'-'+g.id+'-'+tier;const r=gemInner(g,tier,p);return `<symbol id="${p}" viewBox="-1.3 -1.3 2.6 2.6" overflow="visible">${r.defs}${r.body}</symbol>`;}
+const CUTS=[['natural','Natural'],['brilliant','Round'],['oval','Oval'],['cushion','Cushion'],['pear','Pear'],['marquise','Marquise'],['trillion','Trillion'],['emerald','Emerald'],['cabochon','Cabochon']];
+function cutsFor(g){if(g.cut==='pearl'||g.cut==='cabochon')return['natural'];return CUTS.map(c=>c[0]);}
+function gemSVG(g,tier,cls,cut){const p='gm'+(++_gemUid);const r=gemInner(g,tier,p,cut);return `<svg class="${cls||''}" viewBox="-1.3 -1.3 2.6 2.6" aria-label="${g.name}"><defs>${r.defs}</defs>${r.body}</svg>`;}
+const symId=(prefix,gid,t,cut)=>prefix+'-'+gid+'-'+t+(cut&&cut!=='natural'?'-'+cut:'');
+function gemSymbol(g,tier,prefix,cut){const p=symId(prefix,g.id,tier,cut);const r=gemInner(g,tier,p,cut);return `<symbol id="${p}" viewBox="-1.3 -1.3 2.6 2.6" overflow="visible">${r.defs}${r.body}</symbol>`;}
 /* =====================================================================
    DRESS BUILDER (parametric SVG, viewBox 0 0 400 640)
    ===================================================================== */
@@ -524,7 +772,6 @@ const DRESS_OPTS={
   neckline:[['sweetheart','Sweetheart'],['vneck','V-neck'],['scoop','Scoop'],['strapless','Strapless'],['halter','Halter'],['boat','Boat'],['oneshoulder','One-shoulder']],
   sleeves:[['none','None'],['cap','Cap'],['puff','Puff'],['long','Long'],['offshoulder','Off-shoulder']],
   length:[['mini','Mini'],['knee','Knee'],['midi','Midi'],['floor','Floor'],['train','With train']],
-  texture:[['satin','Satin'],['silk','Silk'],['velvet','Velvet'],['tulle','Tulle'],['lace','Lace']],
 };
 const FABRIC_COLORS=['#fbf7ef','#f1d9b5','#e8a0b4','#f4c7cf','#c8b6e2','#c9d6f0','#9fc5c0','#1f5f4a','#2b2d5c','#7a1630','#3b2440','#151318','#d9b56c','#b8c2c9'];
 const HEM={mini:330,knee:395,midi:460,floor:572,train:572};
@@ -581,54 +828,102 @@ function dressGeometry(d){
   };
   return{skirt,bodice,train,wy,wL,wR,H,hw,span,guides};
 }
-function fabricDefs(d,p){
-  const c=hexToHsl(d.color||'#e8a0b4'); const h=(dl,ds=0,a=1)=>hsl(c,dl,ds,a);
-  const light=c.l>70; const k=light?.7:1;
+/* ---------- fabrics (20), each with its own texture recipe ---------- */
+const FABRICS={
+ satin:{name:'Satin',kind:'gloss',info:'A weave, not a fibre: long "floating" threads give one smooth, glossy face. The name probably comes from Zaitun (today Quanzhou), a Chinese port that exported it.'},
+ charmeuse:{name:'Silk charmeuse',kind:'soft',sheen:.3,info:'A light satin-weave fabric, traditionally silk, with a liquid drape: a lustrous face and a matte back. "Charmeuse" is French for "charmer".'},
+ chiffon:{name:'Chiffon',kind:'soft',sheer:.62,info:'A sheer, very light plain weave of tightly twisted yarns that floats in layers. From the French chiffe, "rag".'},
+ organza:{name:'Organza',kind:'crisp',sheer:.55,pat:'organza',info:'A thin, crisp, sheer plain weave, traditionally silk. It holds volume, so it is loved for structured skirts and bridal layers.'},
+ tulle:{name:'Tulle',kind:'soft',sheer:.6,pat:'tulle',info:'A fine, light netting. It is named after Tulle, a town in central France known for lace and silk making.'},
+ chantilly:{name:'Chantilly lace',kind:'soft',sheer:.82,pat:'lace',info:'A delicate bobbin lace with flowers outlined on a fine net, named after the town of Chantilly, France, where it was made from the 17th century.'},
+ velvet:{name:'Velvet',kind:'velvet',noise:[.9,.55],info:'A cut-pile fabric: short tufts of thread stand up from the base, so it looks deep and feels soft. Originally woven from silk.'},
+ brocade:{name:'Brocade',kind:'gloss',pat:'brocade',info:'A rich woven fabric with raised patterns made by extra, often metallic, threads. Venice, Florence and Lyon were famous brocade centres.'},
+ damask:{name:'Damask',kind:'soft',pat:'damask',info:'A reversible patterned fabric where glossy satin and matte areas form designs in a single colour. Named after the city of Damascus.'},
+ taffeta:{name:'Taffeta',kind:'crisp',shot:true,info:'A crisp, smooth plain weave that rustles when you move. "Shot" taffeta uses two yarn colours, so it changes colour in the light. From the Persian tāftah, "twisted, woven".'},
+ crepe:{name:'Crepe',kind:'matte',noise:[1.6,.35],info:'A fabric with a crinkled, pebbly surface made with tightly twisted yarns. From the French crêpe, "crimped".'},
+ georgette:{name:'Georgette',kind:'matte',sheer:.7,noise:[1.3,.3],info:'A sheer, slightly grainy, bouncy crepe fabric named after the early-20th-century French dressmaker Georgette de la Plante.'},
+ jersey:{name:'Jersey',kind:'matte',pat:'jersey',info:'A soft, stretchy knit fabric, named after the island of Jersey in the Channel Islands, where knitted wool garments were made.'},
+ sequin:{name:'Sequin',kind:'metal',pat:'sequin',info:'Small shiny discs sewn onto fabric so it sparkles. The word comes from the Italian zecchino, a gold coin of Venice.'},
+ lame:{name:'Lamé',kind:'metal',pat:'lame',info:'A fabric woven with metallic threads for a liquid-metal shine. From the French lamé, "laminated", for the thin flat strips of metal used.'},
+ denim:{name:'Denim',kind:'matte',pat:'denim',noise:[1.1,.25],info:'A sturdy cotton twill with a coloured (usually indigo) warp and a white weft. The name comes from "serge de Nîmes", a fabric from Nîmes, France.'},
+ linen:{name:'Linen',kind:'matte',pat:'linen',noise:[.5,.2],info:'Woven from flax fibres, one of the oldest textiles (ancient Egyptians wrapped mummies in it). Cool and crisp, with a natural slubby texture.'},
+ poplin:{name:'Cotton poplin',kind:'matte',pat:'poplin',info:'A smooth, tightly woven cotton with very fine horizontal ribs, perfect for crisp shirts and day dresses.'},
+ tweed:{name:'Tweed',kind:'matte',pat:'tweed',noise:[1.4,.35],info:'A rough, warm woollen twill from Scotland and Ireland, often woven in herringbone. Harris Tweed is handwoven in the Outer Hebrides.'},
+ leather:{name:'Leather',kind:'gloss',k:.7,noise:[2.2,.3],info:'Tanned animal hide: supple, durable and softly lustrous.'},
+};
+const FAB_ORDER=Object.keys(FABRICS);
+const OVERLAYS=['none','tulle','chiffon','organza','chantilly','georgette','sequin'];
+const DRESS_PARTS=[['bodice','Bodice'],['skirt','Skirt'],['sleeves','Sleeves'],['overlay','Overlay']];
+function normDress(d){
+  if(d.parts)return d;
+  const f={silk:'charmeuse',lace:'chantilly'}[d.texture]||d.texture||'satin';const c=d.color||'#e8a0b4';
+  d.parts={bodice:{f,c},skirt:{f,c},sleeves:{f,c},overlay:{f:'none',c:'#ffffff'}};delete d.texture;return d;
+}
+function fabricDefs(f,hex,pid){
+  const F=FABRICS[f]||FABRICS.satin;const c=hexToHsl(hex||'#e8a0b4');const h=(dl,ds=0,a=1)=>hsl(c,dl,ds,a);
+  const light=c.l>70, kk=(light?.7:1)*(F.k||1);
+  const amp={gloss:1,soft:.55,crisp:.8,matte:.28,metal:1.7,velvet:1}[F.kind]||1;
   let g='';
-  if(d.texture==='velvet'){
-    g+=`<linearGradient id="${p}-fab" x1="0" x2="1"><stop offset="0" stop-color="${h(-30)}"/><stop offset=".25" stop-color="${h(-6)}"/><stop offset=".45" stop-color="${h(8)}"/><stop offset=".6" stop-color="${h(0)}"/><stop offset=".85" stop-color="${h(-12)}"/><stop offset="1" stop-color="${h(-32)}"/></linearGradient>`;
-  }else if(d.texture==='silk'){
-    g+=`<linearGradient id="${p}-fab" x1="0" x2="1"><stop offset="0" stop-color="${h(-16*k)}"/><stop offset=".22" stop-color="${h(10*k)}"/><stop offset=".45" stop-color="${h(1)}"/><stop offset=".7" stop-color="${h(14*k)}"/><stop offset="1" stop-color="${h(-18*k)}"/></linearGradient>`;
-  }else{ // satin, tulle, lace
-    g+=`<linearGradient id="${p}-fab" x1="0" x2="1"><stop offset="0" stop-color="${h(-22*k)}"/><stop offset=".17" stop-color="${h(0)}"/><stop offset=".31" stop-color="${h(22*k)}"/><stop offset=".44" stop-color="${h(2)}"/><stop offset=".62" stop-color="${h(-12*k)}"/><stop offset=".8" stop-color="${h(15*k)}"/><stop offset="1" stop-color="${h(-24*k)}"/></linearGradient>`;
-  }
-  g+=`<linearGradient id="${p}-sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity="${d.texture==='silk'?.28:d.texture==='satin'?.2:.08}"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
-  g+=`<linearGradient id="${p}-vshade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".10"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient>`;
-  g+=`<filter id="${p}-vel" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0" result="a"/><feComposite in="a" in2="SourceGraphic" operator="in"/></filter>`;
-  g+=`<filter id="${p}-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>`;
-  g+=`<pattern id="${p}-tulle" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r=".9" fill="${light?'rgba(120,90,100,.18)':'rgba(255,255,255,.28)'}"/></pattern>`;
-  const lc=light?'rgba(140,110,110,.35)':h(30,-10,.55);
-  g+=`<pattern id="${p}-lace" width="30" height="30" patternUnits="userSpaceOnUse"><g fill="none" stroke="${lc}" stroke-width="1.1"><circle cx="15" cy="15" r="3.2"/>${[0,60,120,180,240,300].map(a=>`<ellipse cx="15" cy="8.5" rx="2.6" ry="4.2" transform="rotate(${a} 15 15)"/>`).join('')}<path d="M0,0 Q7,4 0,8 M30,0 Q23,4 30,8 M0,30 Q7,26 0,22 M30,30 Q23,26 30,22"/></g><circle cx="15" cy="15" r="1" fill="${lc}"/></pattern>`;
+  const st=(F.kind==='velvet')?[[0,-30],[.25,-6],[.45,8],[.6,0],[.85,-12],[1,-32]]:[[0,-22],[.17,0],[.31,22],[.44,2],[.62,-12],[.8,15],[1,-24]];
+  g+=`<linearGradient id="${pid}-g" x1="0" x2="1">${st.map(([o,l],i)=>`<stop offset="${o}" stop-color="${F.shot?hsl({h:c.h+(i%2?28:-10),s:c.s,l:c.l},l*kk*amp):h(F.kind==='metal'?l*amp*.9+(l>0?6:0):l*kk*amp)}"/>`).join('')}</linearGradient>`;
+  const sh={gloss:.2,soft:F.sheen||.12,crisp:.22,matte:.04,metal:.35,velvet:.06}[F.kind];
+  g+=`<linearGradient id="${pid}-sh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".36" stop-color="#fff" stop-opacity="0"/><stop offset=".46" stop-color="#fff" stop-opacity="${sh}"/><stop offset=".56" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>`;
+  if(F.noise)g+=`<filter id="${pid}-nz" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="${F.noise[0]}" numOctaves="2" seed="${hashStr(f)%50}" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 ${F.noise[1]*2} 0" result="a"/><feComposite in="a" in2="SourceGraphic" operator="in"/></filter>`;
+  const lc=light?'rgba(120,90,95,.35)':h(28,-10,.5), dk=h(-25,0,.35), lt=h(25,0,.35);
+  const P={
+   tulle:`<pattern id="${pid}-pt" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0,3 L3,0 L6,3 L3,6Z" fill="none" stroke="${light?'rgba(120,90,100,.2)':'rgba(255,255,255,.28)'}" stroke-width=".6"/></pattern>`,
+   lace:`<pattern id="${pid}-pt" width="30" height="30" patternUnits="userSpaceOnUse"><g fill="none" stroke="${lc}" stroke-width="1.1"><circle cx="15" cy="15" r="3.2"/>${[0,60,120,180,240,300].map(a=>`<ellipse cx="15" cy="8.5" rx="2.6" ry="4.2" transform="rotate(${a} 15 15)"/>`).join('')}<path d="M0,0 Q7,4 0,8 M30,0 Q23,4 30,8 M0,30 Q7,26 0,22 M30,30 Q23,26 30,22"/></g><circle cx="15" cy="15" r="1" fill="${lc}"/></pattern>`,
+   organza:`<pattern id="${pid}-pt" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="14" height="3" fill="rgba(255,255,255,.18)"/><rect y="7" width="14" height="1.2" fill="rgba(200,220,255,.18)"/></pattern>`,
+   brocade:`<pattern id="${pid}-pt" width="34" height="40" patternUnits="userSpaceOnUse"><g fill="#e2c27d" opacity=".55"><path d="M17,5 C25,12 25,26 17,34 C9,26 9,12 17,5Z" fill="none" stroke="#e2c27d" stroke-width="1.6"/><circle cx="17" cy="19.5" r="3.2"/><path d="M0,0 C5,4 5,9 0,12 M34,0 C29,4 29,9 34,12 M0,40 C5,36 5,31 0,28 M34,40 C29,36 29,31 34,28" fill="none" stroke="#e2c27d" stroke-width="1.3"/></g></pattern>`,
+   damask:`<pattern id="${pid}-pt" width="40" height="48" patternUnits="userSpaceOnUse"><g fill="${lt}"><path d="M20,4 C30,14 30,34 20,44 C10,34 10,14 20,4Z M20,14 C24,20 24,28 20,34 C16,28 16,20 20,14Z" fill-rule="evenodd"/><circle cx="0" cy="24" r="5"/><circle cx="40" cy="24" r="5"/></g></pattern>`,
+   jersey:`<pattern id="${pid}-pt" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M1,0 L1,4" stroke="${dk}" stroke-width=".7"/><path d="M3,0 L3,4" stroke="${lt}" stroke-width=".5"/></pattern>`,
+   sequin:`<pattern id="${pid}-pt" width="7" height="6" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3" r="2.9" fill="${h(18,0,.55)}" stroke="${h(-30,0,.5)}" stroke-width=".4"/><circle cx="2.6" cy="2.2" r=".9" fill="rgba(255,255,255,.75)"/><circle cx="0" cy="0" r="2.9" fill="${h(-8,0,.55)}"/><circle cx="7" cy="6" r="2.9" fill="${h(-8,0,.55)}"/></pattern>`,
+   lame:`<pattern id="${pid}-pt" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(60)"><rect width="10" height="1.2" fill="rgba(255,255,255,.25)"/><rect y="5" width="10" height=".6" fill="rgba(0,0,0,.15)"/></pattern>`,
+   denim:`<pattern id="${pid}-pt" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="4" height="1.4" fill="rgba(255,255,255,.16)"/><rect y="2.2" width="4" height=".8" fill="rgba(0,0,30,.14)"/></pattern>`,
+   linen:`<pattern id="${pid}-pt" width="9" height="7" patternUnits="userSpaceOnUse"><path d="M0,2 L9,2.4 M0,5.3 L9,5" stroke="${lt}" stroke-width=".7"/><path d="M3,0 L3.3,7 M7,0 L6.8,7" stroke="${dk}" stroke-width=".5"/></pattern>`,
+   poplin:`<pattern id="${pid}-pt" width="4" height="2.2" patternUnits="userSpaceOnUse"><rect width="4" height=".8" fill="${dk}" opacity=".5"/></pattern>`,
+   tweed:`<pattern id="${pid}-pt" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M0,0 L6,6 L0,12 M6,0 L12,6 L6,12" fill="none" stroke="${lt}" stroke-width="1.6"/><path d="M3,0 L9,6 L3,12" fill="none" stroke="${dk}" stroke-width="1.2"/><circle cx="9" cy="2" r=".9" fill="#c98b5a"/><circle cx="2" cy="9" r=".8" fill="#6f8bb5"/><circle cx="10" cy="10" r=".7" fill="#f2e3c6"/></pattern>`,
+  };
+  if(F.pat)g+=P[F.pat];
   return g;
 }
+function fabricLayer(path,pid,f,cls){
+  const F=FABRICS[f]||FABRICS.satin;
+  let s=`<path class="${cls}" d="${path}" fill="url(#${pid}-g)"${F.sheer?` fill-opacity="${F.sheer}"`:''}/>`;
+  if(F.noise)s+=`<path d="${path}" fill="#000" filter="url(#${pid}-nz)" opacity="${F.kind==='velvet'?.35:.3}" pointer-events="none"/>`;
+  if(F.pat)s+=`<path d="${path}" fill="url(#${pid}-pt)" pointer-events="none"/>`;
+  s+=`<path d="${path}" fill="url(#${pid}-sh)" pointer-events="none"/>`;
+  return s;
+}
+function allFabricDefs(d,p){normDress(d);const P=d.parts;let g=`<linearGradient id="${p}-vshade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".10"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient><filter id="${p}-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>`;
+  ['bodice','skirt','sleeves'].forEach(k=>g+=fabricDefs(P[k].f,P[k].c,p+'-'+k));
+  if(P.overlay&&P.overlay.f!=='none')g+=fabricDefs(P.overlay.f,P.overlay.c,p+'-overlay');
+  return g;}
 function dressBody(d,p){
-  const G=dressGeometry(d); const c=hexToHsl(d.color||'#e8a0b4');
-  const fab=`url(#${p}-fab)`, out=[];
-  const layer=(path,cls)=>{
-    let s=`<path class="${cls||'fab'}" d="${path}" fill="${fab}" ${d.texture==='tulle'?'fill-opacity=".92"':''}/>`;
-    if(d.texture==='velvet') s+=`<path d="${path}" fill="#000" filter="url(#${p}-vel)" opacity=".35" pointer-events="none"/>`;
-    if(d.texture==='tulle') s+=`<path d="${path}" fill="url(#${p}-tulle)" pointer-events="none"/>`;
-    if(d.texture==='lace') s+=`<path d="${path}" fill="url(#${p}-lace)" pointer-events="none"/>`;
-    s+=`<path d="${path}" fill="url(#${p}-sheen)" pointer-events="none"/><path d="${path}" fill="url(#${p}-vshade)" pointer-events="none"/>`;
-    return s;
-  };
-  if(G.train) out.push(`<g opacity=".96">${layer(G.train)}</g><path d="${G.train}" fill="#000" opacity=".12" pointer-events="none"/>`);
-  if(d.texture==='tulle'){ // extra petticoat layer
-    out.push(`<path d="${G.skirt}" transform="translate(200 ${G.wy}) scale(1.07 1.025) translate(-200 ${-G.wy})" fill="${hsl(c,12,-10,.45)}" pointer-events="none"/>`);
-  }
-  if(d.sleeves&&d.sleeves!=='none'&&SLEEVE[d.sleeves]){const sp=SLEEVE[d.sleeves];
-    out.push(`<g>${layer(sp)}</g><g transform="translate(400 0) scale(-1 1)">${layer(sp)}</g>`);}
-  out.push(layer(G.skirt));
-  // soft folds
+  normDress(d);const G=dressGeometry(d);const P=d.parts;const out=[];
+  const vs=path=>`<path d="${path}" fill="url(#${p}-vshade)" pointer-events="none"/>`;
+  const part=(path,k,cls)=>fabricLayer(path,p+'-'+k,P[k].f,cls||'fab')+vs(path);
+  const sk=hexToHsl(P.skirt.c);
+  if(G.train) out.push(part(G.train,'skirt')+`<path d="${G.train}" fill="#000" opacity=".12" pointer-events="none"/>`);
+  if(d.sleeves&&d.sleeves!=='none'&&SLEEVE[d.sleeves]){const sp=SLEEVE[d.sleeves];out.push(`<g>${part(sp,'sleeves')}</g><g transform="translate(400 0) scale(-1 1)">${part(sp,'sleeves')}</g>`);}
+  if(FABRICS[P.skirt.f]&&FABRICS[P.skirt.f].sheer)out.push(`<path d="${G.skirt}" transform="translate(200 ${G.wy}) scale(1.06 1.02) translate(-200 ${-G.wy})" fill="${hsl(sk,10,-10,.4)}" pointer-events="none"/>`);
+  out.push(part(G.skirt,'skirt'));
   if(d.silhouette!=='sheath'){const folds=[];const n=7;for(let i=0;i<n;i++){const t=(i+.5)/n;const xh=200-G.hw+2*G.hw*t, xw=G.wL+(G.wR-G.wL)*t;
     folds.push(`M${xw.toFixed(1)},${G.wy+6} Q${((xw+xh)/2+(t-.5)*20).toFixed(1)},${(G.wy+G.H)/2} ${xh.toFixed(1)},${G.H-2}`);}
-    out.push(`<path d="${folds.join(' ')}" fill="none" stroke="#000" stroke-opacity="${d.texture==='velvet'?.16:.09}" stroke-width="9" filter="url(#${p}-soft)" pointer-events="none"/>`);
-    out.push(`<path d="${folds.join(' ')}" transform="translate(7 0)" fill="none" stroke="#fff" stroke-opacity="${d.texture==='velvet'?.05:.12}" stroke-width="4" filter="url(#${p}-soft)" pointer-events="none"/>`);}
-  out.push(layer(G.bodice));
-  out.push(`<path d="M${G.wL},${G.wy} Q200,${G.wy+(d.silhouette==='empire'?6:8)} ${G.wR},${G.wy}" fill="none" stroke="${hsl(c,-25,0,.5)}" stroke-width="1.6" pointer-events="none"/>`);
-  if(d.texture==='lace') out.push(`<path d="${G.guides.hem.replace(/(\d+\.?\d*),(\d+\.?\d*)/g,(m,x,y)=>x+','+(+y+8))}" fill="none" stroke="${c.l>70?'rgba(150,120,120,.5)':'rgba(255,255,255,.55)'}" stroke-width="3.2" stroke-dasharray=".1 6" stroke-linecap="round" pointer-events="none"/>`);
+    const vel=P.skirt.f==='velvet';
+    out.push(`<path d="${folds.join(' ')}" fill="none" stroke="#000" stroke-opacity="${vel?.16:.09}" stroke-width="9" filter="url(#${p}-soft)" pointer-events="none"/>`);
+    out.push(`<path d="${folds.join(' ')}" transform="translate(7 0)" fill="none" stroke="#fff" stroke-opacity="${vel?.05:.12}" stroke-width="4" filter="url(#${p}-soft)" pointer-events="none"/>`);}
+  if(P.overlay&&P.overlay.f!=='none'){const o=`<path d="${G.skirt}" transform="translate(200 ${G.wy}) scale(1.035 1.015) translate(-200 ${-G.wy})"/>`;
+    out.push(`<g pointer-events="none" transform="translate(200 ${G.wy}) scale(1.035 1.015) translate(-200 ${-G.wy})">${fabricLayer(G.skirt,p+'-overlay',P.overlay.f,'ovl')}</g>`);}
+  out.push(part(G.bodice,'bodice'));
+  if(P.overlay&&P.overlay.f!=='none'&&['chantilly','tulle','sequin','georgette','chiffon'].includes(P.overlay.f))out.push(`<g pointer-events="none">${fabricLayer(G.bodice,p+'-overlay',P.overlay.f,'ovl')}</g>`);
+  const bc=hexToHsl(P.bodice.c);
+  out.push(`<path d="M${G.wL},${G.wy} Q200,${G.wy+(d.silhouette==='empire'?6:8)} ${G.wR},${G.wy}" fill="none" stroke="${hsl(bc,-25,0,.5)}" stroke-width="1.6" pointer-events="none"/>`);
+  if(P.skirt.f==='chantilly'||(P.overlay&&P.overlay.f==='chantilly'))out.push(`<path d="${G.guides.hem.replace(/(\d+\.?\d*),(\d+\.?\d*)/g,(m,x,y)=>x+','+(+y+8))}" fill="none" stroke="${sk.l>70?'rgba(150,120,120,.5)':'rgba(255,255,255,.55)'}" stroke-width="3.2" stroke-dasharray=".1 6" stroke-linecap="round" pointer-events="none"/>`);
+  if(P.skirt.f==='denim'||P.bodice.f==='denim')out.push(`<path d="${G.guides.hem.replace(/(\d+\.?\d*),(\d+\.?\d*)/g,(m,x,y)=>x+','+(+y+4))}" fill="none" stroke="#e0a64a" stroke-width="1" stroke-dasharray="3 2" pointer-events="none"/>`);
   return{G,markup:out.join('')};
 }
+function fabricSwatch(f,hex){const p='sw'+(++_gemUid);return `<svg viewBox="0 0 120 60" class="fabsw"><defs>${fabricDefs(f,hex,p)}</defs><rect width="120" height="60" fill="#f3e8de"/><path d="M0,0 H120 V60 H0Z" fill="none"/>${fabricLayer('M0,0 C40,8 80,-6 120,4 L120,60 C80,52 40,64 0,56 Z',p,f,'')}</svg>`;}
 function mannequinMarkup(G){
   return `<g class="form"><rect x="196" y="${G.H-10}" width="8" height="${Math.max(0,612-G.H)}" fill="url(#mq-pole)"/>
   <path d="M200,610 L158,632 M200,610 L242,632 M200,610 L200,636" stroke="#9c7a3c" stroke-width="5" stroke-linecap="round"/>
@@ -644,12 +939,12 @@ const STAGE_DEFS=`<linearGradient id="mq-linen" x1="0" x2="1"><stop offset="0" s
 function dressSVG(design,opt){
   opt=opt||{}; const p=opt.prefix||('x'+(++_gemUid)); const tier=design.tier!=null?design.tier:0;
   const {G,markup}=dressBody(design.dress,p);
-  const used=[...new Set((design.gems||[]).map(q=>q.g+':'+(q.t!=null?q.t:tier)))];
-  const syms=used.map(u=>{const [gid,t]=u.split(':');return GEM[gid]?gemSymbol(GEM[gid],+t,p):'';}).join('');
-  const gems=(design.gems||[]).map(q=>{const t=q.t!=null?q.t:tier;const s=q.s||16;return GEM[q.g]?`<use href="#${p}-${q.g}-${t}" x="${(q.x-s/2).toFixed(1)}" y="${(q.y-s/2).toFixed(1)}" width="${s}" height="${s}"/>`:'';}).join('');
+  const used=[...new Set((design.gems||[]).map(q=>q.g+':'+(q.t!=null?q.t:tier)+':'+(q.c||'')))];
+  const syms=used.map(u=>{const [gid,t,c]=u.split(':');return GEM[gid]?gemSymbol(GEM[gid],+t,p,c||undefined):'';}).join('');
+  const gems=(design.gems||[]).map(q=>{const t=q.t!=null?q.t:tier;const s=q.s||16;return GEM[q.g]?`<use href="#${symId(p,q.g,t,q.c)}" x="${(q.x-s/2).toFixed(1)}" y="${(q.y-s/2).toFixed(1)}" width="${s}" height="${s}"/>`:'';}).join('');
   const W=opt.width?` width="${opt.width}" height="${opt.width*1.6}"`:'';
   const caption=opt.caption?`<text x="200" y="628" text-anchor="middle" font-family="Georgia,serif" font-size="15" fill="#3b2440" font-style="italic">${esc(opt.caption)}</text>`:'';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640"${W}><defs>${STAGE_DEFS}${fabricDefs(design.dress,p)}${syms}</defs>
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640"${W}><defs>${STAGE_DEFS}${allFabricDefs(design.dress,p)}${syms}</defs>
   ${opt.bg===false?'':'<rect width="400" height="640" fill="url(#stage-bg)"/><ellipse cx="200" cy="628" rx="170" ry="14" fill="url(#stage-floor)"/>'}
   ${mannequinMarkup(G)}${markup}<g>${gems}</g>${caption}</svg>`;
 }
@@ -681,17 +976,22 @@ function worldMap(g,uid){
 /* =====================================================================
    PRESET DRESSES & LEVELS
    ===================================================================== */
+const PF=(b,sk,sl,ov)=>({bodice:{f:b[0],c:b[1]},skirt:{f:sk[0],c:sk[1]},sleeves:{f:(sl||b)[0],c:(sl||b)[1]},overlay:ov?{f:ov[0],c:ov[1]}:{f:'none',c:'#ffffff'}});
 const PRESETS=[
- {name:'Rose Cocktail Dress', dress:{silhouette:'cocktail',neckline:'sweetheart',sleeves:'none',length:'knee',color:'#e8a0b4',texture:'satin'}},
- {name:'Midnight Sheath', dress:{silhouette:'sheath',neckline:'vneck',sleeves:'none',length:'midi',color:'#2b2d5c',texture:'silk'}},
- {name:'Champagne A-Line', dress:{silhouette:'aline',neckline:'scoop',sleeves:'cap',length:'floor',color:'#f1d9b5',texture:'satin'}},
- {name:'Emerald Mermaid Gown', dress:{silhouette:'mermaid',neckline:'strapless',sleeves:'none',length:'floor',color:'#1f5f4a',texture:'velvet'}},
- {name:'Starlight Ball Gown', dress:{silhouette:'ballgown',neckline:'sweetheart',sleeves:'offshoulder',length:'floor',color:'#c9d6f0',texture:'tulle'}},
- {name:'Ivory Wedding Gown', dress:{silhouette:'ballgown',neckline:'boat',sleeves:'long',length:'train',color:'#fbf7ef',texture:'lace'}},
- {name:'Garnet Evening Gown', dress:{silhouette:'aline',neckline:'halter',sleeves:'none',length:'floor',color:'#7a1630',texture:'velvet'}},
- {name:'Lilac Empire Dress', dress:{silhouette:'empire',neckline:'scoop',sleeves:'puff',length:'midi',color:'#c8b6e2',texture:'silk'}},
- {name:'Onyx Mermaid Couture', dress:{silhouette:'mermaid',neckline:'oneshoulder',sleeves:'none',length:'train',color:'#151318',texture:'satin'}},
- {name:'Golden Gala Gown', dress:{silhouette:'ballgown',neckline:'vneck',sleeves:'puff',length:'floor',color:'#d9b56c',texture:'silk'}},
+ {name:'Rose Cocktail Dress', dress:{silhouette:'cocktail',neckline:'sweetheart',sleeves:'none',length:'knee',parts:PF(['satin','#e8a0b4'],['satin','#e8a0b4'])}},
+ {name:'Midnight Sheath', dress:{silhouette:'sheath',neckline:'vneck',sleeves:'none',length:'midi',parts:PF(['crepe','#2b2d5c'],['crepe','#2b2d5c'])}},
+ {name:'Champagne A-Line', dress:{silhouette:'aline',neckline:'scoop',sleeves:'cap',length:'floor',parts:PF(['charmeuse','#f1d9b5'],['charmeuse','#f1d9b5'],null,['chiffon','#f7e6cc'])}},
+ {name:'Emerald Mermaid Gown', dress:{silhouette:'mermaid',neckline:'strapless',sleeves:'none',length:'floor',parts:PF(['velvet','#1f5f4a'],['velvet','#1f5f4a'])}},
+ {name:'Starlight Ball Gown', dress:{silhouette:'ballgown',neckline:'sweetheart',sleeves:'offshoulder',length:'floor',parts:PF(['sequin','#c9d6f0'],['tulle','#c9d6f0'],['organza','#dfe7f7'])}},
+ {name:'Ivory Wedding Gown', dress:{silhouette:'ballgown',neckline:'boat',sleeves:'long',length:'train',parts:PF(['chantilly','#fbf7ef'],['satin','#fbf7ef'],['chantilly','#fbf7ef'],['chantilly','#ffffff'])}},
+ {name:'Garnet Evening Gown', dress:{silhouette:'aline',neckline:'halter',sleeves:'none',length:'floor',parts:PF(['velvet','#7a1630'],['taffeta','#7a1630'])}},
+ {name:'Lilac Empire Dress', dress:{silhouette:'empire',neckline:'scoop',sleeves:'puff',length:'midi',parts:PF(['georgette','#c8b6e2'],['chiffon','#c8b6e2'])}},
+ {name:'Onyx Mermaid Couture', dress:{silhouette:'mermaid',neckline:'oneshoulder',sleeves:'none',length:'train',parts:PF(['lame','#151318'],['satin','#151318'])}},
+ {name:'Golden Gala Gown', dress:{silhouette:'ballgown',neckline:'vneck',sleeves:'puff',length:'floor',parts:PF(['brocade','#d9b56c'],['taffeta','#d9b56c'],['organza','#f1dca8'])}},
+ {name:'Riviera Day Dress', dress:{silhouette:'aline',neckline:'boat',sleeves:'cap',length:'knee',parts:PF(['poplin','#9fc5c0'],['poplin','#9fc5c0'])}},
+ {name:'Highland Tweed Dress', dress:{silhouette:'sheath',neckline:'scoop',sleeves:'long',length:'knee',parts:PF(['tweed','#8a6d5a'],['tweed','#8a6d5a'])}},
+ {name:'Damask Opera Gown', dress:{silhouette:'ballgown',neckline:'strapless',sleeves:'none',length:'floor',parts:PF(['damask','#2e3f6e'],['damask','#2e3f6e'])}},
+ {name:'Moonlight Silk Slip', dress:{silhouette:'sheath',neckline:'vneck',sleeves:'none',length:'floor',parts:PF(['charmeuse','#b8c2c9'],['charmeuse','#b8c2c9'],null,['chiffon','#e8edf2'])}},
 ];
 const LEVEL_PATTERNS=[[['belt',5]],[['neck',7]],[['belt',5],['hem',7]],[['neck',7],['hem',9]],[['neck',7],['belt',5],['hem',9]],
  [['neck',7],['cascade',6],['hem',11]],[['bodice',6],['belt',6],['skirtmid',9],['hem',11]],[['neck',8],['belt',6],['cascade',7],['hem',13]]];
@@ -702,10 +1002,10 @@ function levelSpec(lv){const pre=PRESETS[(lv-1)%PRESETS.length];const pat=LEVEL_
    STATE, SAVE, AUDIO
    ===================================================================== */
 const SKEY='jewel-dress-v1', GKEY='jewel-dress-gallery-v1';
-const DEFAULT_DRAFT=()=>({name:'My Dream Dress',dress:{silhouette:'ballgown',neckline:'sweetheart',sleeves:'none',length:'floor',color:'#c8b6e2',texture:'satin'},gems:[]});
+const DEFAULT_DRAFT=()=>({name:'My Dream Dress',dress:{silhouette:'ballgown',neckline:'sweetheart',sleeves:'none',length:'floor',parts:PF(['satin','#c8b6e2'],['satin','#c8b6e2'])},gems:[]});
 function loadJSON(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
 let S=Object.assign({level:1,points:0,unlocked:START_GEMS.slice(),seen:[],muted:false,progress:null,draft:null,editing:null},loadJSON(SKEY,{}));
-S.unlocked=S.unlocked.filter(id=>GEM[id]); if(!S.draft)S.draft=DEFAULT_DRAFT();
+S.unlocked=S.unlocked.filter(id=>GEM[id]);GEMS.forEach(g=>{if(unlockLevelOf(g.id)<=S.level&&!S.unlocked.includes(g.id))S.unlocked.push(g.id);}); if(!S.draft)S.draft=DEFAULT_DRAFT();
 let GALLERY=loadJSON(GKEY,[]);
 function save(){try{localStorage.setItem(SKEY,JSON.stringify(S));}catch(e){}}
 function saveGallery(){try{localStorage.setItem(GKEY,JSON.stringify(GALLERY));}catch(e){toast('Storage is full: delete a few gallery dresses');}}
@@ -750,7 +1050,7 @@ function openInfo(gid,opts){
      ${locked||t>=4?'':`<button class="btn small" id="masterBtn">✨ Preview the master cut</button>`}
      ${opts&&opts.unlocked?'<div class="badge" style="background:#4f8a6b">New gem unlocked!</div>':''}</div>${body}</div>`,opts&&opts.onClose);
   const mb=$('#masterBtn',m.el);let master=false;
-  mb&&mb.addEventListener('click',()=>{master=!master;$('#infoGem',m.el).innerHTML=gemSVG(g,master?4:t);$('#infoTier',m.el).innerHTML=master?'Preview: <b>Masterpiece</b> quality (reach level 9)':`Your atelier cuts it at: <b>${TIERS[t].name}</b>`;mb.textContent=master?'Back to my cut':'✨ Preview the master cut';AudioFX.chime();});
+  mb&&mb.addEventListener('click',()=>{master=!master;$('#infoGem',m.el).innerHTML=gemSVG(g,master?4:t);$('#infoTier',m.el).innerHTML=master?'Preview: <b>Masterpiece</b> quality (reach level 13)':`Your atelier cuts it at: <b>${TIERS[t].name}</b>`;mb.textContent=master?'Back to my cut':'✨ Preview the master cut';AudioFX.chime();});
 }
 function showInfoQueue(ids,done){if(!ids.length){done&&done();return;}openInfo(ids[0],{unlocked:true,onClose:()=>showInfoQueue(ids.slice(1),done)});}
 /* =====================================================================
@@ -764,13 +1064,13 @@ function createStage(host,dress,opts){
   const st={wrap,svg,hud:$('.stage-hud',wrap),dress:null,G:null,syms:new Set(),spots:[],onTap:null};
   st.setDress=d=>{st.dress=d;const {G,markup}=dressBody(d,'st');st.G=G;
     [...defs.children].forEach(n=>{if(n.dataset&&n.dataset.fab)n.remove();});
-    const fd=document.createElementNS('http://www.w3.org/2000/svg','g');fd.dataset.fab='1';fd.innerHTML=fabricDefs(d,'st');defs.appendChild(fd);
+    const fd=document.createElementNS('http://www.w3.org/2000/svg','g');fd.dataset.fab='1';fd.innerHTML=allFabricDefs(d,'st');defs.appendChild(fd);
     if(!defs.querySelector('#mq-linen')){const sd=document.createElementNS('http://www.w3.org/2000/svg','g');sd.innerHTML=STAGE_DEFS;defs.appendChild(sd);}
     $('.dress',svg).innerHTML=mannequinMarkup(G)+markup;
     $('.guides',svg).innerHTML=Object.entries(G.guides).map(([k,v])=>`<path data-k="${k}" d="${v}"/>`).join('');};
-  st.ensureSym=(gid,t)=>{const k=gid+'-'+t;if(st.syms.has(k))return;st.syms.add(k);const n=document.createElementNS('http://www.w3.org/2000/svg','g');n.innerHTML=gemSymbol(GEM[gid],t,'st');defs.appendChild(n);};
-  st.gemEl=q=>{st.ensureSym(q.g,q.t);const s=q.s;const u=document.createElementNS('http://www.w3.org/2000/svg','use');
-    u.setAttribute('href',`#st-${q.g}-${q.t}`);u.setAttribute('x',(q.x-s/2).toFixed(1));u.setAttribute('y',(q.y-s/2).toFixed(1));u.setAttribute('width',s);u.setAttribute('height',s);return u;};
+  st.ensureSym=(gid,t,c)=>{const k=symId('st',gid,t,c);if(st.syms.has(k))return;st.syms.add(k);const n=document.createElementNS('http://www.w3.org/2000/svg','g');n.innerHTML=gemSymbol(GEM[gid],t,'st',c);defs.appendChild(n);};
+  st.gemEl=q=>{st.ensureSym(q.g,q.t,q.c);const s=q.s;const u=document.createElementNS('http://www.w3.org/2000/svg','use');
+    u.setAttribute('href','#'+symId('st',q.g,q.t,q.c));u.setAttribute('x',(q.x-s/2).toFixed(1));u.setAttribute('y',(q.y-s/2).toFixed(1));u.setAttribute('width',s);u.setAttribute('height',s);return u;};
   st.renderGems=list=>{const g=$('.gems',svg);g.innerHTML='';list.forEach(q=>g.appendChild(st.gemEl(q)));};
   st.addGem=q=>{const el=st.gemEl(q);$('.gems',svg).appendChild(el);el.animate([{transform:'scale(1.6)',opacity:0,transformOrigin:`${q.x}px ${q.y}px`},{transform:'scale(1)',opacity:1,transformOrigin:`${q.x}px ${q.y}px`}],{duration:280,easing:'cubic-bezier(.2,1.4,.4,1)'});burst(q.x,q.y,q.s);};
   st.toSvg=(cx,cy)=>{const r=svg.getBoundingClientRect();if(cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)return null;const m=svg.getScreenCTM();if(!m)return null;const p=new DOMPoint(cx,cy).matrixTransform(m.inverse());return{x:p.x,y:p.y};};
@@ -789,7 +1089,7 @@ function createStage(host,dress,opts){
   return st;
 }
 /* palette with tap-to-select and drag-to-place */
-function paletteHTML(sel){const t=curTier();return `<div class="palette">${GEMS.filter(g=>S.unlocked.includes(g.id)).map(g=>`<div class="gemchip ${g.id===sel?'sel':''}" data-g="${g.id}" role="button" tabindex="0" title="${esc(g.name)}">${gemSVG(g,t)}<span>${esc(g.name.replace('Watermelon ','').replace(' Tourmaline',' Tourm.'))}</span><button class="info" data-info="${g.id}" aria-label="About ${esc(g.name)}">i</button></div>`).join('')}</div>`;}
+function paletteHTML(sel){const t=curTier();return `<div class="palette">${GEMS_SORTED.filter(g=>S.unlocked.includes(g.id)).map(g=>`<div class="gemchip ${g.id===sel?'sel':''}" data-g="${g.id}" role="button" tabindex="0" title="${esc(g.name)}">${gemSVG(g,t)}<span>${esc(g.name.replace('Watermelon ','').replace(' Tourmaline',' Tourm.'))}</span><button class="info" data-info="${g.id}" aria-label="About ${esc(g.name)}">i</button></div>`).join('')}</div>`;}
 function bindPalette(root,stage,onSelect,onDrop){
   root.addEventListener('click',e=>{const b=e.target.closest('[data-info]');if(b){e.stopPropagation();openInfo(b.dataset.info);}});
   root.addEventListener('keydown',e=>{const c=e.target.closest('.gemchip');if(c&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onSelect(c.dataset.g);}});
@@ -807,7 +1107,7 @@ function bindPalette(root,stage,onSelect,onDrop){
 const app=()=>$('#app');
 let SCREEN='menu';
 function go(name,arg){SCREEN=name;closeModal();window.scrollTo(0,0);({menu:screenMenu,play:screenPlay,design:screenDesign,book:screenBook,gallery:screenGallery}[name]||screenMenu)(arg);hud();}
-const SHOWCASE={name:'Showcase',tier:4,dress:{silhouette:'ballgown',neckline:'sweetheart',sleeves:'offshoulder',length:'floor',color:'#c8b6e2',texture:'tulle'},
+const SHOWCASE={name:'Showcase',tier:4,dress:{silhouette:'ballgown',neckline:'sweetheart',sleeves:'offshoulder',length:'floor',parts:PF(['sequin','#c8b6e2'],['satin','#c8b6e2'],['organza','#e6dcf2'],['tulle','#e6dcf2'])},
   gems:[...[[164,141],[182,135],[200,152],[218,135],[236,141]].map(([x,y],i)=>({g:['sapphire','diamond','ruby','diamond','emerald'][i],x,y,s:i===2?20:13})),
         ...[170,185,200,215,230].map(x=>({g:'diamond',x,y:229+(x===200?3:1),s:10})),
         ...Array.from({length:11},(_,i)=>({g:i%2?'pearl':'opal',x:68+i*26.4,y:568+Math.sin(i/10*Math.PI)*12,s:i%2?11:16})),
@@ -819,7 +1119,7 @@ function screenMenu(){
     <h1>Jewel <em>Dress</em></h1>
     <p class="lead">Design gowns, set real gemstones on them, and discover where each gem comes from on Earth. The higher your level, the more beautiful and lifelike your gems become.</p>
     <div class="menu-cards">
-      <button class="mcard feature" data-go="design"><div class="t">✂️ Create your own dress</div><div class="d">Choose the silhouette, neckline, sleeves, length, colour and fabric, then set gems anywhere you like.</div></button>
+      <button class="mcard feature" data-go="design"><div class="t">✂️ Create your own dress</div><div class="d">Choose the silhouette, neckline, sleeves and length, sew each part from 20 real fabrics, then set gems in any cut, anywhere you like.</div></button>
       <button class="mcard" data-go="play"><div class="t">💎 Atelier levels</div><div class="d">Level ${S.level}: ${esc(next.preset.name)}. Fill the marked spots to unlock new gems.</div></button>
       <button class="mcard" data-go="book"><div class="t">📖 Gem encyclopedia</div><div class="d">${S.unlocked.length} of ${GEMS.length} gems discovered. Names, minerals and origins.</div></button>
       <button class="mcard" data-go="gallery"><div class="t">🖼️ My gallery</div><div class="d">${GALLERY.length} saved dress${GALLERY.length===1?'':'es'}. Download as PNG.</div></button>
@@ -837,7 +1137,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by level</div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${TIERS.map((t,i)=>`<div style="text-align:center;width:110px"><div style="width:70px;height:70px;margin:auto">${gemSVG(GEM.diamond,i)}</div><b style="font-family:var(--serif);font-size:17px">${t.name}</b><div class="small muted">Level ${i*2+1}+</div></div>`).join('')}</div></div>`);}
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${TIERS.map((t,i)=>`<div style="text-align:center;width:110px"><div style="width:70px;height:70px;margin:auto">${gemSVG(GEM.diamond,i)}</div><b style="font-family:var(--serif);font-size:17px">${t.name}</b><div class="small muted">Level ${i*3+1}+</div></div>`).join('')}</div></div>`);}
 /* ---------- level play ---------- */
 let PLAY=null;
 function screenPlay(){
@@ -850,7 +1150,7 @@ function screenPlay(){
      <div class="tools"><button class="btn small" id="undoBtn">↶ Undo</button><button class="btn small" id="restartBtn">Restart level</button></div></aside>
    <div class="center" id="stageHost"></div>
    <aside class="panel right"><h3>Atelier notes</h3>
-     <p class="small">${spec.unlocks.length?`Finish this dress to unlock: <b>${spec.unlocks.map(id=>esc(GEM[id].name)).join('</b> and <b>')}</b>.`:'You have discovered every gem. Keep designing for sparkle points!'}</p>
+     <p class="small">${spec.unlocks.length?`Finish this dress to unlock: <b>${(n=>n.length>1?n.slice(0,-1).join('</b>, <b>')+'</b> and <b>'+n[n.length-1]:n[0])(spec.unlocks.map(id=>esc(GEM[id].name)))}</b>.`:'You have discovered every gem. Keep designing for sparkle points!'}</p>
      <p class="small muted">Rarer gems are worth more sparkle points. Matching gems in a row looks elegant, but any combination counts.</p>
      <div class="tools"><button class="btn small" data-go="book">📖 Encyclopedia</button><button class="btn small" data-go="design">✂️ Free design</button></div></aside></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
@@ -888,7 +1188,7 @@ function screenPlay(){
 function levelComplete(){
   const spec=levelSpec(S.level);const P=S.progress;const oldTier=curTier();
   const bonus=100*S.level;S.points+=bonus;
-  GALLERY.unshift({id:'d'+Date.now().toString(36),name:`Level ${S.level}: ${spec.preset.name}`,dress:Object.assign({},spec.preset.dress),gems:P.gems.map(({g,x,y,s,t})=>({g,x,y,s,t})),tier:oldTier,created:Date.now(),from:'level'});saveGallery();
+  GALLERY.unshift({id:'d'+Date.now().toString(36),name:`Level ${S.level}: ${spec.preset.name}`,dress:JSON.parse(JSON.stringify(spec.preset.dress)),gems:P.gems.map(({g,x,y,s,t,c})=>({g,x,y,s,t,c})),tier:oldTier,created:Date.now(),from:'level'});saveGallery();
   const unl=spec.unlocks.filter(id=>!S.unlocked.includes(id));S.unlocked.push(...unl);
   S.level++;S.progress=null;save();hud();AudioFX.fanfare();
   const nt=curTier();
@@ -903,7 +1203,7 @@ function levelComplete(){
 /* ---------- custom dress designer ---------- */
 function screenDesign(arg){
   if(arg&&arg.load){S.draft=JSON.parse(JSON.stringify({id:arg.load.id,name:arg.load.name,dress:arg.load.dress,gems:arg.load.gems}));save();}
-  const D=S.draft; D.gems=D.gems||[]; let tab=D.gems.length?'gems':'design'; let size=16, mode='place';
+  const D=S.draft; D.gems=D.gems||[]; normDress(D.dress); let tab=D.gems.length?'gems':'design'; let size=16, mode='place', cut='natural', part='skirt';
   let sel=D.sel&&S.unlocked.includes(D.sel)?D.sel:S.unlocked[S.unlocked.length-1];
   app().innerHTML=`<section class="screen play">
     <aside class="panel left"><div class="tabs"><button data-tab="design">✂️ Dress</button><button data-tab="gems">💎 Gems</button></div><div id="tabBody"></div></aside>
@@ -916,31 +1216,42 @@ function screenDesign(arg){
       <p class="small muted">Tip: gems you unlock in the atelier levels appear here, and they get more beautiful as your level rises (now: <b>${TIERS[curTier()].name}</b>).</p></aside></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
   const stage=createStage($('#stageHost'),D.dress);stage.renderGems(D.gems);
-  const info=()=>{$('#dinfo').textContent=`${D.gems.length} gem${D.gems.length===1?'':'s'} set${D.id?' · saved in gallery':''}`;stage.hud.innerHTML=`<span class="tag">${mode==='erase'?'🧽 Eraser':'💎 '+esc(GEM[sel].name)}</span><span class="tag">${D.gems.length} gems</span>`;};
+  const info=()=>{$('#dinfo').textContent=`${D.gems.length} gem${D.gems.length===1?'':'s'} set${D.id?' · saved in gallery':''}`;stage.hud.innerHTML=`<span class="tag">${mode==='erase'?'🧽 Eraser':'💎 '+esc(GEM[sel].name)+(cut!=='natural'?' · '+CUTS.find(c=>c[0]===cut)[1]:'')}</span><span class="tag">${D.gems.length} gems</span>`;};
   const persist=()=>{D.sel=sel;save();info();};
   const opt=(key,label)=>`<div class="opt-label">${label}</div><div class="chips">${DRESS_OPTS[key].map(([v,l])=>`<button class="chip ${D.dress[key]===v?'on':''}" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
   const renderTab=()=>{$$('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
     const tb=$('#tabBody');
-    if(tab==='design'){tb.innerHTML=opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length')+
-      `<div class="opt-label">Fabric colour</div><div class="swatches">${FABRIC_COLORS.map(c=>`<button class="sw ${D.dress.color===c?'on':''}" data-c="${c}" style="background:${c}" aria-label="Colour ${c}"></button>`).join('')}<input type="color" id="cpick" value="${D.dress.color}" aria-label="Custom colour"></div>`+opt('texture','Fabric')+
-      `<button class="btn small primary" id="toGems">Next: set gems →</button>`;
+    if(tab==='design'){const PP=D.dress.parts,cp=PP[part];const flist=part==='overlay'?OVERLAYS:FAB_ORDER;
+      tb.innerHTML=opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length')+
+      `<div class="opt-label">Fabric for…</div><div class="seg" id="partSeg">${DRESS_PARTS.map(([k,l])=>`<button data-part="${k}" class="${part===k?'on':''}">${l}</button>`).join('')}</div>
+      <div class="chips fabchips">${flist.map(f=>`<button class="chip ${cp.f===f?'on':''}" data-f="${f}">${f==='none'?'None':esc(FABRICS[f].name)}</button>`).join('')}</div>
+      ${cp.f!=='none'?`<div class="fabinfo" id="fabInfo">${fabricSwatch(cp.f,cp.c)}<div><b>${esc(FABRICS[cp.f].name)}</b><p class="small">${esc(FABRICS[cp.f].info)}</p></div></div>`:''}
+      <div class="opt-label">${DRESS_PARTS.find(x=>x[0]===part)[1]} colour</div><div class="swatches">${FABRIC_COLORS.map(c=>`<button class="sw ${cp.c===c?'on':''}" data-c="${c}" style="background:${c}" aria-label="Colour ${c}"></button>`).join('')}<input type="color" id="cpick" value="${cp.c}" aria-label="Custom colour"></div>
+      ${part!=='overlay'?`<button class="btn small" id="sameAll">Use this fabric &amp; colour everywhere</button>`:''}
+      <button class="btn small primary" id="toGems">Next: set gems →</button>`;
       $$('[data-k]',tb).forEach(b=>b.onclick=()=>{D.dress[b.dataset.k]=b.dataset.v;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
-      $$('[data-c]',tb).forEach(b=>b.onclick=()=>{D.dress.color=b.dataset.c;stage.setDress(D.dress);persist();renderTab();});
-      $('#cpick').oninput=e=>{D.dress.color=e.target.value;stage.setDress(D.dress);persist();};
+      $$('[data-part]',tb).forEach(b=>b.onclick=()=>{part=b.dataset.part;renderTab();});
+      $$('[data-f]',tb).forEach(b=>b.onclick=()=>{cp.f=b.dataset.f;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
+      $$('[data-c]',tb).forEach(b=>b.onclick=()=>{cp.c=b.dataset.c;stage.setDress(D.dress);persist();renderTab();});
+      $('#cpick').oninput=e=>{cp.c=e.target.value;stage.setDress(D.dress);persist();};
       $('#cpick').onchange=()=>renderTab();
+      const sa=$('#sameAll');sa&&(sa.onclick=()=>{['bodice','skirt','sleeves'].forEach(k=>PP[k]={f:cp.f,c:cp.c});stage.setDress(D.dress);persist();toast(FABRICS[cp.f].name+' everywhere');});
       $('#toGems').onclick=()=>{tab='gems';renderTab();};
     }else{
-      tb.innerHTML=`<div class="opt-label">Gem size</div><div class="tools"><div class="seg" id="sizeSeg">${[[10,'S'],[16,'M'],[24,'L'],[34,'XL']].map(([v,l])=>`<button data-s="${v}" class="${size===v?'on':''}">${l}</button>`).join('')}</div>
+      const cuts=cutsFor(GEM[sel]);if(!cuts.includes(cut))cut='natural';
+      tb.innerHTML=`<div class="opt-label">Cut</div><div class="seg cutseg" id="cutSeg">${CUTS.filter(c=>cuts.includes(c[0])).map(([v,l])=>`<button data-cut="${v}" class="${cut===v?'on':''}" title="${l}">${gemSVG(GEM[sel],curTier(),'cutic',v)}<span>${v==='natural'?'Classic':l}</span></button>`).join('')}</div>
+        <div class="opt-label">Gem size</div><div class="tools"><div class="seg" id="sizeSeg">${[[10,'S'],[16,'M'],[24,'L'],[34,'XL']].map(([v,l])=>`<button data-s="${v}" class="${size===v?'on':''}">${l}</button>`).join('')}</div>
         <div class="seg" id="modeSeg"><button data-m="place" class="${mode==='place'?'on':''}">Place</button><button data-m="erase" class="${mode==='erase'?'on':''}">Erase</button></div></div>
         <div id="pal"></div><div class="tools"><button class="btn small" id="undoBtn">↶ Undo</button><button class="btn small" id="clearBtn">Clear gems</button><button class="btn small" id="pattBtn">✨ Auto-trim</button></div>
         <p class="small muted">Tap a gem, then tap anywhere on the dress. On a computer you can also drag gems onto it.</p>`;
       const pal=$('#pal');const drawPal=()=>{pal.innerHTML=paletteHTML(mode==='erase'?'':sel);};drawPal();
       bindPalette(pal,stage,(gid,quiet)=>{sel=gid;mode='place';if(!quiet)AudioFX.soft();renderTab();persist();},(gid,p,cx,cy)=>{sel=gid;mode='place';place(p,cx,cy);renderTab();});
       $$('#sizeSeg button').forEach(b=>b.onclick=()=>{size=+b.dataset.s;renderTab();});
+      $$('#cutSeg button').forEach(b=>b.onclick=()=>{cut=b.dataset.cut;mode='place';AudioFX.soft();renderTab();info();});
       $$('#modeSeg button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;renderTab();info();});
       $('#undoBtn').onclick=()=>{D.gems.pop();stage.renderGems(D.gems);persist();};
       $('#clearBtn').onclick=()=>{if(D.gems.length&&confirm('Remove all gems from this dress?')){D.gems=[];stage.renderGems(D.gems);persist();}};
-      $('#pattBtn').onclick=()=>{const t=curTier();const add=[];[['neck',9,12],['belt',7,11],['hem',13,14]].forEach(([k,n,s])=>stage.sample(k,n).forEach(q=>add.push({g:sel,x:q.x,y:q.y,s,t})));
+      $('#pattBtn').onclick=()=>{const t=curTier();const add=[];[['neck',9,12],['belt',7,11],['hem',13,14]].forEach(([k,n,s])=>stage.sample(k,n).forEach(q=>add.push(Object.assign({g:sel,x:q.x,y:q.y,s,t},cut!=='natural'?{c:cut}:{}))));
         add.forEach((q,i)=>setTimeout(()=>{D.gems.push(q);stage.addGem(q);if(i%3===0)AudioFX.chime();if(i===add.length-1)persist();},i*35));};
     }
   };
@@ -948,7 +1259,7 @@ function screenDesign(arg){
     if(mode==='erase'){let bi=-1,bd=1e9;D.gems.forEach((q,i)=>{const d=Math.hypot(q.x-p.x,q.y-p.y);if(d<bd){bd=d;bi=i;}});
       if(bi>=0&&bd<=D.gems[bi].s/2+6){D.gems.splice(bi,1);stage.renderGems(D.gems);AudioFX.soft();persist();}return;}
     if(!stage.onFabric(p.x,p.y)){toast('Set your gems on the dress fabric');return;}
-    const q={g:sel,x:+p.x.toFixed(1),y:+p.y.toFixed(1),s:size,t:curTier()};D.gems.push(q);stage.addGem(q);AudioFX.chime();
+    const q={g:sel,x:+p.x.toFixed(1),y:+p.y.toFixed(1),s:size,t:curTier()};if(cut!=='natural'&&cutsFor(GEM[sel]).includes(cut))q.c=cut;D.gems.push(q);stage.addGem(q);AudioFX.chime();
     const pts=Math.max(1,Math.round(GEM[sel].value*.2));S.points+=pts;stage.float(cx,cy,'+'+pts);hud();persist();};
   stage.onTap=place;
   $$('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderTab();});
@@ -959,7 +1270,7 @@ function screenDesign(arg){
   const mb=$('#mintBtn');mb&&(mb.onclick=()=>{if(!D.gems.length){toast('Set some gems first ✨');return;}const rec=saveDraftToGallery();JD_STARKNET.mint(rec);});
   renderTab();info();
 }
-function draftDesign(){const D=S.draft;return{id:D.id,name:(D.name||'My Dress').trim()||'My Dress',dress:Object.assign({},D.dress),gems:D.gems.map(({g,x,y,s,t})=>({g,x,y,s,t})),tier:curTier()};}
+function draftDesign(){const D=S.draft;return{id:D.id,name:(D.name||'My Dress').trim()||'My Dress',dress:JSON.parse(JSON.stringify(normDress(D.dress))),gems:D.gems.map(({g,x,y,s,t,c})=>(c?{g,x,y,s,t,c}:{g,x,y,s,t})),tier:curTier()};}
 function saveDraftToGallery(){const d=draftDesign();let rec=d.id&&GALLERY.find(x=>x.id===d.id);
   if(rec){if(rec.minted&&JSON.stringify(rec.gems)!==JSON.stringify(d.gems)){rec=null;}else Object.assign(rec,d,{updated:Date.now()});}
   if(!rec){rec=Object.assign(d,{id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),created:Date.now(),from:'design'});GALLERY.unshift(rec);S.draft.id=rec.id;save();}
@@ -968,7 +1279,7 @@ function saveDraftToGallery(){const d=draftDesign();let rec=d.id&&GALLERY.find(x
 function screenBook(){const t=curTier();
   app().innerHTML=`<section class="screen"><div class="section-head"><div><div class="opt-label">Gem encyclopedia</div><h2>${S.unlocked.length} of ${GEMS.length} gems discovered</h2></div>
     <div class="muted small">Tap a gem to read where it comes from. Locked gems unlock as you finish atelier levels.</div></div>
-    <div class="grid">${GEMS.map(g=>{const u=S.unlocked.includes(g.id);return `<button class="ecard ${u?'':'locked'}" data-g="${g.id}">${gemSVG(g,u?t:0)}<div class="n">${esc(g.name)}</div><div class="small muted">${u?esc(g.src.slice(0,2).map(s=>s.n.split(',').pop().trim()).join(' · ')):'🔒 Level '+(unlockLevelOf(g.id)-1)}</div></button>`;}).join('')}</div></section>`;
+    <div class="grid">${GEMS_SORTED.map(g=>{const u=S.unlocked.includes(g.id);return `<button class="ecard ${u?'':'locked'}" data-g="${g.id}">${gemSVG(g,u?t:0)}<div class="n">${esc(g.name)}</div><div class="small muted">${u?esc(g.src.slice(0,2).map(s=>s.n.split(',').pop().trim()).join(' · ')):'🔒 Level '+(unlockLevelOf(g.id)-1)}</div></button>`;}).join('')}</div></section>`;
   $$('[data-g]').forEach(b=>b.onclick=()=>openInfo(b.dataset.g));}
 /* ---------- gallery ---------- */
 function screenGallery(){
@@ -1002,7 +1313,7 @@ async function downloadPNG(d){
    ===================================================================== */
 window.JD_GAME={
   toast, gems:GEMS, gallery:()=>GALLERY,
-  async fingerprint(d){const canon=JSON.stringify({dress:d.dress,gems:d.gems.map(q=>[q.g,Math.round(q.x*10),Math.round(q.y*10),q.s,q.t])});
+  async fingerprint(d){const canon=JSON.stringify({dress:d.dress,gems:d.gems.map(q=>{const r=[q.g,Math.round(q.x*10),Math.round(q.y*10),q.s,q.t];if(q.c)r.push(q.c);return r;})});
     try{const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canon));return '0x'+[...new Uint8Array(buf)].slice(0,31).map(b=>b.toString(16).padStart(2,'0')).join('');}
     catch(e){let a=hashStr(canon),b=hashStr(canon+'#'),c=hashStr('#'+canon);return '0x'+[a,b,c].map(x=>x.toString(16).padStart(8,'0')).join('');}},
   nameFelt(n){const ascii=[...String(n||'')].filter(ch=>{const c=ch.charCodeAt(0);return c>=32&&c<127;}).slice(0,31);return ascii.length?'0x'+ascii.map(ch=>ch.charCodeAt(0).toString(16).padStart(2,'0')).join(''):'0x0';},
