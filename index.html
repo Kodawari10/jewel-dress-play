@@ -170,6 +170,10 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 .mohs i.on{background:linear-gradient(90deg,#e2c27d,#b98d3e)}
 .mohsref{margin-top:4px;line-height:1.4}
 .relgems{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}.relgem{display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:13px;font-weight:700;color:var(--plum);background:#fff;border:1px solid #ecd3b5;border-radius:999px;padding:2px 10px 2px 3px;cursor:pointer}.relgem svg{width:24px;height:24px;display:block}.relgem:hover{background:#fdf1e4}.relgem.locked{color:#8a7f86;border-style:dashed}.relgem.locked svg{opacity:.45;filter:grayscale(.7)}
+.quiz .qstep{margin:6px 0 4px}.quiz .qgem{width:64px;height:64px;margin:6px 0}.quiz .qgem svg{width:100%;height:100%}.quiz .qq{font-family:var(--serif);font-size:24px;color:var(--plum);margin:6px 0 12px}
+.qopts{display:grid;gap:8px}.qopt{display:flex;align-items:center;gap:10px;font:inherit;font-size:16px;font-weight:700;color:var(--plum);text-align:left;background:#fff;border:1px solid #ecd3b5;border-radius:16px;padding:8px 14px;cursor:pointer;min-height:48px}
+.qopt svg{width:34px;height:34px;flex:none}.qopt:hover:not(:disabled){background:#fdf1e4}.qopt:disabled{cursor:default}.qopt.right{background:#e8f6ec;border-color:#5aa874}.qopt.right::after{content:"✓";margin-left:auto;color:#2f7d4a}
+.qopt.wrong{background:#fdecef;border-color:#d9788c}.qopt.wrong::after{content:"✕";margin-left:auto;color:#b0435a}.qopt:disabled:not(.right):not(.wrong){opacity:.6}.qfb p{line-height:1.5;margin:12px 0 10px}.qscore{font-size:18px}
 .map{width:100%;height:auto;border-radius:14px;background:linear-gradient(180deg,#e8f0f3,#dfe9ee);border:1px solid #d6e2e7}
 .srclist{margin:8px 0 0;padding-left:18px;font-size:13.5px;line-height:1.5}
 .badge{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--gold);border-radius:999px;padding:3px 9px}
@@ -1689,6 +1693,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>Mirror:</b> in the designer, turn on 🪞 Mirror to set every gem on both sides of the dress at once (one Undo removes the pair).</li>
    <li><b>Finding gems:</b> once you have ten or more, type in <b>Find a gem…</b> above the palette (a name or mineral, like “beryl”) or tap <b>♥</b> to show just your favourites; press Enter to pick the first match.</li>
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Under <b>Gem relatives</b>, tap a gem made of the same mineral (like ruby and sapphire, both corundum) to compare them. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
+   <li><b>🧠 Gem quiz:</b> in the encyclopedia, answer five quick questions about the gems you have discovered (their mineral family, which is harder, birthstone months). Your best score is saved.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${TIERS.map((t,i)=>`<div style="text-align:center;width:110px"><div style="width:70px;height:70px;margin:auto">${gemSVG(GEM.diamond,i)}</div><b style="font-family:var(--serif);font-size:17px">${t.name}</b><div class="small muted">${MILESTONES.find(m=>m.tier===i).n.toLocaleString('en')}+ gems</div></div>`).join('')}</div></div>`);}
@@ -1858,6 +1863,7 @@ function screenBook(){const t=curTier();
     <div class="booktools"><input type="search" id="bookQ" placeholder="Search gems, minerals, places or birth months (e.g. Brazil, July)" aria-label="Search the encyclopedia" autocomplete="off" value="${esc(BOOK_F.q)}">
       <div class="seg" id="bookSeg" role="group" aria-label="Show">${[['all','All'],['found','Discovered'],['locked','Locked'],['fav','♥ Favourites']].map(([v,l])=>`<button data-bf="${v}" class="${BOOK_F.show===v?'on':''}" aria-pressed="${BOOK_F.show===v}">${l}</button>`).join('')}</div>
       <label class="booksort small muted">Sort <select id="bookSort" aria-label="Sort gems">${BOOK_SORTS.map(([v,l])=>`<option value="${v}" ${BOOK_F.sort===v?'selected':''}>${l}</option>`).join('')}</select></label>
+      <button class="btn small" id="quizBtn" title="Five quick questions about the gems you have discovered">🧠 Gem quiz</button>
       <span class="small muted" id="bookCount" aria-live="polite"></span></div>
     <div class="grid" id="bookGrid">${GEMS_SORTED.map(g=>{const u=S.unlocked.includes(g.id);return `<button class="ecard ${u?'':'locked'} ${u&&isFav(g.id)?'fav':''}" data-g="${g.id}"><span class="favmark" aria-label="Favourite">♥</span>${gemSVG(g,u?t:0)}<div class="n">${esc(g.name)}</div><div class="small muted">${u?esc(g.src.slice(0,2).map(s=>s.n.split(',').pop().trim()).join(' · ')):(msGemAt(g.id)!=null?'🔒 '+msGemAt(g.id).toLocaleString('en')+' gems placed':'🔒 Level '+(unlockLevelOf(g.id)-1))}</div>${u?`<div class="mh small" title="Hardness on the Mohs scale">💪 Mohs ${esc(g.mohsTxt)}</div>`:''}</button>`;}).join('')}</div></section>`;
   $$('[data-g]').forEach(b=>b.onclick=()=>openInfo(b.dataset.g,{list:$$('.ecard').filter(x=>!x.hidden).map(x=>x.dataset.g)}));
@@ -1871,12 +1877,55 @@ function screenBook(){const t=curTier();
     $$('.ecard',grid).sort((a,b)=>cmp(GEM[a.dataset.g],GEM[b.dataset.g])||GEM[a.dataset.g].name.localeCompare(GEM[b.dataset.g].name)).forEach(b=>grid.appendChild(b));};
   $('#bookSort').onchange=e=>{BOOK_F.sort=e.target.value;order();};order();
   $('#bookQ').oninput=e=>{BOOK_F.q=e.target.value;apply();};
+  $('#quizBtn').onclick=()=>{AudioFX.soft();openQuiz();};
   $$('#bookSeg button').forEach(b=>b.onclick=()=>{BOOK_F.show=b.dataset.bf;$$('#bookSeg button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',x===b);});apply();});
   apply();}
 const BOOK_F={q:'',show:'all',sort:'rarity'};let BOOK_REFRESH=null;
 const BOOK_SORTS=[['rarity','Rarity'],['name','A–Z'],['hard','Hardest first'],['soft','Softest first'],['colour','Colour']];
 const hueKey=g=>g.c.s<20?1000+(100-g.c.l):g.c.h;
 const BOOK_CMP={rarity:(a,b)=>a.value-b.value,name:(a,b)=>a.name.localeCompare(b.name),hard:(a,b)=>b.mohs-a.mohs,soft:(a,b)=>a.mohs-b.mohs,colour:(a,b)=>hueKey(a)-hueKey(b)};
+/* ---------- gem quiz (encyclopedia): short rounds built only from the game's own gem facts ---------- */
+const QUIZ_FAM=['quartz','chalcedony','corundum','beryl','garnet','feldspar','tourmaline','opal','chrysoberyl','topaz'];
+const qNorm=x=>String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const qShuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const qCap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function quizQuestion(type,g){
+  if(type==='fam'){const r=REL.find(x=>QUIZ_FAM.includes(x[0])&&x[1].includes(g.id));if(!r||qNorm(g.name).includes(r[0]))return null;
+    const pair={quartz:'chalcedony',chalcedony:'quartz'};const wrong=qShuf(QUIZ_FAM.filter(f=>f!==r[0]&&f!==pair[r[0]])).slice(0,2);
+    return{key:'fam:'+g.id,gem:g,q:`Which mineral family does ${g.name} belong to?`,opts:qShuf([r[0],...wrong]).map(f=>({label:qCap(f),ok:f===r[0]})),why:`${g.name}: ${g.family}.`};}
+  if(type==='hard'){const[a0,a1]=mohsRange(g);const far=h=>{const[b0,b1]=mohsRange(h);return b0-a1>=1||a0-b1>=1;};
+    const pool=GEMS.filter(h=>h.id!==g.id&&far(h));const found=pool.filter(h=>S.unlocked.includes(h.id));const h=qShuf(found.length?found:pool)[0];if(!h)return null;
+    const harder=mohsRange(h)[0]>a1?h:g;
+    return{key:'hard:'+[g.id,h.id].sort().join(','),q:'Which is harder on the Mohs scale?',opts:qShuf([g,h]).map(x=>({gem:x,label:x.name,ok:x===harder})),why:`${g.name} is Mohs ${g.mohsTxt} and ${h.name} is Mohs ${h.mohsTxt}. A harder gem can scratch a softer one.`};}
+  if(type==='birth'){if(!BIRTH[g.id])return null;const kin=new Set(REL.flatMap(r=>r[1]));const pool=GEMS.filter(h=>!BIRTH[h.id]&&!kin.has(h.id));
+    const found=pool.filter(h=>S.unlocked.includes(h.id));const wrong=qShuf(found.length>=2?found:pool).slice(0,2);if(wrong.length<2)return null;const m=birthMonth(g.id);
+    return{key:'birth:'+g.id,q:`Which of these is a modern birthstone for ${m}?`,opts:qShuf([g,...wrong]).map(x=>({gem:x,label:x.name,ok:x===g})),why:`${g.name} is on the modern birthstone list for ${m}.`};}
+  return null;}
+function quizRound(n){const out=[],keys=new Set();const found=GEMS.filter(g=>S.unlocked.includes(g.id));
+  const all=[];found.forEach(g=>['fam','hard','birth'].forEach(t=>all.push([t,g])));
+  for(const[t,g] of qShuf(all)){if(out.length>=n)break;const q=quizQuestion(t,g);if(q&&!keys.has(q.key)&&!(t==='hard'&&out.some(o=>o.key.startsWith('hard:'))&&out.filter(o=>o.key.startsWith('hard:')).length>=2)){keys.add(q.key);out.push(q);}}
+  return out;}
+let QUIZ=null;
+function openQuiz(){const qs=quizRound(5);if(!qs.length){toast('Discover a few more gems first!');return;}
+  QUIZ={qs,i:0,score:0,answered:false};const m=modal(`<div class="quiz" style="padding:26px 24px"><div class="opt-label">🧠 Gem quiz</div><div id="quizBody" aria-live="polite"></div></div>`,()=>{QUIZ=null;});
+  const t=curTier();const body=$('#quizBody',m.el);
+  const draw=()=>{const q=QUIZ.qs[QUIZ.i];QUIZ.answered=false;
+    body.innerHTML=`<div class="small muted qstep">Question ${QUIZ.i+1} of ${QUIZ.qs.length} · ✨ ${QUIZ.score} right</div>
+      ${q.gem?`<div class="qgem">${gemSVG(q.gem,S.unlocked.includes(q.gem.id)?t:0)}</div>`:''}<h3 class="qq">${esc(q.q)}</h3>
+      <div class="qopts" role="group" aria-label="Answers">${q.opts.map((o,k)=>`<button class="qopt" data-k="${k}">${o.gem?gemSVG(o.gem,S.unlocked.includes(o.gem.id)?t:0):''}<span>${esc(o.label)}</span></button>`).join('')}</div><div class="qfb" id="quizFb"></div>`;
+    $$('.qopt',body).forEach(b=>b.onclick=()=>answer(+b.dataset.k));const f=$('.qopt',body);f&&f.focus();};
+  const answer=k=>{if(!QUIZ||QUIZ.answered)return;QUIZ.answered=true;const q=QUIZ.qs[QUIZ.i];const ok=q.opts[k].ok;if(ok)QUIZ.score++;
+    $$('.qopt',body).forEach((b,j)=>{b.disabled=true;b.classList.toggle('right',q.opts[j].ok);b.classList.toggle('wrong',j===k&&!ok);});
+    ok?AudioFX.chime():AudioFX.soft();const last=QUIZ.i===QUIZ.qs.length-1;
+    $('#quizFb',body).innerHTML=`<p><b>${ok?'✓ Right!':'Not quite.'}</b> ${esc(q.why)}</p><button class="btn primary small" id="quizNext">${last?'See my score':'Next question ›'}</button>`;
+    const nb=$('#quizNext',body);nb.onclick=()=>{if(last)finish();else{QUIZ.i++;draw();}};nb.focus();};
+  const finish=()=>{const n=QUIZ.qs.length,s=QUIZ.score;const best=Math.max(S.quizBest||0,s);const isNew=s>(S.quizBest||0);S.quizBest=best;save();
+    if(s===n)AudioFX.fanfare();else AudioFX.chime();
+    body.innerHTML=`<h3 class="qq">${s===n?'Perfect! 💎':s>=n/2?'Lovely work! ✨':'Good try! 🌸'}</h3><p class="qscore">You got <b>${s}</b> of ${n} right.</p>
+      <p class="small muted">${isNew&&s?'New best score!':'Best score: '+best+' of 5'} Every question comes from the gems you have discovered, so new gems bring new questions.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"><button class="btn primary small" id="quizAgain">Play again</button><button class="btn small" id="quizDone">Done</button></div>`;
+    $('#quizAgain',body).onclick=()=>{const qs2=quizRound(5);QUIZ={qs:qs2,i:0,score:0,answered:false};draw();};$('#quizDone',body).onclick=()=>m.close();$('#quizAgain',body).focus();};
+  draw();}
 /* ---------- gallery ---------- */
 function screenGallery(){
   app().innerHTML=`<section class="screen"><div class="section-head"><div><div class="opt-label">My gallery</div><h2>${GALLERY.length} saved dress${GALLERY.length===1?'':'es'}</h2></div>
