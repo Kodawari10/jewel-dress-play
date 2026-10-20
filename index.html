@@ -1643,7 +1643,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>Removing gems:</b> tap a placed gem (or long-press / right-click it), use the 🧽 eraser to drag over several, or Clear all. Undo (or <b>Ctrl+Z</b> / <b>⌘Z</b> on a keyboard) brings them back.</li>
    <li><b>Mirror:</b> in the designer, turn on 🪞 Mirror to set every gem on both sides of the dress at once (one Undo removes the pair).</li>
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
-   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name.</li></ol>
+   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${TIERS.map((t,i)=>`<div style="text-align:center;width:110px"><div style="width:70px;height:70px;margin:auto">${gemSVG(GEM.diamond,i)}</div><b style="font-family:var(--serif);font-size:17px">${t.name}</b><div class="small muted">${MILESTONES.find(m=>m.tier===i).n.toLocaleString('en')}+ gems</div></div>`).join('')}</div></div>`);}
 /* ---------- level play ---------- */
@@ -1838,7 +1838,7 @@ function screenGallery(){
     ${GALLERY.length?'':'<p class="muted">Nothing here yet. Finish an atelier level or save a dress from the designer.</p>'}
     <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">${GALLERY.map((d,i)=>`<div class="gcard" data-i="${i}"><div class="thumb">${dressSVG(d,{prefix:'gal'+i})}</div>
       <div class="meta"><div class="n">${esc(d.name)}</div><div class="small muted">${d.gems.length} gems · ${new Date(d.created).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}${d.minted?` · <a href="${esc(d.minted.url||'#')}" target="_blank" rel="noopener">✦ on Starknet</a>`:''}</div>${gemsUsedHTML(d)}</div>
-      <div class="acts"><button class="btn small" data-a="edit">Edit</button>${d.minted?'':`<button class="btn small" data-a="ren" title="Rename this dress" aria-label="Rename ${esc(d.name)}">✏️ Rename</button>`}<button class="btn small" data-a="dup" title="Make a copy of this dress to try a variation" aria-label="Copy ${esc(d.name)}">📋 Copy</button><button class="btn small" data-a="png">⬇︎ PNG</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" data-a="mint">✦ Mint</button><button class="btn small" data-a="agent" title="Copy a Starknet MCP tool call for an AI agent">🤖</button>':''}<button class="btn small" data-a="del" aria-label="Delete">🗑</button></div></div>`).join('')}</div></section>`;
+      <div class="acts"><button class="btn small" data-a="edit">Edit</button>${d.minted?'':`<button class="btn small" data-a="ren" title="Rename this dress" aria-label="Rename ${esc(d.name)}">✏️ Rename</button>`}<button class="btn small" data-a="dup" title="Make a copy of this dress to try a variation" aria-label="Copy ${esc(d.name)}">📋 Copy</button><button class="btn small" data-a="png">⬇︎ PNG</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" data-a="mint">✦ Mint</button><button class="btn small" data-a="agent" title="Copy a Starknet MCP tool call for an AI agent">🤖</button>':''}<button class="btn small" data-a="del" title="Delete this dress (you can undo)" aria-label="Delete ${esc(d.name)}">🗑</button></div></div>`).join('')}</div></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
   $$('.gcard').forEach(c=>{const d=GALLERY[+c.dataset.i];const used=gemsUsed(d).map(x=>x[0]);$$('.gu',c).forEach(b=>b.onclick=()=>openInfo(b.dataset.g,{list:used}));$$('[data-a]',c).forEach(b=>b.onclick=()=>{const a=b.dataset.a;
     if(a==='edit')go('design',{load:d});
@@ -1850,7 +1850,15 @@ function screenGallery(){
     if(a==='png')downloadPNG(d);
     if(a==='mint')JD_STARKNET.mint(d);
     if(a==='agent')JD_STARKNET.agentCall(d);
-    if(a==='del'&&confirm(`Delete “${d.name}” from your gallery?`)){GALLERY.splice(GALLERY.indexOf(d),1);saveGallery();if(S.draft.id===d.id){S.draft.id=null;save();}screenGallery();}});});
+    if(a==='del')deleteDress(d);});});
+}
+/* delete a saved dress right away, with Undo in the toast (minted ones still ask first) */
+function deleteDress(d){if(d.minted&&!confirm(`Delete “${d.name}” from your gallery? (It stays on Starknet.)`))return;
+  const at=GALLERY.indexOf(d);if(at<0)return;const wasDraft=S.draft.id===d.id;
+  GALLERY.splice(at,1);saveGallery();if(wasDraft){S.draft.id=null;save();}AudioFX.soft();screenGallery();
+  toastAct(`Deleted “${d.name}” 🗑`,'Undo',()=>{if(GALLERY.some(x=>x.id===d.id))return;GALLERY.splice(Math.min(at,GALLERY.length),0,d);saveGallery();
+    if(wasDraft&&!S.draft.id){S.draft.id=d.id;save();}if(SCREEN==='gallery')screenGallery();toast(`“${d.name}” is back ✨`);
+    const f=$('.gcard[data-i="'+GALLERY.indexOf(d)+'"] [data-a="edit"]');f&&f.focus();},7000);
 }
 /* rename a saved dress (not minted ones, whose name is on-chain) */
 function renameDress(d){const m=modal(`<div class="body"><h2>Rename dress</h2><form id="renForm"><label class="opt-label" for="renInput">Dress name</label>
