@@ -1553,8 +1553,10 @@ function bindPalette(root,stage,onSelect,onDrop){
    SCREENS
    ===================================================================== */
 const app=()=>$('#app');
-let SCREEN='menu';
-function go(name,arg){SCREEN=name;ON_MS=null;closeModal();window.scrollTo(0,0);({menu:screenMenu,play:screenPlay,design:screenDesign,book:screenBook,gallery:screenGallery}[name]||screenMenu)(arg);hud();}
+let SCREEN='menu',UNDO_FN=null;
+/* Ctrl/Cmd+Z undoes the last gem edit on the dress screens (not while typing or in a dialog) */
+document.addEventListener('keydown',e=>{if(!UNDO_FN||e.repeat||e.shiftKey||e.altKey||!(e.ctrlKey||e.metaKey)||(e.key||'').toLowerCase()!=='z')return;const t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;if($('#modalRoot')&&$('#modalRoot').firstChild)return;e.preventDefault();if(UNDO_FN()===false)toast('Nothing to undo');});
+function go(name,arg){SCREEN=name;ON_MS=null;UNDO_FN=null;closeModal();window.scrollTo(0,0);({menu:screenMenu,play:screenPlay,design:screenDesign,book:screenBook,gallery:screenGallery}[name]||screenMenu)(arg);hud();}
 const SHOWCASE={name:'Showcase',tier:4,dress:{silhouette:'ballgown',neckline:'sweetheart',sleeves:'offshoulder',length:'floor',parts:PF(['sequin','#e9d8f4'],['satin','#e9d8f4'],['organza','#f4ecfa'],['tulle','#f4ecfa']),extras:X('waist','hem','none','dust','#f9c6d3')},
   gems:[...[[164,141],[182,135],[200,152],[218,135],[236,141]].map(([x,y],i)=>({g:['sapphire','diamond','ruby','diamond','emerald'][i],x,y,s:i===2?20:13})),
         ...[170,185,200,215,230].map(x=>({g:'diamond',x,y:229+(x===200?3:1),s:10})),
@@ -1583,7 +1585,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>Pick a gem</b> from the palette (tap it), then <b>tap the dress</b> to set it. On a computer you can also <b>drag</b> a gem onto the dress.</li>
    <li>In <b>Atelier levels</b>, fill every glowing marked spot to finish the design. Gems set off the marks still earn a few sparkle points.</li>
    <li>Each short level unlocks <b>new, rarer gems</b>. <b>Every gem you place</b> (in levels or your own designs) counts toward milestones (50, 100, 200, 350, 500, 750, 1,000…). Each one upgrades your gems’ realism or unlocks new cute touches: ruffles, hearts, stars, bows and sparkle. Removing gems never lowers your total.</li>
-   <li><b>Removing gems:</b> tap a placed gem (or long-press / right-click it), use the 🧽 eraser to drag over several, or Clear all. Undo brings them back.</li>
+   <li><b>Removing gems:</b> tap a placed gem (or long-press / right-click it), use the 🧽 eraser to drag over several, or Clear all. Undo (or <b>Ctrl+Z</b> / <b>⌘Z</b> on a keyboard) brings them back.</li>
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
@@ -1598,7 +1600,7 @@ function screenPlay(){
      <div class="progress"><i id="prog"></i></div><div class="small muted" id="progTxt"></div>
      <div class="opt-label" style="margin-top:12px">Your gems</div><div id="pal"></div>
      <div class="tools"><div class="seg" id="modeSeg"><button data-m="place" class="on">💎 Place</button><button data-m="erase">🧽 Eraser</button></div></div>
-     <div class="tools"><button class="btn small" id="undoBtn">↶ Undo</button><button class="btn small" id="clearBtn">Clear all</button></div>
+     <div class="tools"><button class="btn small" id="undoBtn" title="Undo (Ctrl+Z / ⌘Z)" aria-keyshortcuts="Control+Z Meta+Z">↶ Undo</button><button class="btn small" id="clearBtn">Clear all</button></div>
      <p class="small muted" style="margin:6px 0 0">Tap a gem on the dress to remove it (or long-press / right-click). The eraser removes several at once as you drag.</p></aside>
    <div class="center" id="stageHost"></div>
    <aside class="panel right"><h3>Atelier notes</h3>
@@ -1617,7 +1619,7 @@ function screenPlay(){
   const drawPal=()=>{pal.innerHTML=paletteHTML(P.sel);};drawPal();
   const select=(gid,quiet)=>{P.sel=gid;if(!quiet)AudioFX.soft();drawPal();save();};
   let mode='place';
-  const ed=gemEditor(stage,()=>P.gems,{onRemove:q=>{if(q.spot!=null&&P.spots[q.spot])P.spots[q.spot].filled=false;},onRestore:q=>{if(q.spot!=null&&P.spots[q.spot])P.spots[q.spot].filled=true;},changed:()=>{stage.setSpots(P.spots);save();upd();}});
+  const ed=gemEditor(stage,()=>P.gems,{onRemove:q=>{if(q.spot!=null&&P.spots[q.spot])P.spots[q.spot].filled=false;},onRestore:q=>{if(q.spot!=null&&P.spots[q.spot])P.spots[q.spot].filled=true;},changed:()=>{stage.setSpots(P.spots);save();upd();}});UNDO_FN=()=>ed.undo();
   const setMode=m=>{mode=m;stage.setErasing(m==='erase');$$('#modeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));upd();};
   $$('#modeSeg button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
   ON_MS=()=>{drawPal();};
@@ -1675,7 +1677,7 @@ function screenDesign(arg){
       <p class="small muted">Tip: gems you unlock in the atelier levels appear here. Every gem you place (here or in levels) counts toward atelier upgrades: more realistic gems and new cute touches (now: <b>${TIERS[curTier()].name}</b>, ${(S.placed||0).toLocaleString('en')} gems placed).</p></aside></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
   const stage=createStage($('#stageHost'),D.dress);stage.renderGems(D.gems);
-  const ed=gemEditor(stage,()=>D.gems,{changed:()=>persist()});
+  const ed=gemEditor(stage,()=>D.gems,{changed:()=>persist()});UNDO_FN=()=>ed.undo();
   ON_MS=()=>renderTab();
   const info=()=>{$('#dinfo').textContent=`${D.gems.length} gem${D.gems.length===1?'':'s'} set${D.id?' · saved in gallery':''}`;stage.hud.innerHTML=`<span class="tag">${mode==='erase'?'🧽 Eraser':'💎 '+esc(GEM[sel].name)+(cut!=='natural'?' · '+CUTS.find(c=>c[0]===cut)[1]:'')}</span><span class="tag">${D.gems.length} gems</span>`;};
   const persist=()=>{D.sel=sel;save();info();};
@@ -1709,7 +1711,7 @@ function screenDesign(arg){
       tb.innerHTML=`<div class="opt-label">Cut</div><div class="seg cutseg" id="cutSeg">${CUTS.filter(c=>cuts.includes(c[0])).map(([v,l])=>`<button data-cut="${v}" class="${cut===v?'on':''}" title="${l}">${gemSVG(GEM[sel],curTier(),'cutic',v)}<span>${v==='natural'?'Classic':l}</span></button>`).join('')}</div>
         <div class="opt-label">Gem size</div><div class="tools"><div class="seg" id="sizeSeg">${[[10,'S'],[16,'M'],[24,'L'],[34,'XL']].map(([v,l])=>`<button data-s="${v}" class="${size===v?'on':''}">${l}</button>`).join('')}</div>
         <div class="seg" id="modeSeg"><button data-m="place" class="${mode==='place'?'on':''}">💎 Place</button><button data-m="erase" class="${mode==='erase'?'on':''}">🧽 Eraser</button></div></div>
-        <div id="pal"></div><div class="tools"><button class="btn small" id="undoBtn">↶ Undo</button><button class="btn small" id="clearBtn">Clear all</button><button class="btn small" id="pattBtn">✨ Auto-trim</button></div>
+        <div id="pal"></div><div class="tools"><button class="btn small" id="undoBtn" title="Undo (Ctrl+Z / ⌘Z)" aria-keyshortcuts="Control+Z Meta+Z">↶ Undo</button><button class="btn small" id="clearBtn">Clear all</button><button class="btn small" id="pattBtn">✨ Auto-trim</button></div>
         <p class="small muted">Tap a gem, then tap anywhere on the dress (or drag it there). Tap a placed gem to remove it, or long-press / right-click it. The eraser removes several as you drag.</p>`;
       const pal=$('#pal');const drawPal=()=>{pal.innerHTML=paletteHTML(mode==='erase'?'':sel);};drawPal();
       bindPalette(pal,stage,(gid,quiet)=>{sel=gid;mode='place';stage.setErasing(false);if(!quiet)AudioFX.soft();renderTab();persist();},(gid,p,cx,cy)=>{sel=gid;mode='place';stage.setErasing(false);place(p,cx,cy,true);renderTab();});
