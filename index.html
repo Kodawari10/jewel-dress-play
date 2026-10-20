@@ -1793,15 +1793,21 @@ function screenGallery(){
     ${GALLERY.length?'':'<p class="muted">Nothing here yet. Finish an atelier level or save a dress from the designer.</p>'}
     <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">${GALLERY.map((d,i)=>`<div class="gcard" data-i="${i}"><div class="thumb">${dressSVG(d,{prefix:'gal'+i})}</div>
       <div class="meta"><div class="n">${esc(d.name)}</div><div class="small muted">${d.gems.length} gems · ${new Date(d.created).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}${d.minted?` · <a href="${esc(d.minted.url||'#')}" target="_blank" rel="noopener">✦ on Starknet</a>`:''}</div></div>
-      <div class="acts"><button class="btn small" data-a="edit">Edit</button><button class="btn small" data-a="png">⬇︎ PNG</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" data-a="mint">✦ Mint</button><button class="btn small" data-a="agent" title="Copy a Starknet MCP tool call for an AI agent">🤖</button>':''}<button class="btn small" data-a="del" aria-label="Delete">🗑</button></div></div>`).join('')}</div></section>`;
+      <div class="acts"><button class="btn small" data-a="edit">Edit</button><button class="btn small" data-a="dup" title="Make a copy of this dress to try a variation" aria-label="Copy ${esc(d.name)}">📋 Copy</button><button class="btn small" data-a="png">⬇︎ PNG</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" data-a="mint">✦ Mint</button><button class="btn small" data-a="agent" title="Copy a Starknet MCP tool call for an AI agent">🤖</button>':''}<button class="btn small" data-a="del" aria-label="Delete">🗑</button></div></div>`).join('')}</div></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
   $$('.gcard').forEach(c=>{const d=GALLERY[+c.dataset.i];$$('[data-a]',c).forEach(b=>b.onclick=()=>{const a=b.dataset.a;
     if(a==='edit')go('design',{load:d});
+    if(a==='dup'){const nm=copyName(d.name);const c=JSON.parse(JSON.stringify({name:nm,dress:d.dress,gems:d.gems,tier:d.tier}));
+      Object.assign(c,{id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),created:Date.now(),from:'copy'});
+      GALLERY.splice(GALLERY.indexOf(d),0,c);saveGallery();AudioFX.soft();screenGallery();toastAct(`Copied as “${nm}” 📋`,'Edit copy',()=>go('design',{load:c}));
+      const f=$('.gcard[data-i="'+GALLERY.indexOf(c)+'"] [data-a="edit"]');f&&f.focus();}
     if(a==='png')downloadPNG(d);
     if(a==='mint')JD_STARKNET.mint(d);
     if(a==='agent')JD_STARKNET.agentCall(d);
     if(a==='del'&&confirm(`Delete “${d.name}” from your gallery?`)){GALLERY.splice(GALLERY.indexOf(d),1);saveGallery();if(S.draft.id===d.id){S.draft.id=null;save();}screenGallery();}});});
 }
+function copyName(n){const base=String(n||'My Dress').replace(/\s*\(copy(?: \d+)?\)$/,'').trim()||'My Dress';const names=new Set(GALLERY.map(x=>x.name));
+  for(let k=1;k<100;k++){const tag=k===1?' (copy)':` (copy ${k})`;const nm=base.slice(0,31-tag.length).trim()+tag;if(!names.has(nm))return nm;}return base.slice(0,24)+' (copy)';}
 /* ---------- PNG export ---------- */
 async function downloadPNG(d){
   try{const svg=dressSVG(d,{prefix:'ex',width:800,caption:d.name});
