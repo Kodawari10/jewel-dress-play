@@ -219,6 +219,7 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 }
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .gemchip:focus-visible,.sw:focus-visible{outline-offset:3px}
+.backup .filebtn{position:relative;display:inline-block;cursor:pointer}.backup .filebtn input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.backup .filebtn:focus-within{outline:3px solid var(--gold);outline-offset:2px}
 /* Respect the system "reduce motion" setting: calm CSS motion here, SVG sparkles are paused in JS */
 @media (prefers-reduced-motion: reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
@@ -1678,10 +1679,12 @@ function screenMenu(){
       <button class="mcard" data-go="book"><div class="t">📖 Gem encyclopedia</div><div class="d">${S.unlocked.length} of ${GEMS.length} gems discovered. Names, minerals and origins.</div></button>
       <button class="mcard" data-go="gallery"><div class="t">🖼️ My gallery</div><div class="d">${GALLERY.length} saved dress${GALLERY.length===1?'':'es'}. Download as PNG.</div></button>
       <button class="mcard" id="howBtn"><div class="t">❔ How to play</div><div class="d">Quick guide and gem quality levels.</div></button>
+      <button class="mcard" id="backupBtn"><div class="t">💾 Backup</div><div class="d">Save your progress and gallery to a file, or restore them on another browser.</div></button>
     </div></div>
     <div class="hero-art">${dressSVG(SHOWCASE,{prefix:'hero'})}</div></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>{AudioFX.soft();go(b.dataset.go);});
   $('#howBtn').onclick=howTo;
+  $('#backupBtn').onclick=()=>{AudioFX.soft();backupModal();};
   const gd=$('#gemDay');gd&&(gd.onclick=()=>{AudioFX.soft();openInfo(gemOfDay().id);});
 }
 function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px;color:var(--plum)">How to play</h2>
@@ -1694,9 +1697,44 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>Finding gems:</b> once you have ten or more, type in <b>Find a gem…</b> above the palette (a name or mineral, like “beryl”) or tap <b>♥</b> to show just your favourites; press Enter to pick the first match.</li>
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Under <b>Gem relatives</b>, tap a gem made of the same mineral (like ruby and sapphire, both corundum) to compare them. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
    <li><b>🧠 Gem quiz:</b> in the encyclopedia, answer five quick questions about the gems you have discovered (their mineral family, which is harder, birthstone months). Your best score is saved.</li>
-   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li></ol>
+   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
+   <li><b>💾 Backup:</b> your progress is saved only in this browser. From the main menu, download a backup file now and then; restoring it (here or in another browser) brings back your gems, milestones and gallery.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${TIERS.map((t,i)=>`<div style="text-align:center;width:110px"><div style="width:70px;height:70px;margin:auto">${gemSVG(GEM.diamond,i)}</div><b style="font-family:var(--serif);font-size:17px">${t.name}</b><div class="small muted">${MILESTONES.find(m=>m.tier===i).n.toLocaleString('en')}+ gems</div></div>`).join('')}</div></div>`);}
+/* ---------- backup & restore (a local JSON file; nothing leaves the device) ---------- */
+const BACKUP_APP='jewel-dress-backup';
+function backupData(){return{app:BACKUP_APP,v:1,saved:new Date().toISOString(),state:S,gallery:GALLERY};}
+function parseBackup(txt){let b;try{b=JSON.parse(txt);}catch(e){return null;}
+  if(!b||typeof b!=='object'||b.app!==BACKUP_APP||!b.state||typeof b.state!=='object'||Array.isArray(b.state)||!Array.isArray(b.gallery))return null;
+  const st=b.state;if(!Array.isArray(st.unlocked)||typeof st.placed!=='number'||!isFinite(st.placed)||st.placed<0)return null;
+  if(!b.gallery.every(d=>d&&typeof d==='object'&&d.dress&&typeof d.dress==='object'&&Array.isArray(d.gems)))return null;
+  return b;}
+function backupSummary(st,gal){const n=(st.unlocked||[]).filter(id=>GEM[id]).length;
+  return `💎 ${Math.floor(st.placed||0).toLocaleString('en')} gems placed · 📖 ${n} of ${GEMS.length} gems discovered · 🖼️ ${gal.length} saved dress${gal.length===1?'':'es'}`;}
+function backupFileName(d){const p=n=>String(n).padStart(2,'0');return `jewel-dress-backup-${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}.json`;}
+function downloadBackup(){save();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(backupData())],{type:'application/json'}));
+  a.download=backupFileName(new Date());document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);toast('Backup saved to your downloads 💾');}
+function restoreBackup(b){try{localStorage.setItem(SKEY,JSON.stringify(b.state));localStorage.setItem(GKEY,JSON.stringify(b.gallery));}catch(e){toast('Could not restore: browser storage is full');return false;}
+  location.reload();return true;}
+function backupModal(){const md=modal(`<div style="padding:26px 24px" class="backup"><h2 style="font-size:32px;color:var(--plum)">💾 Backup &amp; restore</h2>
+  <p class="small muted" style="margin-top:0">Your progress lives only in this browser. A backup file keeps it safe if you clear your browser data, and lets you carry on in another browser or on another device. The file stays on your device; nothing is uploaded.</p>
+  <div class="opt-label">Right now</div><p class="small" style="margin:4px 0 10px">${backupSummary(S,GALLERY)}</p>
+  <button class="btn primary" id="bkSave">⬇️ Download backup</button>
+  <div class="opt-label" style="margin-top:18px">Restore</div>
+  <p class="small muted" style="margin:4px 0 8px">Pick a Jewel Dress backup file. You'll see what's inside before anything changes.</p>
+  <label class="btn filebtn">📂 Choose backup file…<input type="file" id="bkFile" accept=".json,application/json" aria-label="Choose a Jewel Dress backup file to restore"></label>
+  <div id="bkOut" role="status" aria-live="polite" style="margin-top:10px"></div></div>`);
+  const el=md.el;el.querySelector('#bkSave').onclick=()=>{AudioFX.soft();downloadBackup();};
+  el.querySelector('#bkFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];const out=el.querySelector('#bkOut');e.target.value='';if(!f)return;
+    const txt=f.size>20e6?'':await f.text().catch(()=>'');const b=parseBackup(txt);
+    if(!b){out.innerHTML=`<p class="small" style="color:#b0405a;margin:0">“${esc(f.name)}” isn't a Jewel Dress backup file, so nothing was changed.</p>`;return;}
+    const when=new Date(b.saved);
+    out.innerHTML=`<div style="border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--card)"><div class="small"><b>${esc(f.name)}</b>${isNaN(when)?'':` · saved ${esc(when.toLocaleString('en',{dateStyle:'medium',timeStyle:'short'}))}`}</div>
+      <p class="small" style="margin:6px 0">${backupSummary(b.state,b.gallery)}</p>
+      <p class="small muted" style="margin:0 0 8px">Restoring replaces your current progress and gallery in this browser with the backup.</p>
+      <button class="btn primary" id="bkRestore">Replace with this backup</button> <button class="btn" id="bkCancel">Cancel</button></div>`;
+    out.querySelector('#bkCancel').onclick=()=>{out.innerHTML='';};
+    out.querySelector('#bkRestore').onclick=()=>{AudioFX.soft();restoreBackup(b);};};}
 /* ---------- level play ---------- */
 let PLAY=null;
 function screenPlay(){
