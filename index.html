@@ -169,6 +169,7 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 .mohs i{width:16px;height:8px;border-radius:2px;background:#eadfd3}
 .mohs i.on{background:linear-gradient(90deg,#e2c27d,#b98d3e)}
 .mohsref{margin-top:4px;line-height:1.4}
+.relgems{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}.relgem{display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:13px;font-weight:700;color:var(--plum);background:#fff;border:1px solid #ecd3b5;border-radius:999px;padding:2px 10px 2px 3px;cursor:pointer}.relgem svg{width:24px;height:24px;display:block}.relgem:hover{background:#fdf1e4}.relgem.locked{color:#8a7f86;border-style:dashed}.relgem.locked svg{opacity:.45;filter:grayscale(.7)}
 .map{width:100%;height:auto;border-radius:14px;background:linear-gradient(180deg,#e8f0f3,#dfe9ee);border:1px solid #d6e2e7}
 .srclist{margin:8px 0 0;padding-left:18px;font-size:13.5px;line-height:1.5}
 .badge{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--gold);border-radius:999px;padding:3px 9px}
@@ -1505,11 +1506,23 @@ function mohsCompare(g){const[lo,hi]=mohsRange(g);const ref=n=>`${MOHS_REF[n-1]}
   const cmp=lo===hi&&Number.isInteger(lo)?`Same hardness as ${ref(lo)}${lo===10?', the top of the scale':''}.`:`Between ${ref(Math.max(1,Math.floor(lo)))} and ${ref(Math.min(10,Math.ceil(hi)))} on the scale.`;
   const dust=lo>7?'Harder than quartz, so everyday dust (which contains tiny quartz grains) can’t scratch it.':hi<7?'Softer than quartz, so even everyday dust (which contains tiny quartz grains) can slowly scratch it.':lo===7&&hi===7?'Quartz is also the hard mineral in everyday dust.':'About as hard as quartz, the hard mineral in everyday dust.';
   return cmp+' '+dust;}
+/* gems in this game that are the same mineral (or close kin), for the "Gem relatives" row on info cards */
+const REL=[['quartz',['quartz','amethyst','citrine','ametrine','prasiolite','rosequartz','smokyquartz','tigerseye']],
+  ['chalcedony',['chalcedony','agate','onyx','carnelian','chrysoprase','bloodstone']],
+  ['corundum',['ruby','sapphire','padparadscha','starsapphire']],['beryl',['emerald','aquamarine','morganite','heliodor','goshenite','redberyl']],
+  ['garnet',['garnet','rhodolite','hessonite','spessartine','tsavorite','demantoid']],['feldspar',['moonstone','sunstone','labradorite','amazonite']],
+  ['tourmaline',['tourmaline','paraiba']],['opal',['opal','fireopal','blackopal']],['chrysoberyl',['alexandrite','catseye']],['topaz',['topaz','imperialtopaz']],
+  ['nacre (pearl material)',['pearl','tahitian','motherofpearl']],['natural glass',['obsidian','tektite','moldavite']],
+  ['copper carbonate hydroxide',['malachite','azurite']],['aluminium silicate (the same formula, Al₂SiO₅)',['kyanite','andalusite']],
+  ['beryllium magnesium aluminium oxide',['taaffeite','musgravite']]];
+function relOf(gid){const r=REL.find(x=>x[1].includes(gid));return r?{label:r[0],ids:r[1].filter(id=>GEM[id])}:null;}
 function openInfo(gid,opts){
   const g=GEM[gid];const locked=!S.unlocked.includes(gid);const t=curTier();
   if(!locked&&!S.seen.includes(gid)){S.seen.push(gid);save();}
   const list=opts&&opts.list&&opts.list.length>1&&opts.list.includes(gid)?opts.list:null;const li=list?list.indexOf(gid):-1;
   const nav=list?`<div class="infonav" role="group" aria-label="Browse gems"><button class="btn small" id="infoPrev" aria-label="Previous gem: ${esc(GEM[list[(li-1+list.length)%list.length]].name)}" title="Previous gem (←)">‹ Prev</button><span class="small muted">${li+1} / ${list.length}</span><button class="btn small" id="infoNext" aria-label="Next gem: ${esc(GEM[list[(li+1)%list.length]].name)}" title="Next gem (→)">Next ›</button></div>`:'';
+  const rel=relOf(gid);const t0=curTier();
+  const relRow=rel&&rel.ids.length>1?`<dt>Gem relatives</dt><dd>Also ${esc(rel.label)}:<div class="relgems" role="group" aria-label="Other ${esc(rel.label.split(' (')[0])} gems">${rel.ids.filter(id=>id!==gid).map(id=>{const lk=!S.unlocked.includes(id);return `<button class="relgem${lk?' locked':''}" data-rel="${id}" aria-label="${esc(GEM[id].name)}${lk?' (locked)':''}: open its story">${gemSVG(GEM[id],lk?0:t0)}${esc(GEM[id].name)}${lk?' 🔒':''}</button>`;}).join('')}</div></dd>`:'';
   const mohsBar=Array.from({length:10},(_,i)=>`<i class="${i<Math.round(g.mohs)?'on':''}" title="${i+1}: ${MOHS_REF[i]}"></i>`).join('');
   const body=locked?`<div class="body"><span class="badge">Locked</span><h2 style="margin-top:8px">${esc(g.name)}</h2>
      <p class="muted">${msGemAt(gid)!=null?`Place <b>${msGemAt(gid).toLocaleString('en')} gems</b> in total (levels or your own designs) to discover this gem and learn its story.`:`Complete <b>level ${unlockLevelOf(gid)-1}</b> of the atelier to unlock this gem and learn its story.`}</p></div>`:
@@ -1517,17 +1530,18 @@ function openInfo(gid,opts){
      <dl class="kv"><dt>The name</dt><dd>${esc(g.ety)}</dd><dt>Mineral</dt><dd>${esc(g.family)}</dd><dt>Colour</dt><dd>${esc(g.color)}</dd>
      <dt>Hardness</dt><dd><div class="mohs">${mohsBar}<span style="margin-left:8px"><b>${g.mohsTxt}</b> on the Mohs scale</span></div><div class="mohsref small muted">${mohsCompare(g)}</div></dd>
      ${birthMonth(gid)?`<dt>Birthstone</dt><dd><span class="bstone">🎂 ${birthMonth(gid)}</span> on the modern birthstone list${BIRTH[gid]===new Date().getMonth()+1?' (that’s this month!)':''}</dd>`:''}
-     <dt>Did you know?</dt><dd>${esc(g.fact)}</dd></dl>
+     ${relRow}<dt>Did you know?</dt><dd>${esc(g.fact)}</dd></dl>
      <div class="opt-label">Where it is found on Earth</div>${worldMap(g)}<ol class="srclist">${g.src.map(s=>`<li>${esc(s.n)}</li>`).join('')}</ol></div>`;
   const m=modal(`<div class="infocard"><div class="gemside"><div id="infoGem">${gemSVG(g,locked?0:t)}</div>
      <div class="small muted" id="infoTier">${locked?'':`Your atelier cuts it at: <b>${TIERS[t].name}</b>`}</div>
      ${locked||t>=4?'':`<button class="btn small" id="masterBtn">✨ Preview the master cut</button>`}
      ${opts&&opts.unlocked?'<div class="badge" style="background:#4f8a6b">New gem unlocked!</div>':''}${nav}</div>${body}</div>`,opts&&opts.onClose);
-  if(list){const step=d=>{const id=list[(li+d+list.length)%list.length];openInfo(id,{list,focus:d<0?'prev':'next'});};
+  if(list){const step=d=>{const id=list[(li+d+list.length)%list.length];openInfo(id,{list,focus:d<0?'prev':'next',onClose:opts.onClose});};
     $('#infoPrev',m.el).onclick=()=>step(-1);$('#infoNext',m.el).onclick=()=>step(1);
     document.addEventListener('keydown',function k(e){if($('#modalRoot').firstChild!==m.el){document.removeEventListener('keydown',k);return;}
       if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();document.removeEventListener('keydown',k);step(e.key==='ArrowLeft'?-1:1);}});
     const f=opts.focus&&$(opts.focus==='prev'?'#infoPrev':'#infoNext',m.el);f&&f.focus();}
+  $$('.relgem',m.el).forEach(b=>b.onclick=()=>{AudioFX.soft();openInfo(b.dataset.rel,{list:rel.ids,focus:'next',onClose:opts&&opts.onClose});});
   const fb=$('#favBtn',m.el);fb&&fb.addEventListener('click',()=>{const on=toggleFav(gid);fb.setAttribute('aria-pressed',on);fb.textContent=on?'♥ Favourite':'♡ Favourite';
     fb.setAttribute('aria-label',(on?'Remove ':'Add ')+g.name+(on?' from':' to')+' favourites');if(on)AudioFX.chime();toast(on?`♥ ${g.name} added to your favourites`:`${g.name} removed from favourites`);});
   const mb=$('#masterBtn',m.el);let master=false;
@@ -1674,7 +1688,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>Removing gems:</b> tap a placed gem (or long-press / right-click it), use the 🧽 eraser to drag over several, or Clear all. Undo (or <b>Ctrl+Z</b> / <b>⌘Z</b> on a keyboard) brings them back, and Redo (<b>Ctrl+Shift+Z</b> / <b>⌘⇧Z</b> or <b>Ctrl+Y</b>) puts back what you undid.</li>
    <li><b>Mirror:</b> in the designer, turn on 🪞 Mirror to set every gem on both sides of the dress at once (one Undo removes the pair).</li>
    <li><b>Finding gems:</b> once you have ten or more, type in <b>Find a gem…</b> above the palette (a name or mineral, like “beryl”) or tap <b>♥</b> to show just your favourites; press Enter to pick the first match.</li>
-   <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
+   <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Under <b>Gem relatives</b>, tap a gem made of the same mineral (like ruby and sapphire, both corundum) to compare them. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${TIERS.map((t,i)=>`<div style="text-align:center;width:110px"><div style="width:70px;height:70px;margin:auto">${gemSVG(GEM.diamond,i)}</div><b style="font-family:var(--serif);font-size:17px">${t.name}</b><div class="small muted">${MILESTONES.find(m=>m.tier===i).n.toLocaleString('en')}+ gems</div></div>`).join('')}</div></div>`);}
