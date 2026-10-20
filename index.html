@@ -184,6 +184,10 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
   .brand small{display:none}.pill.hide-m{display:none}
   .palette{grid-template-columns:repeat(auto-fill,minmax(58px,1fr));max-height:300px}
 }
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.gemchip:focus-visible,.sw:focus-visible{outline-offset:3px}
+/* Respect the system "reduce motion" setting: calm CSS motion here, SVG sparkles are paused in JS */
+@media (prefers-reduced-motion: reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
@@ -1792,6 +1796,12 @@ $('#homeBtn').onclick=()=>go('menu');
 $('#muteBtn').onclick=()=>{S.muted=!S.muted;save();hud();if(!S.muted)AudioFX.chime();};
 $('#chainBtn').onclick=()=>{if(window.JD_STARKNET&&JD_STARKNET.enabled)JD_STARKNET.openPanel();else modal(`<div style="padding:26px"><h2 style="color:var(--plum)">Starknet (optional)</h2><p>The on-chain layer isn’t loaded in this copy. The game works fully offline without it.</p></div>`);};
 go('menu');
+// Reduced motion: freeze SVG (SMIL) sparkle, glint and shimmer animations when the system asks for less motion
+(function(){const mq=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)');if(!mq)return;let obs=null;
+  const pauseAll=()=>document.querySelectorAll('svg').forEach(v=>{if(v.pauseAnimations&&!v.ownerSVGElement)v.pauseAnimations();});
+  const apply=()=>{if(mq.matches){pauseAll();if(!obs){obs=new MutationObserver(pauseAll);obs.observe(document.body,{childList:true,subtree:true});}}
+    else{if(obs){obs.disconnect();obs=null;}document.querySelectorAll('svg').forEach(v=>{if(v.unpauseAnimations&&!v.ownerSVGElement)v.unpauseAnimations();});}};
+  apply();if(mq.addEventListener)mq.addEventListener('change',apply);})();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
 <script src="js/starknet-config.js"></script>
