@@ -55,6 +55,7 @@ main{max-width:1280px;margin:0 auto;padding:14px}
 .hero h1{font-size:clamp(40px,6vw,72px);line-height:1;color:var(--plum)}
 .hero h1 em{font-style:normal;color:var(--gold)}
 .hero p.lead{font-size:18px;color:var(--muted);max-width:520px;line-height:1.5}
+.gemday{display:flex;align-items:center;gap:12px;max-width:560px;width:100%;margin-top:10px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 14px;cursor:pointer;transition:transform .15s, box-shadow .15s}.gemday:hover{transform:translateY(-1px);box-shadow:var(--shadow)}.gemday .gd-gem{width:52px;height:52px;flex:none}.gemday .gd-gem svg{width:100%;height:100%}.gemday .gd-txt{flex:1;min-width:0}.gemday .gd-name{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--plum)}.gemday .gd-more{font-size:13px;color:var(--gold);font-weight:700;white-space:nowrap}
 .msmenu{max-width:560px;margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 14px}.msmenu .progress{margin:6px 0 4px}.progress i{background:linear-gradient(90deg,#f2a7c3,#e2c27d)}
 .menu-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px;max-width:560px}
 .mcard{text-align:left;border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.03);transition:transform .15s, box-shadow .15s}
@@ -1578,6 +1579,7 @@ const SHOWCASE={name:'Showcase',tier:4,dress:{silhouette:'ballgown',neckline:'sw
         ...[170,185,200,215,230].map(x=>({g:'diamond',x,y:229+(x===200?3:1),s:10})),
         ...Array.from({length:11},(_,i)=>({g:i%2?'pearl':'opal',x:68+i*26.4,y:568+Math.sin(i/10*Math.PI)*12,s:i%2?11:16})),
         ...[[150,330],[250,330],[120,430],[280,430],[200,470],[170,390],[230,390],[95,520],[305,520],[200,540]].map(([x,y],i)=>({g:['paraiba','tanzanite','alexandrite','starsapphire','diamond'][i%5],x,y,s:15}))]};
+function gemOfDay(){const ids=GEMS_SORTED.filter(g=>S.unlocked.includes(g.id)).map(g=>g.id);if(!ids.length)return null;const d=new Date();const key=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();let h=2166136261;for(const c of key){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return GEM[ids[(h>>>0)%ids.length]];}
 function screenMenu(){
   const next=levelSpec(S.level);
   app().innerHTML=`<section class="screen hero"><div>
@@ -1585,6 +1587,7 @@ function screenMenu(){
     <h1>Jewel <em>Dress</em></h1>
     <p class="lead">Design gowns, set real gemstones on them, and discover where each gem comes from on Earth. Every gem you place makes your atelier better: more lifelike gems, and cute ruffles, bows, hearts and stars for your dresses.</p>
     ${(mp=>`<div class="msmenu"><div class="small"><b>${esc(mp.cur.name)}</b> · 💎 ${mp.n.toLocaleString('en')} gems placed</div><div class="progress"><i style="width:${(mp.f*100).toFixed(1)}%"></i></div><div class="small muted">${(mp.next.n-mp.n).toLocaleString('en')} more to <b>${esc(mp.next.name)}</b>${mp.next.perks.length?': '+mp.next.perks.map(perkLabel).join(' & '):''}${mp.next.tier>mp.cur.tier?` · ${TIERS[mp.next.tier].name} gems`:''}</div></div>`)(msProgress())}
+    ${(g=>g?`<button class="gemday" id="gemDay" aria-label="Gem of the day: ${esc(g.name)}. Read its story"><div class="gd-gem">${gemSVG(g,curTier())}</div><div class="gd-txt"><div class="opt-label">💫 Gem of the day</div><div class="gd-name">${esc(g.name)}</div><div class="small muted">${esc(g.family.split('(')[0].trim())}</div></div><span class="gd-more">Read its story ›</span></button>`:'')(gemOfDay())}
     <div class="menu-cards">
       <button class="mcard feature" data-go="design"><div class="t">✂️ Create your own dress</div><div class="d">Choose the silhouette, neckline, sleeves and length, sew each part from 20 real fabrics, then set gems in any cut, anywhere you like.</div></button>
       <button class="mcard" data-go="play"><div class="t">💎 Atelier levels</div><div class="d">Level ${S.level}: ${esc(next.preset.name)}. Fill the marked spots to unlock new gems.</div></button>
@@ -1595,6 +1598,7 @@ function screenMenu(){
     <div class="hero-art">${dressSVG(SHOWCASE,{prefix:'hero'})}</div></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>{AudioFX.soft();go(b.dataset.go);});
   $('#howBtn').onclick=howTo;
+  const gd=$('#gemDay');gd&&(gd.onclick=()=>{AudioFX.soft();openInfo(gemOfDay().id);});
 }
 function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px;color:var(--plum)">How to play</h2>
   <ol style="line-height:1.7;font-size:15px;padding-left:20px">
