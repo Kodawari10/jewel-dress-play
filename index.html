@@ -117,6 +117,9 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 .ecard svg{width:96px;height:96px}
 .ecard .n{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--plum)}
 .ecard.locked{opacity:.65}
+.ecard[hidden]{display:none}
+.booktools{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 14px}
+.booktools input[type=search]{font:inherit;border:1px solid var(--line);border-radius:999px;padding:9px 15px;flex:1 1 240px;max-width:420px;background:#fff}
 .ecard.locked svg{filter:grayscale(1) brightness(.6) contrast(.6);opacity:.35}
 .gcard{border:1px solid var(--line);background:var(--card);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
 .gcard .thumb{background:radial-gradient(70% 60% at 50% 35%,#fff 0,#f2e6dc 100%);}
@@ -1748,8 +1751,20 @@ function saveDraftToGallery(){const d=draftDesign();let rec=d.id&&GALLERY.find(x
 function screenBook(){const t=curTier();
   app().innerHTML=`<section class="screen"><div class="section-head"><div><div class="opt-label">Gem encyclopedia</div><h2>${S.unlocked.length} of ${GEMS.length} gems discovered</h2></div>
     <div class="muted small">Tap a gem to read where it comes from. Locked gems unlock as you finish atelier levels.</div></div>
+    <div class="booktools"><input type="search" id="bookQ" placeholder="Search gems, minerals or places (e.g. Brazil)" aria-label="Search the encyclopedia" autocomplete="off" value="${esc(BOOK_F.q)}">
+      <div class="seg" id="bookSeg" role="group" aria-label="Show">${[['all','All'],['found','Discovered'],['locked','Locked']].map(([v,l])=>`<button data-bf="${v}" class="${BOOK_F.show===v?'on':''}" aria-pressed="${BOOK_F.show===v}">${l}</button>`).join('')}</div>
+      <span class="small muted" id="bookCount" aria-live="polite"></span></div>
     <div class="grid">${GEMS_SORTED.map(g=>{const u=S.unlocked.includes(g.id);return `<button class="ecard ${u?'':'locked'}" data-g="${g.id}">${gemSVG(g,u?t:0)}<div class="n">${esc(g.name)}</div><div class="small muted">${u?esc(g.src.slice(0,2).map(s=>s.n.split(',').pop().trim()).join(' · ')):(msGemAt(g.id)!=null?'🔒 '+msGemAt(g.id).toLocaleString('en')+' gems placed':'🔒 Level '+(unlockLevelOf(g.id)-1))}</div></button>`;}).join('')}</div></section>`;
-  $$('[data-g]').forEach(b=>b.onclick=()=>openInfo(b.dataset.g));}
+  $$('[data-g]').forEach(b=>b.onclick=()=>openInfo(b.dataset.g));
+  const norm=x=>String(x).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const apply=()=>{const q=norm(BOOK_F.q.trim());let n=0;$$('.ecard').forEach(b=>{const g=GEM[b.dataset.g],u=S.unlocked.includes(g.id);
+      const okShow=BOOK_F.show==='all'||(BOOK_F.show==='found')===u;const okQ=!q||norm([g.name,g.family,...g.src.map(s=>s.n)].join(' | ')).includes(q);
+      b.hidden=!(okShow&&okQ);if(!b.hidden)n++;});
+    $('#bookCount').textContent=n===GEMS.length?'':n?`${n} gem${n===1?'':'s'} shown`:'No gems match. Try another word.';};
+  $('#bookQ').oninput=e=>{BOOK_F.q=e.target.value;apply();};
+  $$('#bookSeg button').forEach(b=>b.onclick=()=>{BOOK_F.show=b.dataset.bf;$$('#bookSeg button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',x===b);});apply();});
+  apply();}
+const BOOK_F={q:'',show:'all'};
 /* ---------- gallery ---------- */
 function screenGallery(){
   app().innerHTML=`<section class="screen"><div class="section-head"><div><div class="opt-label">My gallery</div><h2>${GALLERY.length} saved dress${GALLERY.length===1?'':'es'}</h2></div>
