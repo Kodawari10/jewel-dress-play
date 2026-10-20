@@ -13,7 +13,7 @@ window.JD_STARKNET_CONFIG = {
   networkName: 'Sepolia testnet',
   chainId: '0x534e5f5345504f4c4941',          // SN_SEPOLIA
   rpcUrl: 'https://starknet-sepolia.drpc.org', // any Starknet JSON-RPC (v0.8+) endpoint for Sepolia
-  contractAddress: '',                        // <- paste the deployed JewelDress address here
+  contractAddress: '0x037207895b8f0396c276721f02478d5e573e2c3cb883c3ad93e091a2e496449f', // JewelDress on Sepolia (deployed 2026-10-20)
   explorerTx: 'https://sepolia.voyager.online/tx/',
   explorerContract: 'https://sepolia.voyager.online/contract/',
   explorerNft: 'https://sepolia.voyager.online/nft/',
