@@ -1697,6 +1697,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>Mirror:</b> in the designer, turn on 🪞 Mirror to set every gem on both sides of the dress at once (one Undo removes the pair).</li>
    <li><b>Finding gems:</b> once you have ten or more, type in <b>Find a gem…</b> above the palette (a name or mineral, like “beryl”) or tap <b>♥</b> to show just your favourites; press Enter to pick the first match.</li>
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Under <b>Gem relatives</b>, tap a gem made of the same mineral (like ruby and sapphire, both corundum) to compare them. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
+   <li><b>🎲 Random gem:</b> in the encyclopedia, open the story of a random discovered gem (ones you have not read yet come first), then keep browsing with Prev/Next.</li>
    <li><b>🧠 Gem quiz:</b> in the encyclopedia, answer five quick questions about the gems you have discovered (their mineral family, which is harder, birthstone months). Your best score is saved.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
    <li><b>💾 Backup:</b> your progress is saved only in this browser. From the main menu, download a backup file now and then; restoring it (here or in another browser) brings back your gems, milestones and gallery.</li></ol>
@@ -1903,6 +1904,7 @@ function screenBook(){const t=curTier();
       <div class="seg" id="bookSeg" role="group" aria-label="Show">${[['all','All'],['found','Discovered'],['locked','Locked'],['fav','♥ Favourites']].map(([v,l])=>`<button data-bf="${v}" class="${BOOK_F.show===v?'on':''}" aria-pressed="${BOOK_F.show===v}">${l}</button>`).join('')}</div>
       <label class="booksort small muted">Sort <select id="bookSort" aria-label="Sort gems">${BOOK_SORTS.map(([v,l])=>`<option value="${v}" ${BOOK_F.sort===v?'selected':''}>${l}</option>`).join('')}</select></label>
       <button class="btn small" id="quizBtn" title="Five quick questions about the gems you have discovered">🧠 Gem quiz</button>
+      <button class="btn small" id="randGemBtn" title="Open the story of a random discovered gem, ones you have not read yet first">🎲 Random gem</button>
       <span class="small muted" id="bookCount" aria-live="polite"></span></div>
     <div class="grid" id="bookGrid">${GEMS_SORTED.map(g=>{const u=S.unlocked.includes(g.id);return `<button class="ecard ${u?'':'locked'} ${u&&isFav(g.id)?'fav':''}" data-g="${g.id}"><span class="favmark" aria-label="Favourite">♥</span>${gemSVG(g,u?t:0)}<div class="n">${esc(g.name)}</div><div class="small muted">${u?esc(g.src.slice(0,2).map(s=>s.n.split(',').pop().trim()).join(' · ')):(msGemAt(g.id)!=null?'🔒 '+msGemAt(g.id).toLocaleString('en')+' gems placed':'🔒 Level '+(unlockLevelOf(g.id)-1))}</div>${u?`<div class="mh small" title="Hardness on the Mohs scale">💪 Mohs ${esc(g.mohsTxt)}</div>`:''}</button>`;}).join('')}</div></section>`;
   $$('[data-g]').forEach(b=>b.onclick=()=>openInfo(b.dataset.g,{list:$$('.ecard').filter(x=>!x.hidden).map(x=>x.dataset.g)}));
@@ -1917,6 +1919,10 @@ function screenBook(){const t=curTier();
   $('#bookSort').onchange=e=>{BOOK_F.sort=e.target.value;order();};order();
   $('#bookQ').oninput=e=>{BOOK_F.q=e.target.value;apply();};
   $('#quizBtn').onclick=()=>{AudioFX.soft();openQuiz();};
+  $('#randGemBtn').onclick=()=>{const vis=$$('.ecard').filter(x=>!x.hidden).map(x=>x.dataset.g).filter(id=>S.unlocked.includes(id));
+    const pool=vis.length?vis:S.unlocked.slice();if(!pool.length){toast('Discover a gem first by finishing a level.');return;}
+    const unread=pool.filter(id=>!S.seen.includes(id));const from=unread.length?unread:pool;AudioFX.soft();
+    openInfo(from[Math.floor(Math.random()*from.length)],{list:pool});};
   $$('#bookSeg button').forEach(b=>b.onclick=()=>{BOOK_F.show=b.dataset.bf;$$('#bookSeg button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',x===b);});apply();});
   apply();}
 /* encyclopedia: collection progress bar and where the next gems come from (levels or gems-placed milestones) */
