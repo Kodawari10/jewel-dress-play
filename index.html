@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Jewel Dress · Gem Couture Atelier</title>
 <meta name="description" content="Design dresses, set real gemstones on them, and learn where every gem on Earth comes from.">
-<meta name="theme-color" content="#f6ece4">
+<meta name="theme-color" content="#ffe9f3">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <style>
@@ -15,11 +15,14 @@
 @font-face{font-family:'Nunito';font-style:normal;font-weight:200 1000;font-display:swap;src:url(fonts/nunito-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 
 :root{
-  --ivory:#fbf6ef; --cream:#f6ece4; --blush:#f2d9d9; --champ:#e8d5b9; --gold:#b98d3e; --gold2:#e2c27d;
-  --plum:#3b2440; --ink:#3a2a33; --muted:#86727c; --card:#fffdf9; --line:#ead9c8; --ok:#4f8a6b;
+  --ivory:#fff8fb; --cream:#ffeef6; --blush:#ffd6e7; --champ:#ffe3d3; --gold:#c2417f; --gold2:#f6b3d3;
+  --plum:#5b3a86; --ink:#4a3552; --muted:#8a7896; --card:#fffafd; --line:#f3dcec; --ok:#3f9a78;
+  --pink:#ffb3d1; --pink2:#ff8fbf; --lav:#cdb8ff; --lav2:#a98bff; --mint:#b5ecd8; --peach:#ffd3b8; --sky:#bfe3ff; --lemon:#fff1b8;
+  --glass:rgba(255,255,255,.64); --glass-b:rgba(255,255,255,.9);
+  --bounce:cubic-bezier(.34,1.56,.64,1);
   --serif:"Fredoka","Baloo 2","Quicksand","Varela Round","Arial Rounded MT Bold","Hiragino Maru Gothic ProN",ui-rounded,"Nunito",system-ui,sans-serif;
   --sans:"Nunito","Quicksand",ui-rounded,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --r:16px; --shadow:0 10px 30px rgba(59,36,64,.12),0 2px 6px rgba(59,36,64,.08);
+  --r:22px; --shadow:0 12px 30px rgba(194,65,127,.16),0 3px 8px rgba(91,58,134,.08); --soft:0 6px 18px rgba(194,65,127,.10),0 1px 3px rgba(91,58,134,.06);
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;}
@@ -209,7 +212,7 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 @media (max-width:760px){
   .mspill{min-width:70px;padding:4px 8px}
   header.top{gap:6px;padding:8px 10px}.brand{font-size:19px;gap:5px}.pill{padding:6px 9px;font-size:13px}.iconbtn{min-width:34px;height:34px;padding:0 8px}
-  .hero{grid-template-columns:1fr;min-height:auto;padding-top:8px}.hero-art{order:-1}.hero-art svg{width:min(260px,70%)}
+  .hero{grid-template-columns:1fr;min-height:auto;padding-top:8px}.hero-art{order:-1}.hero-art svg.dressart{width:min(240px,64%)}
   .menu-cards{grid-template-columns:1fr 1fr}
   .play{grid-template-columns:1fr}.play .left{order:2}.play .center{order:1}.play .right{order:3}
   .stagewrap svg.stage{max-height:62vh}
@@ -221,13 +224,153 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .gemchip:focus-visible,.sw:focus-visible{outline-offset:3px}
 .backup .filebtn{position:relative;display:inline-block;cursor:pointer}.backup .filebtn input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.backup .filebtn:focus-within{outline:3px solid var(--gold);outline-offset:2px}
+/* =====================================================================
+   KAWAII + MODERN THEME (pastel glass, chunky bouncy UI, sparkles)
+   ===================================================================== */
+body{background:
+  radial-gradient(700px 520px at 6% 2%,rgba(255,179,209,.55) 0,rgba(255,179,209,0) 70%),
+  radial-gradient(760px 600px at 100% 8%,rgba(205,184,255,.55) 0,rgba(205,184,255,0) 70%),
+  radial-gradient(700px 600px at 0% 100%,rgba(181,236,216,.55) 0,rgba(181,236,216,0) 70%),
+  radial-gradient(700px 600px at 100% 100%,rgba(255,211,184,.55) 0,rgba(255,211,184,0) 70%),
+  linear-gradient(180deg,#fff6fb,#fbefff);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.55;background-size:240px 240px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg fill='%23ffb3d1'%3E%3Cpath d='M40 52c-7-6-4-13 0-8 4-5 7 2 0 8z'/%3E%3Cpath d='M182 168c-7-6-4-13 0-8 4-5 7 2 0 8z'/%3E%3C/g%3E%3Cg fill='%23cdb8ff'%3E%3Cpath d='M150 40l2 6 6 2-6 2-2 6-2-6-6-2 6-2z'/%3E%3Cpath d='M60 170l1.6 4.4 4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4-4.4-1.6 4.4-1.6z'/%3E%3C/g%3E%3Cg fill='%2396e0c4'%3E%3Ccircle cx='110' cy='110' r='2.2'/%3E%3Ccircle cx='214' cy='72' r='1.8'/%3E%3Ccircle cx='20' cy='214' r='1.8'/%3E%3C/g%3E%3C/svg%3E")}
+::selection{background:#ffd0e4}
+header.top{background:rgba(255,250,253,.62);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border-bottom:none;box-shadow:0 6px 24px rgba(194,65,127,.08)}
+.brand{gap:6px;color:var(--plum)}
+.brand .mascot-mini{width:34px;height:34px;flex:none;animation:bob 3.2s ease-in-out infinite}
+.brand-word{background:linear-gradient(90deg,#ff6fae,#a98bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand small{color:var(--lav2)}
+.pill,.iconbtn{background:var(--glass);border:2px solid var(--glass-b);box-shadow:var(--soft);backdrop-filter:blur(8px)}
+.iconbtn{transition:transform .25s var(--bounce),box-shadow .2s}.iconbtn:hover{transform:translateY(-2px) rotate(-6deg);border-color:#fff}.iconbtn:active{transform:scale(.92)}
+.btn{border:2px solid #fff;background:linear-gradient(180deg,#fff,#fff3f9);box-shadow:0 4px 0 #f6c9de,0 8px 16px rgba(194,65,127,.12);transition:transform .25s var(--bounce),box-shadow .2s,filter .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 #f6c9de,0 12px 22px rgba(194,65,127,.18)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #f6c9de,0 3px 8px rgba(194,65,127,.12);transition-duration:.06s}
+.btn.primary{background:linear-gradient(135deg,#ff8fbf,#b993ff);color:#fff;border:2px solid rgba(255,255,255,.7);box-shadow:0 4px 0 #c8669d,0 10px 20px rgba(169,139,255,.3);text-shadow:0 1px 0 rgba(120,40,90,.25)}
+.btn.primary:hover{box-shadow:0 6px 0 #c8669d,0 14px 26px rgba(169,139,255,.36);filter:saturate(1.1)}
+.btn.primary:active{box-shadow:0 1px 0 #c8669d}
+.btn.gold{background:linear-gradient(135deg,#ffc29a,#ff8fb1);color:#fff;border:2px solid rgba(255,255,255,.7);box-shadow:0 4px 0 #d9787f,0 10px 20px rgba(255,143,177,.3)}
+.btn:disabled{box-shadow:none}
+.screen{animation:pageIn .5s var(--bounce)}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-5px) rotate(3deg)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg) scale(1.12)}75%{transform:rotate(8deg) scale(1.12)}}
+@keyframes hop{0%,100%{transform:translateY(0) scale(1)}30%{transform:translateY(-14px) scale(1.06,.94)}55%{transform:translateY(0) scale(1.1,.9)}75%{transform:translateY(-4px)}}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
+@keyframes shine{from{background-position:-200% 0}to{background-position:200% 0}}
+/* menu */
+.hero h1{color:var(--plum);display:flex;align-items:center;gap:.18em;flex-wrap:wrap}
+.hero h1 em{background:linear-gradient(90deg,#ff6fae 0%,#c58bff 55%,#7cc8ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 .mascot{width:.95em;height:.95em;flex:none;animation:bob 3s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(194,65,127,.25))}
+.hero .opt-label{display:inline-flex;align-items:center;gap:6px;background:var(--glass);border:2px solid var(--glass-b);border-radius:999px;padding:4px 12px;box-shadow:var(--soft)}
+.hero p.lead{color:var(--muted)}
+.gemday,.msmenu{background:var(--glass);border:2px solid var(--glass-b);border-radius:24px;box-shadow:var(--soft);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.gemday{transition:transform .3s var(--bounce),box-shadow .2s}.gemday:hover{transform:translateY(-3px) scale(1.01)}
+.gemday:hover .gd-gem{animation:wiggle .6s ease}
+.gemday .gd-gem{background:radial-gradient(circle at 40% 35%,#fff,#ffe1ee 70%);border-radius:50%;padding:5px}
+.mcard{position:relative;background:var(--glass);border:2px solid var(--glass-b);border-radius:26px;box-shadow:var(--soft);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .35s var(--bounce),box-shadow .25s}
+.mcard:hover{transform:translateY(-4px) scale(1.015);box-shadow:var(--shadow)}
+.mcard:active{transform:scale(.97)}
+.mcard .ico{display:inline-grid;place-items:center;width:38px;height:38px;margin-right:6px;border-radius:14px;background:#fff;box-shadow:0 3px 0 rgba(0,0,0,.05);font-size:20px;vertical-align:middle;transition:transform .4s var(--bounce)}
+.mcard:hover .ico{animation:wiggle .6s ease}
+.menu-cards .mcard[data-go="play"]{background:linear-gradient(150deg,rgba(255,214,231,.85),rgba(255,255,255,.6))}
+.menu-cards .mcard[data-go="book"]{background:linear-gradient(150deg,rgba(213,198,255,.85),rgba(255,255,255,.6))}
+.menu-cards .mcard[data-go="gallery"]{background:linear-gradient(150deg,rgba(181,236,216,.9),rgba(255,255,255,.6))}
+.menu-cards #howBtn{background:linear-gradient(150deg,rgba(191,227,255,.9),rgba(255,255,255,.6))}
+.menu-cards #backupBtn{background:linear-gradient(150deg,rgba(255,211,184,.9),rgba(255,255,255,.6))}
+.mcard.feature{background:linear-gradient(120deg,#ff8fbf 0%,#c39bff 55%,#8fd0ff 100%);border:2px solid rgba(255,255,255,.8);box-shadow:0 6px 0 #d27fb6,0 16px 30px rgba(169,139,255,.32)}
+.mcard.feature .t{text-shadow:0 2px 0 rgba(140,60,130,.25)}.mcard.feature .d{color:#fff;opacity:.95}
+.mcard.feature .ico{background:rgba(255,255,255,.35)}
+.mcard.feature:before{content:"✦  ♡  ✧";position:absolute;right:16px;top:10px;color:#fff;opacity:.8;font-size:16px;letter-spacing:2px;animation:bob 2.6s ease-in-out infinite}
+.hero-art{position:relative}
+.hero-art svg.dressart{border-radius:36px;border:4px solid #fff;box-shadow:0 24px 50px rgba(169,139,255,.25),0 6px 16px rgba(194,65,127,.12);filter:none}
+.hero-art .mascot-big{position:absolute;width:96px;height:96px;left:calc(50% - min(200px,45%) - 26px);bottom:6%;animation:bob 3.4s ease-in-out infinite;filter:drop-shadow(0 10px 12px rgba(194,65,127,.3));z-index:2}
+.hero-art .bubble{position:absolute;left:calc(50% - min(200px,45%) + 50px);bottom:calc(6% + 84px);background:#fff;color:var(--plum);font-family:var(--serif);font-weight:600;font-size:15px;border-radius:18px;padding:7px 13px;box-shadow:var(--soft);z-index:2;animation:bob 3.4s ease-in-out infinite reverse}
+.hero-art .bubble:after{content:"";position:absolute;left:14px;bottom:-7px;border:8px solid transparent;border-top-color:#fff;border-bottom:0}
+.hero-art .twk{position:absolute;color:#fff;text-shadow:0 0 8px #ffb3d1,0 0 2px #c39bff;font-size:22px;animation:twinkle 2.4s ease-in-out infinite;pointer-events:none;z-index:2}
+/* panels, stage */
+.panel{background:var(--glass);border:2px solid var(--glass-b);border-radius:26px;box-shadow:var(--soft);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.stagewrap{background:radial-gradient(70% 55% at 50% 35%,#fff 0,#ffeef7 55%,#f1e6ff 100%);border:3px solid #fff;border-radius:30px;box-shadow:0 14px 36px rgba(169,139,255,.18),inset 0 0 50px rgba(255,179,209,.25)}
+.stage-mascot{position:absolute;right:10px;bottom:10px;width:64px;height:64px;pointer-events:none;filter:drop-shadow(0 6px 8px rgba(194,65,127,.28));animation:bob 3.2s ease-in-out infinite}
+.stage-mascot.hop{animation:hop .6s var(--bounce)}
+.tag{background:rgba(255,255,255,.78);border:2px solid #fff;box-shadow:var(--soft);font-weight:600;color:var(--plum)}
+.mirrortag[aria-pressed="true"]{background:linear-gradient(135deg,#ff8fbf,#b993ff);border-color:#fff}
+.progress{height:12px;background:rgba(255,255,255,.8);box-shadow:inset 0 1px 3px rgba(194,65,127,.18);border:1px solid #fff}
+.progress i,.msmenu .progress i,.bookprog .progress i{background:linear-gradient(90deg,#ff9cc8,#c39bff,#8fd8ff,#ff9cc8);background-size:200% 100%;animation:shine 4s linear infinite}
+.mspill i{background:rgba(255,255,255,.8)}.mspill i b{background:linear-gradient(90deg,#ff9cc8,#c39bff)}
+.gemchip{border:2px solid rgba(255,255,255,.95);background:rgba(255,255,255,.75);border-radius:18px;box-shadow:0 3px 0 #f6d6e6;transition:transform .3s var(--bounce),box-shadow .2s;font-weight:600;color:var(--ink)}
+.gemchip:hover{transform:translateY(-3px) scale(1.04)}
+.gemchip:active{transform:scale(.94)}
+.gemchip:hover svg{animation:wiggle .55s ease}
+.gemchip.sel{border-color:#ff8fbf;background:linear-gradient(180deg,#fff,#ffeaf4);box-shadow:0 0 0 3px rgba(255,143,191,.35),0 3px 0 #f3b5d1;transform:translateY(-2px)}
+.gemchip.sel:after{content:"♥";position:absolute;left:5px;top:2px;color:#ff6fae;font-size:12px;line-height:1}
+.gemchip .info{border:2px solid #fff;background:#f1e8ff;color:var(--lav2);font-weight:700;line-height:14px}
+.palfind input[type=search],.booktools input[type=search],.booksort select,input[type=text]{border:2px solid #fff;background:rgba(255,255,255,.85);box-shadow:inset 0 1px 3px rgba(194,65,127,.12);border-radius:999px}
+input[type=text]{border-radius:14px}
+.palfind input[type=search]:focus,.booktools input[type=search]:focus,input[type=text]:focus{outline:none;border-color:#ffb3d1;box-shadow:0 0 0 4px rgba(255,179,209,.4)}
+.palfav{border:2px solid #fff;background:#fff0f6;color:#e0569b}
+.palfav[aria-pressed="true"]{background:linear-gradient(135deg,#ff8fbf,#ff6fae);border-color:#fff}
+.seg{border:2px solid #fff;background:rgba(255,255,255,.7);box-shadow:var(--soft);padding:2px;gap:2px}
+.seg button{border-radius:999px;transition:background .25s,color .25s,transform .25s var(--bounce)}
+.seg button.on,.chip.on,.tabs button.on{background:linear-gradient(135deg,#ff8fbf,#b993ff);color:#fff;border-color:transparent;box-shadow:0 3px 8px rgba(169,139,255,.35)}
+.cutseg{border-radius:20px}
+.chip{border:2px solid #fff;background:rgba(255,255,255,.8);box-shadow:0 2px 0 #f3d6e5;transition:transform .25s var(--bounce)}
+.chip:hover{transform:translateY(-2px)}.chip:active{transform:scale(.94)}
+.tabs button{border:2px solid #fff;background:rgba(255,255,255,.75);border-radius:16px;box-shadow:0 3px 0 #f3d6e5;transition:transform .25s var(--bounce)}
+.tabs button:hover{transform:translateY(-2px)}
+.sw{border:3px solid #fff;box-shadow:0 0 0 1px #f3dcec,0 2px 4px rgba(194,65,127,.15);transition:transform .25s var(--bounce)}
+.sw:hover{transform:scale(1.15)}.sw.on{box-shadow:0 0 0 3px #ff8fbf;transform:scale(1.1)}
+.fabinfo{background:rgba(255,255,255,.75);border:2px solid #fff;border-radius:18px}
+.opt-label{color:var(--gold)}
+/* encyclopedia & gallery */
+.ecard,.gcard{background:var(--glass);border:2px solid var(--glass-b);border-radius:24px;box-shadow:var(--soft);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .35s var(--bounce),box-shadow .25s}
+.ecard:hover,.gcard:hover{transform:translateY(-4px) rotate(-.6deg);box-shadow:var(--shadow)}
+.ecard:hover svg{animation:wiggle .6s ease}
+.ecard svg{background:radial-gradient(circle at 45% 40%,#fff 0,#ffeef7 55%,rgba(255,238,247,0) 72%);border-radius:50%}
+.gcard .thumb{background:radial-gradient(70% 60% at 50% 35%,#fff 0,#fdeaf4 70%,#efe4ff 100%)}
+.gcard .gu{border:2px solid #fff;box-shadow:var(--soft)}.gcard .gu b{background:linear-gradient(135deg,#ff8fbf,#b993ff)}
+.section-head h2{background:linear-gradient(90deg,var(--plum),#c2417f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.relgem,.qopt{border:2px solid #fff;background:rgba(255,255,255,.85);box-shadow:0 2px 0 #f3d6e5}
+.relgem:hover,.qopt:hover:not(:disabled){background:#fff0f7}
+.bstone{background:#fff0f7;border-color:#ffd0e4;color:#a8326f}
+.mohs i{background:#f1e6f7}.mohs i.on{background:linear-gradient(90deg,#ffb3d1,#b993ff)}
+.badge{background:linear-gradient(135deg,#ff8fbf,#b993ff)}
+/* modal & sheets */
+.modal{background:rgba(120,80,150,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.sheet{background:linear-gradient(180deg,#fff,#fff6fb);border:3px solid #fff;border-radius:32px;box-shadow:0 30px 80px rgba(91,58,134,.28);animation:sheetIn .45s var(--bounce)}
+@keyframes sheetIn{from{opacity:0;transform:translateY(24px) scale(.94)}to{opacity:1;transform:none}}
+.infocard .gemside{background:radial-gradient(80% 70% at 50% 40%,#fff 0,#ffe8f3 60%,#efe4ff 100%);border-radius:29px 0 0 29px}
+.infocard .gemside svg{animation:bob 4s ease-in-out infinite}
+.mscard{background:linear-gradient(180deg,#fff,#ffeef7);border:3px solid #fff;border-radius:30px}
+.celebrate h2,.mscard h2{background:linear-gradient(90deg,#ff6fae,#a98bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.celebrate .unl div svg{animation:bob 2.8s ease-in-out infinite}
+.toast{background:linear-gradient(135deg,#ff8fbf,#b993ff);border:2px solid rgba(255,255,255,.8);font-weight:600;box-shadow:0 10px 30px rgba(169,139,255,.4);animation:toastIn .45s var(--bounce)}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,20px) scale(.85)}to{opacity:1;transform:translate(-50%,0)}}
+.float{color:#ff5fa8;font-family:var(--serif);font-size:17px;text-shadow:0 1px 0 #fff,0 0 6px #fff}
+.mscele .conf i{font-size:22px}
+/* confetti (hearts and stars) for completed dresses */
+.kconf{position:fixed;inset:0;z-index:95;pointer-events:none;overflow:hidden}
+.kconf i{position:absolute;top:-34px;font-style:normal;animation:kfall 2.8s cubic-bezier(.3,.6,.5,1) forwards;text-shadow:0 1px 2px rgba(0,0,0,.12)}
+@keyframes kfall{0%{transform:translate(0,0) rotate(0) scale(.6);opacity:0}10%{opacity:1}100%{transform:translate(var(--dx,0),105vh) rotate(var(--rot,240deg)) scale(1);opacity:.25}}
+:focus-visible{outline:3px solid #d6458a;outline-offset:3px;border-radius:12px}
+@media (max-width:760px){
+  .hero h1{font-size:46px}
+  .hero-art .mascot-big{width:64px;height:64px;left:6%;bottom:4%}
+  .hero-art .bubble{left:calc(6% + 50px);bottom:calc(4% + 56px);font-size:13px}
+  .hero-art svg.dressart{border-radius:28px}
+  .mcard{padding:14px;border-radius:22px}.mcard .t{font-size:18px}.mcard.feature .t{font-size:22px}
+  .mcard .ico{width:32px;height:32px;font-size:17px;border-radius:12px}
+  .stage-mascot{width:50px;height:50px}
+  .brand .mascot-mini{width:28px;height:28px}
+}
+@media (max-width:420px){.menu-cards{grid-template-columns:1fr}.mcard.feature:before{display:none}}
 /* Respect the system "reduce motion" setting: calm CSS motion here, SVG sparkles are paused in JS */
 @media (prefers-reduced-motion: reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header class="top">
-  <div class="brand" id="homeBtn" title="Main menu">💎 Jewel Dress <small>Gem couture atelier</small></div>
+  <div class="brand" id="homeBtn" title="Main menu"><span id="brandMascot" aria-hidden="true"></span><span class="brand-word">Jewel Dress</span> <small>Gem couture atelier</small></div>
   <div class="spacer"></div>
   <span class="pill hide-m" id="hudLevel">Level <b>1</b></span>
   <span class="pill mspill" id="hudMs" title="Gems placed"></span>
@@ -1119,12 +1262,18 @@ const NECK_GUIDE={
 };
 const SLEEVE={
   cap:'M156,100 Q132,98 126,126 Q136,134 147,138 L150,118 Z',
-  puff:'M157,100 C114,90 106,150 132,153 C140,151 146,143 148,136 Z',
+  puff:'M157,100 C112,84 100,150 130,157 C140,156 146,145 148,136 Z',
   bubble:'M157,100 C104,82 94,160 132,160 C141,158 147,147 148,136 Z',
   flutter:'M156,100 Q126,94 112,124 Q118,129 123,126 Q126,133 131,131 Q135,138 140,135 Q144,140 148,138 L150,118 Z',
   long:'M155,101 Q130,102 125,130 L106,300 Q117,308 130,302 L146,168 L148,138 Z',
   offshoulder:'M152,138 C136,125 116,127 103,142 C105,154 109,164 114,173 C126,161 138,156 152,161 Z',
 };
+/* gathers + cuff ribbon that make puff and bubble sleeves look soft and pillowy */
+const SLEEVE_DETAIL={
+  puff:'M152,104 Q130,108 122,126 M150,112 Q136,124 132,146 M147,124 Q142,136 140,152',
+  bubble:'M152,103 Q124,104 112,124 M150,112 Q130,124 124,152 M147,126 Q140,140 138,158',
+};
+const SLEEVE_CUFF={puff:'M124,149 Q136,158 148,140',bubble:'M118,152 Q132,163 147,142'};
 function dressGeometry(d){
   const empire=d.silhouette==='empire'||d.silhouette==='babydoll';
   const wy=empire?172:225, wL=empire?150:158, wR=empire?250:242;
@@ -1235,9 +1384,15 @@ function dressBody(d,p){
   const part=(path,k,cls)=>fabricLayer(path,p+'-'+k,P[k].f,cls||'fab')+vs(path);
   const sk=hexToHsl(P.skirt.c);const CL=cuteLayers(d,G,p);out.push(CL.back,`<clipPath id="${p}-skc"><path d="${G.skirt}"/></clipPath>`);
   if(G.train) out.push(part(G.train,'skirt')+`<path d="${G.train}" fill="#000" opacity=".12" pointer-events="none"/>`);
-  if(d.sleeves&&d.sleeves!=='none'&&SLEEVE[d.sleeves]){const sp=SLEEVE[d.sleeves];out.push(`<g>${part(sp,'sleeves')}</g><g transform="translate(400 0) scale(-1 1)">${part(sp,'sleeves')}</g>`);}
+  const sl=hexToHsl(P.sleeves.c);
+  if(d.sleeves&&d.sleeves!=='none'&&SLEEVE[d.sleeves]){const sp=SLEEVE[d.sleeves];
+    const det=(SLEEVE_DETAIL[d.sleeves]?`<path d="${SLEEVE_DETAIL[d.sleeves]}" fill="none" stroke="${hsl(sl,-22,0,.35)}" stroke-width="1.4" stroke-linecap="round" pointer-events="none"/><path d="${SLEEVE_DETAIL[d.sleeves]}" transform="translate(3 -1)" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round" pointer-events="none"/>`:'')
+      +(SLEEVE_CUFF[d.sleeves]?`<path d="${SLEEVE_CUFF[d.sleeves]}" fill="none" stroke="${hsl(sl,-8,8,.95)}" stroke-width="4.5" stroke-linecap="round" pointer-events="none"/><path d="${SLEEVE_CUFF[d.sleeves]}" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.2" stroke-linecap="round" pointer-events="none"/>`:'')
+      +`<path d="${sp}" fill="none" stroke="${hsl(sl,-30,0,.4)}" stroke-width="1.6" stroke-linejoin="round" pointer-events="none"/>`;
+    out.push(`<g>${part(sp,'sleeves')}${det}</g><g transform="translate(400 0) scale(-1 1)">${part(sp,'sleeves')}${det}</g>`);}
   if(FABRICS[P.skirt.f]&&FABRICS[P.skirt.f].sheer)out.push(`<path d="${G.skirt}" transform="translate(200 ${G.wy}) scale(1.06 1.02) translate(-200 ${-G.wy})" fill="${hsl(sk,10,-10,.4)}" pointer-events="none"/>`);
   out.push(part(G.skirt,'skirt'));
+  out.push(`<path d="${G.skirt}" fill="none" stroke="${hsl(sk,-30,0,.38)}" stroke-width="1.8" stroke-linejoin="round" pointer-events="none"/>`);
   if(d.silhouette!=='sheath'){const folds=[];const n=7;for(let i=0;i<n;i++){const t=(i+.5)/n;const xh=200-G.hw+2*G.hw*t, xw=G.wL+(G.wR-G.wL)*t;
     folds.push(`M${xw.toFixed(1)},${G.wy+6} Q${((xw+xh)/2+(t-.5)*20).toFixed(1)},${(G.wy+G.H)/2} ${xh.toFixed(1)},${G.H-2}`);}
     const vel=P.skirt.f==='velvet';
@@ -1247,6 +1402,7 @@ function dressBody(d,p){
     out.push(`<g pointer-events="none" transform="translate(200 ${G.wy}) scale(1.035 1.015) translate(-200 ${-G.wy})">${fabricLayer(G.skirt,p+'-overlay',P.overlay.f,'ovl')}</g>`);}
   out.push(CL.mid);
   out.push(part(G.bodice,'bodice'));
+  out.push(`<path d="${G.bodice}" fill="none" stroke="${hsl(hexToHsl(P.bodice.c),-30,0,.4)}" stroke-width="1.6" stroke-linejoin="round" pointer-events="none"/>`);
   if(P.overlay&&P.overlay.f!=='none'&&['chantilly','tulle','sequin','georgette','chiffon'].includes(P.overlay.f))out.push(`<g pointer-events="none">${fabricLayer(G.bodice,p+'-overlay',P.overlay.f,'ovl')}</g>`);
   const bc=hexToHsl(P.bodice.c);
   out.push(`<path d="M${G.wL},${G.wy} Q200,${G.wy+(d.silhouette==='empire'?6:8)} ${G.wR},${G.wy}" fill="none" stroke="${hsl(bc,-25,0,.5)}" stroke-width="1.6" pointer-events="none"/>`);
@@ -1331,16 +1487,39 @@ const CUTE_DEFS=p=>`<radialGradient id="${p}-aura"><stop offset="0" stop-color="
 <linearGradient id="${p}-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff2c4"/><stop offset=".5" stop-color="#e2be6a"/><stop offset="1" stop-color="#a87d2c"/></linearGradient>`;
 function fabricSwatch(f,hex){const p='sw'+(++_gemUid);return `<svg viewBox="0 0 120 60" class="fabsw"><defs>${fabricDefs(f,hex,p)}</defs><rect width="120" height="60" fill="#f3e8de"/><path d="M0,0 H120 V60 H0Z" fill="none"/>${fabricLayer('M0,0 C40,8 80,-6 120,4 L120,60 C80,52 40,64 0,56 Z',p,f,'')}</svg>`;}
 function mannequinMarkup(G){
-  return `<g class="form"><rect x="196" y="${G.H-10}" width="8" height="${Math.max(0,612-G.H)}" fill="url(#mq-pole)"/>
-  <path d="M200,610 L158,632 M200,610 L242,632 M200,610 L200,636" stroke="#9c7a3c" stroke-width="5" stroke-linecap="round"/>
-  <circle cx="200" cy="30" r="6" fill="url(#mq-pole)"/><rect x="197" y="34" width="6" height="14" rx="2" fill="#9c7a3c"/>
-  <path d="M184,50 Q200,44 216,50 L214,84 Q244,90 260,104 Q268,120 258,150 L250,230 L150,230 L142,150 Q132,120 140,104 Q156,90 186,84 Z" fill="url(#mq-linen)" stroke="#d8c3a5" stroke-width="1"/>
-  <ellipse cx="200" cy="50" rx="16" ry="5" fill="#d9c4a6"/></g>`;
+  return `<g class="form"><rect x="196" y="${G.H-10}" width="8" height="${Math.max(0,612-G.H)}" rx="4" fill="url(#mq-pole)"/>
+  <path d="M200,610 L158,630 M200,610 L242,630 M200,610 L200,634" stroke="#e29ab8" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="158" cy="630" r="4.5" fill="#ffd1e4"/><circle cx="242" cy="630" r="4.5" fill="#ffd1e4"/><circle cx="200" cy="634" r="4.5" fill="#ffd1e4"/>
+  <path d="${HEART}" transform="translate(200 29) scale(2.3)" fill="#ff9fc8" stroke="#fff" stroke-width=".8"/><rect x="197" y="33" width="6" height="15" rx="3" fill="#e29ab8"/>
+  <path d="M184,50 Q200,44 216,50 L214,84 Q244,90 260,104 Q268,120 258,150 L250,230 L150,230 L142,150 Q132,120 140,104 Q156,90 186,84 Z" fill="url(#mq-linen)" stroke="#f0b8d0" stroke-width="1.2"/>
+  <ellipse cx="200" cy="50" rx="16" ry="5" fill="#f5c3d9"/></g>`;
 }
-const STAGE_DEFS=`<linearGradient id="mq-linen" x1="0" x2="1"><stop offset="0" stop-color="#e2cfb4"/><stop offset=".45" stop-color="#f4e8d6"/><stop offset="1" stop-color="#d6c09f"/></linearGradient>
-<linearGradient id="mq-pole" x1="0" x2="1"><stop offset="0" stop-color="#9c7a3c"/><stop offset=".5" stop-color="#f0d895"/><stop offset="1" stop-color="#9c7a3c"/></linearGradient>
-<radialGradient id="stage-bg" cx="50%" cy="38%" r="70%"><stop offset="0" stop-color="#fffdfa"/><stop offset=".7" stop-color="#f6ebe2"/><stop offset="1" stop-color="#ecdccd"/></radialGradient>
-<radialGradient id="stage-floor" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#c9a37a" stop-opacity=".35"/><stop offset="1" stop-color="#c9a37a" stop-opacity="0"/></radialGradient>`;
+const STAGE_DEFS=`<linearGradient id="mq-linen" x1="0" x2="1"><stop offset="0" stop-color="#f7cfe0"/><stop offset=".45" stop-color="#fff2f8"/><stop offset="1" stop-color="#ecc3dc"/></linearGradient>
+<linearGradient id="mq-pole" x1="0" x2="1"><stop offset="0" stop-color="#d98aa8"/><stop offset=".5" stop-color="#ffe6f0"/><stop offset="1" stop-color="#d98aa8"/></linearGradient>
+<radialGradient id="stage-bg" cx="50%" cy="38%" r="72%"><stop offset="0" stop-color="#fffafd"/><stop offset=".6" stop-color="#ffeef7"/><stop offset="1" stop-color="#efe3ff"/></radialGradient>
+<radialGradient id="stage-floor" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e58fb5" stop-opacity=".35"/><stop offset="1" stop-color="#e58fb5" stop-opacity="0"/></radialGradient>
+<pattern id="stage-dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1.6" fill="#ffc6de" opacity=".55"/><path d="M23,21 l1.2,3 3,1.2 -3,1.2 -1.2,3 -1.2,-3 -3,-1.2 3,-1.2z" fill="#d9c8ff" opacity=".5"/></pattern>`;
+const STAGE_BG='<rect width="400" height="640" fill="url(#stage-bg)"/><rect width="400" height="640" fill="url(#stage-dots)"/><ellipse cx="200" cy="628" rx="170" ry="14" fill="url(#stage-floor)"/>';
+/* Gemmy, the kawaii gem mascot (smiling gem with blush and sparkles) */
+function mascotSVG(cls,mood){const id='gm'+(++_gemUid);const happy=mood==='happy';
+  return `<svg class="${cls||'mascot'}" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="${id}a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd1e6"/><stop offset=".5" stop-color="#ff9fcb"/><stop offset="1" stop-color="#c39bff"/></linearGradient>
+  <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#ffe3f1" stop-opacity=".6"/></linearGradient></defs>
+  <ellipse cx="50" cy="94" rx="22" ry="4" fill="#c2417f" opacity=".12"/>
+  <path d="M28,22 H72 L90,42 L50,90 L10,42 Z" fill="url(#${id}a)" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M28,22 L38,42 H62 L72,22 M10,42 H90 M38,42 L50,90 L62,42" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M30,24 H50 L40,40 H14 Z" fill="url(#${id}b)" opacity=".75"/>
+  ${happy?'<path d="M33,52 Q38,46 43,52 M57,52 Q62,46 67,52" fill="none" stroke="#5b3a86" stroke-width="3.2" stroke-linecap="round"/>':'<ellipse cx="38" cy="52" rx="4" ry="5" fill="#5b3a86"/><ellipse cx="62" cy="52" rx="4" ry="5" fill="#5b3a86"/><circle cx="39.5" cy="50" r="1.6" fill="#fff"/><circle cx="63.5" cy="50" r="1.6" fill="#fff"/>'}
+  <ellipse cx="30" cy="60" rx="5.5" ry="3.2" fill="#ff6fae" opacity=".55"/><ellipse cx="70" cy="60" rx="5.5" ry="3.2" fill="#ff6fae" opacity=".55"/>
+  <path d="M44,59 Q50,66 56,59" fill="#fff" stroke="#5b3a86" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M86,10 l2,5 5,2 -5,2 -2,5 -2,-5 -5,-2 5,-2z" fill="#fff" stroke="#ffb3d1" stroke-width="1"><animate attributeName="opacity" values="1;.2;1" dur="1.8s" repeatCount="indefinite"/></path>
+  <path d="M12,14 l1.4,3.4 3.4,1.4 -3.4,1.4 -1.4,3.4 -1.4,-3.4 -3.4,-1.4 3.4,-1.4z" fill="#fff" stroke="#c39bff" stroke-width="1"><animate attributeName="opacity" values=".2;1;.2" dur="2.3s" repeatCount="indefinite"/></path></svg>`;}
+const REDUCED_MOTION=()=>!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches);
+/* falling hearts & stars over the whole screen (skipped when the system asks for less motion) */
+function kawaiiConfetti(n){if(REDUCED_MOTION())return;const el=document.createElement('div');el.className='kconf';el.setAttribute('aria-hidden','true');
+  const C=['#ff8fbf','#c39bff','#8fd8ff','#96e0c4','#ffc29a','#ffe27a'],G=['♥','★','✦','♡','✧','❀'];
+  el.innerHTML=Array.from({length:n||40},(_,k)=>`<i style="left:${(k*37+11)%100}%;font-size:${16+(k*7)%16}px;color:${C[k%C.length]};animation-delay:${((k*13)%20)/20}s;animation-duration:${2.2+(k%6)*.3}s;--dx:${((k*29)%120)-60}px;--rot:${(k%2?1:-1)*(180+(k*41)%180)}deg">${G[k%G.length]}</i>`).join('');
+  document.body.appendChild(el);setTimeout(()=>el.remove(),4200);}
 /* Full standalone dress SVG (gallery thumbnails, PNG export, menu art). */
 function dressSVG(design,opt){
   opt=opt||{}; const p=opt.prefix||('x'+(++_gemUid)); const tier=design.tier!=null?design.tier:0;
@@ -1351,7 +1530,7 @@ function dressSVG(design,opt){
   const W=opt.width?` width="${opt.width}" height="${opt.width*1.6}"`:'';
   const caption=opt.caption?`<text x="200" y="628" text-anchor="middle" font-family="Fredoka,'Arial Rounded MT Bold','Varela Round',Nunito,sans-serif" font-size="15" fill="#3b2440">${esc(opt.caption)}</text>`:'';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640"${W}><defs>${STAGE_DEFS}${allFabricDefs(design.dress,p)}${syms}</defs>
-  ${opt.bg===false?'':'<rect width="400" height="640" fill="url(#stage-bg)"/><ellipse cx="200" cy="628" rx="170" ry="14" fill="url(#stage-floor)"/>'}
+  ${opt.bg===false?'':STAGE_BG}
   ${mannequinMarkup(G)}${markup}<g>${gems}</g>${caption}</svg>`;
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1541,7 +1720,7 @@ function openInfo(gid,opts){
   const m=modal(`<div class="infocard"><div class="gemside"><div id="infoGem">${gemSVG(g,locked?0:t)}</div>
      <div class="small muted" id="infoTier">${locked?'':`Your atelier cuts it at: <b>${TIERS[t].name}</b>`}</div>
      ${locked||t>=4?'':`<button class="btn small" id="masterBtn">✨ Preview the master cut</button>`}
-     ${opts&&opts.unlocked?'<div class="badge" style="background:#4f8a6b">New gem unlocked!</div>':''}${nav}</div>${body}</div>`,opts&&opts.onClose);
+     ${opts&&opts.unlocked?'<div class="badge" style="background:linear-gradient(135deg,#6fd6b0,#3f9a78)">New gem unlocked! ♡</div>':''}${nav}</div>${body}</div>`,opts&&opts.onClose);
   if(list){const step=d=>{const id=list[(li+d+list.length)%list.length];openInfo(id,{list,focus:d<0?'prev':'next',onClose:opts.onClose});};
     $('#infoPrev',m.el).onclick=()=>step(-1);$('#infoNext',m.el).onclick=()=>step(1);
     document.addEventListener('keydown',function k(e){if($('#modalRoot').firstChild!==m.el){document.removeEventListener('keydown',k);return;}
@@ -1559,27 +1738,30 @@ function showInfoQueue(ids,done){if(!ids.length){done&&done();return;}openInfo(i
    ===================================================================== */
 function createStage(host,dress,opts){
   host.innerHTML=`<div class="stagewrap"><svg class="stage" viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg"><defs><g></g></defs>
-    <rect width="400" height="640" fill="url(#stage-bg)"/><ellipse cx="200" cy="628" rx="170" ry="14" fill="url(#stage-floor)"/>
-    <g class="dress"></g><g class="guides" fill="none" stroke="none"></g><line class="mirror-line" x1="200" y1="70" x2="200" y2="610" stroke="#b98d3e" stroke-width="1.2" stroke-dasharray="4 4" opacity="0" pointer-events="none"/><g class="spots"></g><g class="gems"></g><g class="fx"></g></svg><div class="stage-hud"></div></div>`;
+    <g class="stagebg"></g>
+    <g class="dress"></g><g class="guides" fill="none" stroke="none"></g><line class="mirror-line" x1="200" y1="70" x2="200" y2="610" stroke="#b98d3e" stroke-width="1.2" stroke-dasharray="4 4" opacity="0" pointer-events="none"/><g class="spots"></g><g class="gems"></g><g class="fx"></g></svg><div class="stage-hud"></div>${mascotSVG('stage-mascot')}</div>`;
   const wrap=host.firstChild, svg=$('svg',wrap), defs=$('defs',svg);
   const st={wrap,svg,hud:$('.stage-hud',wrap),dress:null,G:null,syms:new Set(),spots:[],onTap:null};
   st.setDress=d=>{st.dress=d;const {G,markup}=dressBody(d,'st');st.G=G;
     [...defs.children].forEach(n=>{if(n.dataset&&n.dataset.fab)n.remove();});
     const fd=document.createElementNS('http://www.w3.org/2000/svg','g');fd.dataset.fab='1';fd.innerHTML=allFabricDefs(d,'st');defs.appendChild(fd);
-    if(!defs.querySelector('#mq-linen')){const sd=document.createElementNS('http://www.w3.org/2000/svg','g');sd.innerHTML=STAGE_DEFS;defs.appendChild(sd);}
+    if(!defs.querySelector('#mq-linen')){const sd=document.createElementNS('http://www.w3.org/2000/svg','g');sd.innerHTML=STAGE_DEFS;defs.appendChild(sd);$('.stagebg',svg).innerHTML=STAGE_BG;}
     $('.dress',svg).innerHTML=mannequinMarkup(G)+markup;
     $('.guides',svg).innerHTML=Object.entries(G.guides).map(([k,v])=>`<path data-k="${k}" d="${v}"/>`).join('');};
   st.ensureSym=(gid,t,c)=>{const k=symId('st',gid,t,c);if(st.syms.has(k))return;st.syms.add(k);const n=document.createElementNS('http://www.w3.org/2000/svg','g');n.innerHTML=gemSymbol(GEM[gid],t,'st',c);defs.appendChild(n);};
   st.gemEl=q=>{st.ensureSym(q.g,q.t,q.c);const s=q.s;const u=document.createElementNS('http://www.w3.org/2000/svg','use');
     u.setAttribute('href','#'+symId('st',q.g,q.t,q.c));u.setAttribute('x',(q.x-s/2).toFixed(1));u.setAttribute('y',(q.y-s/2).toFixed(1));u.setAttribute('width',s);u.setAttribute('height',s);return u;};
   st.renderGems=list=>{const g=$('.gems',svg);g.innerHTML='';list.forEach(q=>g.appendChild(st.gemEl(q)));};
-  st.addGem=q=>{const el=st.gemEl(q);$('.gems',svg).appendChild(el);el.animate([{transform:'scale(1.6)',opacity:0,transformOrigin:`${q.x}px ${q.y}px`},{transform:'scale(1)',opacity:1,transformOrigin:`${q.x}px ${q.y}px`}],{duration:280,easing:'cubic-bezier(.2,1.4,.4,1)'});burst(q.x,q.y,q.s);};
+  st.addGem=q=>{const el=st.gemEl(q);$('.gems',svg).appendChild(el);const o=`${q.x}px ${q.y}px`;if(!REDUCED_MOTION()){el.animate([{transform:'scale(0) rotate(-30deg)',opacity:0,transformOrigin:o},{transform:'scale(1.35) rotate(8deg)',opacity:1,offset:.45,transformOrigin:o},{transform:'scale(.88,1.08)',offset:.7,transformOrigin:o},{transform:'scale(1)',opacity:1,transformOrigin:o}],{duration:520,easing:'ease-out'});burst(q.x,q.y,q.s);
+    const mm=$('.stage-mascot',wrap);if(mm){mm.classList.remove('hop');void mm.getBoundingClientRect();mm.classList.add('hop');}}};
   st.toSvg=(cx,cy)=>{const r=svg.getBoundingClientRect();if(cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)return null;const m=svg.getScreenCTM();if(!m)return null;const p=new DOMPoint(cx,cy).matrixTransform(m.inverse());return{x:p.x,y:p.y};};
   st.onFabric=(x,y)=>{const ps=$$('.dress .fab',svg);if(!ps.length)return false;try{return ps.some(p=>p.isPointInFill(new DOMPoint(x,y)));}catch(e){return y>90&&y<st.G.H+10&&Math.abs(x-200)<st.G.hw+10;}};
   st.sample=(k,n)=>{const p=$(`.guides path[data-k="${k}"]`,svg);if(!p)return[];const L=p.getTotalLength();const out=[];for(let i=0;i<n;i++){const q=p.getPointAtLength(L*(i+.5)/n);out.push({x:+q.x.toFixed(1),y:+q.y.toFixed(1)});}return out;};
-  st.setSpots=spots=>{st.spots=spots;$('.spots',svg).innerHTML=spots.map((s,i)=>s.filled?'':`<g class="spot" data-i="${i}"><circle cx="${s.x}" cy="${s.y}" r="${s.s/2+1.5}" fill="rgba(255,255,255,.55)" stroke="#b98d3e" stroke-width="1.3" stroke-dasharray="3 2.2"><animate attributeName="stroke-opacity" values=".4;1;.4" dur="2s" repeatCount="indefinite"/></circle><circle cx="${s.x}" cy="${s.y}" r="1.6" fill="#b98d3e"/></g>`).join('');};
-  function burst(x,y,s){const fx=$('.fx',svg);const n=8;let h='';for(let i=0;i<n;i++){const a=i/n*Math.PI*2;h+=`<circle cx="${x}" cy="${y}" r="1.4" fill="${i%2?'#fff':'#e2c27d'}"><animate attributeName="cx" from="${x}" to="${x+Math.cos(a)*s*1.4}" dur=".6s" fill="freeze"/><animate attributeName="cy" from="${y}" to="${y+Math.sin(a)*s*1.4}" dur=".6s" fill="freeze"/><animate attributeName="opacity" from="1" to="0" dur=".6s" fill="freeze"/></circle>`;}
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.innerHTML=h;fx.appendChild(g);setTimeout(()=>g.remove(),700);}
+  st.setSpots=spots=>{st.spots=spots;$('.spots',svg).innerHTML=spots.map((s,i)=>s.filled?'':`<g class="spot" data-i="${i}"><circle cx="${s.x}" cy="${s.y}" r="${s.s/2+1.5}" fill="rgba(255,255,255,.7)" stroke="#ff6fae" stroke-width="1.5" stroke-dasharray="3 2.2"><animate attributeName="stroke-opacity" values=".4;1;.4" dur="2s" repeatCount="indefinite"/></circle><path d="${HEART}" transform="translate(${s.x} ${s.y}) scale(.62)" fill="#ff8fbf"/></g>`).join('');};
+  function burst(x,y,s){const fx=$('.fx',svg);const n=8;let h='';const C=['#ff8fbf','#c39bff','#8fd8ff','#ffd36e'];for(let i=0;i<n;i++){const a=i/n*Math.PI*2+.3;const dx=(Math.cos(a)*s*1.7).toFixed(1),dy=(Math.sin(a)*s*1.7).toFixed(1);
+      h+=`<g transform="translate(${x} ${y})"><path d="${i%2?SPARK4:HEART}" fill="${C[i%4]}" stroke="#fff" stroke-width=".5"><animateTransform attributeName="transform" type="translate" from="0 0" to="${dx} ${dy}" dur=".7s" fill="freeze"/><animate attributeName="opacity" values="1;1;0" dur=".7s" fill="freeze"/></path></g>`;}
+    h+=`<circle cx="${x}" cy="${y}" r="${s/2}" fill="none" stroke="#ffb3d1" stroke-width="2"><animate attributeName="r" from="${s/2}" to="${s*1.5}" dur=".5s" fill="freeze"/><animate attributeName="opacity" from=".9" to="0" dur=".5s" fill="freeze"/></circle>`;
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.innerHTML=h;fx.appendChild(g);setTimeout(()=>g.remove(),800);}
   st.float=(cx,cy,txt)=>{const r=wrap.getBoundingClientRect();const d=document.createElement('div');d.className='float';d.textContent=txt;d.style.left=(cx-r.left)+'px';d.style.top=(cy-r.top-20)+'px';wrap.appendChild(d);setTimeout(()=>d.remove(),1000);};
   // input: tap (place or remove), long-press / right-click (remove), eraser drag (remove many)
   let down=null,lp=null,erasingNow=false,lastLP=0;st.erasing=false;
@@ -1669,20 +1851,21 @@ function gemOfDay(){const ids=GEMS_SORTED.filter(g=>S.unlocked.includes(g.id)).m
 function screenMenu(){
   const next=levelSpec(S.level);
   app().innerHTML=`<section class="screen hero"><div>
-    <div class="opt-label">A gem couture game</div>
-    <h1>Jewel <em>Dress</em></h1>
+    <div class="opt-label">✿ A kawaii gem couture game</div>
+    <h1>${mascotSVG('mascot','happy')}<span>Jewel <em>Dress</em></span></h1>
     <p class="lead">Design gowns, set real gemstones on them, and discover where each gem comes from on Earth. Every gem you place makes your atelier better: more lifelike gems, and cute ruffles, bows, hearts and stars for your dresses.</p>
     ${(mp=>`<div class="msmenu"><div class="small"><b>${esc(mp.cur.name)}</b> · 💎 ${mp.n.toLocaleString('en')} gems placed</div><div class="progress"><i style="width:${(mp.f*100).toFixed(1)}%"></i></div><div class="small muted">${(mp.next.n-mp.n).toLocaleString('en')} more to <b>${esc(mp.next.name)}</b>${mp.next.perks.length?': '+mp.next.perks.map(perkLabel).join(' & '):''}${mp.next.tier>mp.cur.tier?` · ${TIERS[mp.next.tier].name} gems`:''}</div></div>`)(msProgress())}
     ${(g=>g?`<button class="gemday" id="gemDay" aria-label="Gem of the day: ${esc(g.name)}. Read its story"><div class="gd-gem">${gemSVG(g,curTier())}</div><div class="gd-txt"><div class="opt-label">💫 Gem of the day</div><div class="gd-name">${esc(g.name)}</div><div class="small muted">${esc(g.family.split('(')[0].trim())}</div></div><span class="gd-more">Read its story ›</span></button>`:'')(gemOfDay())}
     <div class="menu-cards">
-      <button class="mcard feature" data-go="design"><div class="t">✂️ Create your own dress</div><div class="d">Choose the silhouette, neckline, sleeves and length, sew each part from 20 real fabrics, then set gems in any cut, anywhere you like.</div></button>
-      <button class="mcard" data-go="play"><div class="t">💎 Atelier levels</div><div class="d">Level ${S.level}: ${esc(next.preset.name)}. Fill the marked spots to unlock new gems.</div></button>
-      <button class="mcard" data-go="book"><div class="t">📖 Gem encyclopedia</div><div class="d">${S.unlocked.length} of ${GEMS.length} gems discovered. Names, minerals and origins.</div></button>
-      <button class="mcard" data-go="gallery"><div class="t">🖼️ My gallery</div><div class="d">${GALLERY.length} saved dress${GALLERY.length===1?'':'es'}. Download as PNG.</div></button>
-      <button class="mcard" id="howBtn"><div class="t">❔ How to play</div><div class="d">Quick guide and gem quality levels.</div></button>
-      <button class="mcard" id="backupBtn"><div class="t">💾 Backup</div><div class="d">Save your progress and gallery to a file, or restore them on another browser.</div></button>
+      <button class="mcard feature" data-go="design"><div class="t"><span class="ico" aria-hidden="true">✂️</span>Create your own dress</div><div class="d">Choose the silhouette, neckline, sleeves and length, sew each part from 20 real fabrics, then set gems in any cut, anywhere you like.</div></button>
+      <button class="mcard" data-go="play"><div class="t"><span class="ico" aria-hidden="true">💎</span>Atelier levels</div><div class="d">Level ${S.level}: ${esc(next.preset.name)}. Fill the marked spots to unlock new gems.</div></button>
+      <button class="mcard" data-go="book"><div class="t"><span class="ico" aria-hidden="true">📖</span>Gem encyclopedia</div><div class="d">${S.unlocked.length} of ${GEMS.length} gems discovered. Names, minerals and origins.</div></button>
+      <button class="mcard" data-go="gallery"><div class="t"><span class="ico" aria-hidden="true">🖼️</span>My gallery</div><div class="d">${GALLERY.length} saved dress${GALLERY.length===1?'':'es'}. Download as PNG.</div></button>
+      <button class="mcard" id="howBtn"><div class="t"><span class="ico" aria-hidden="true">❔</span>How to play</div><div class="d">Quick guide and gem quality levels.</div></button>
+      <button class="mcard" id="backupBtn"><div class="t"><span class="ico" aria-hidden="true">💾</span>Backup</div><div class="d">Save your progress and gallery to a file, or restore them on another browser.</div></button>
     </div></div>
-    <div class="hero-art">${dressSVG(SHOWCASE,{prefix:'hero'})}</div></section>`;
+    <div class="hero-art">${dressSVG(SHOWCASE,{prefix:'hero'}).replace('<svg ','<svg class="dressart" ')}${mascotSVG('mascot-big')}<div class="bubble" aria-hidden="true">Let’s sparkle! ♡</div>
+      <span class="twk" style="left:18%;top:8%" aria-hidden="true">✦</span><span class="twk" style="right:16%;top:22%;animation-delay:.8s" aria-hidden="true">✧</span><span class="twk" style="right:20%;bottom:14%;animation-delay:1.5s" aria-hidden="true">♡</span></div></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>{AudioFX.soft();go(b.dataset.go);});
   $('#howBtn').onclick=howTo;
   $('#backupBtn').onclick=()=>{AudioFX.soft();backupModal();};
@@ -1798,7 +1981,7 @@ function levelComplete(){
   const bonus=100*S.level;S.points+=bonus;
   GALLERY.unshift({id:'d'+Date.now().toString(36),name:`Level ${S.level}: ${spec.preset.name}`,dress:JSON.parse(JSON.stringify(spec.dress)),gems:P.gems.map(({g,x,y,s,t,c})=>({g,x,y,s,t,c})),tier:oldTier,created:Date.now(),from:'level'});saveGallery();
   const unl=spec.unlocks.filter(id=>!S.unlocked.includes(id));S.unlocked.push(...unl);
-  S.level++;S.progress=null;save();hud();AudioFX.fanfare();
+  S.level++;S.progress=null;save();hud();AudioFX.fanfare();kawaiiConfetti(44);
   const nt=curTier();
   const m=modal(`<div class="celebrate"><div class="opt-label">Design complete</div><h2>${esc(spec.preset.name)}</h2>
     <p class="muted">+${bonus} bonus sparkle points · saved to your gallery</p>
@@ -2060,6 +2243,7 @@ window.JD_GAME={
 /* =====================================================================
    BOOT
    ===================================================================== */
+$('#brandMascot').outerHTML=mascotSVG('mascot-mini','happy');
 $('#homeBtn').onclick=()=>go('menu');
 $('#muteBtn').onclick=()=>{S.muted=!S.muted;save();hud();if(!S.muted)AudioFX.chime();};
 $('#chainBtn').onclick=()=>{if(window.JD_STARKNET&&JD_STARKNET.enabled)JD_STARKNET.openPanel();else modal(`<div style="padding:26px"><h2 style="color:var(--plum)">Starknet (optional)</h2><p>The on-chain layer isn’t loaded in this copy. The game works fully offline without it.</p></div>`);};
