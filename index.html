@@ -466,6 +466,26 @@ input[type=text]{border-radius:14px}
   .vibegrid{grid-template-columns:repeat(3,1fr)}.vibegrid .vibechip i{height:34px}
   .dpanel .palette{grid-template-columns:repeat(auto-fill,minmax(56px,1fr))}
 }
+
+/* ---- fashion doll ---- */
+.dtabs{grid-template-columns:repeat(8,1fr);gap:3px}.dtabs button{font-size:9.6px;padding:6px 1px 5px}
+.hairgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:3px 0 8px}
+.hairtile{min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px 5px;border:2px solid #fff;background:rgba(255,255,255,.8);border-radius:14px;box-shadow:0 2px 0 #f3d6e5;font-size:10.5px;font-weight:600;color:var(--ink);transition:transform .25s var(--bounce)}
+.hairtile svg{width:58px;height:58px}.hairtile:hover{transform:translateY(-2px)}
+.hairtile.on{border-color:#ff8fbf;box-shadow:0 0 0 2px rgba(255,143,191,.45);background:#fff}
+.dollsw .sw{width:26px;height:26px}
+.doll-eye{transform-box:fill-box;transform-origin:center;animation:dblink 5.5s infinite}
+@keyframes dblink{0%,93%,100%{transform:none}95.5%{transform:scaleY(.12)}}
+.rw-stage .doll-head{transform-box:fill-box;transform-origin:50% 92%;animation:dhead 1.1s ease-in-out infinite alternate}
+.rw-stage .doll-hairback{transform-box:fill-box;transform-origin:50% 0;animation:dhair 1.1s ease-in-out infinite alternate}
+.rw-stage .leg-l{animation:dstep 1.1s ease-in-out infinite}.rw-stage .leg-r{animation:dstep 1.1s ease-in-out infinite;animation-delay:-.55s}
+.rw-stage .doll-bag{transform-box:fill-box;transform-origin:50% 0;animation:dhair 1.1s ease-in-out infinite alternate-reverse}
+@keyframes dhead{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+@keyframes dhair{from{transform:rotate(-1.6deg)}to{transform:rotate(1.6deg)}}
+@keyframes dstep{0%,50%,100%{transform:none}25%{transform:translateY(-6px)}}
+.runway.still .doll-head,.runway.still .doll-hairback,.runway.still .leg-l,.runway.still .leg-r,.runway.still .doll-bag{animation:none}
+.stage-hud{flex-direction:column;align-items:flex-start;right:auto;gap:6px}
+@media (max-width:760px){.dtabs button{font-size:9px}.hairtile svg{width:50px;height:50px}.stage-hud .tag{font-size:11.5px;padding:4px 9px}}
 @media (prefers-reduced-motion: reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -1743,8 +1763,8 @@ function allFabricDefs(d,p){normDress(d);const P=d.parts;let g=`<linearGradient 
   ['bodice','skirt','sleeves'].forEach(k=>g+=fabricDefs(P[k].f,P[k].c,p+'-'+k));
   if(P.overlay&&P.overlay.f!=='none')g+=fabricDefs(P.overlay.f,P.overlay.c,p+'-overlay');
   return g+CUTE_DEFS(p);}
-function dressBody(d,p){
-  normDress(d);const G=dressGeometry(d);const P=d.parts;const out=[];
+function dressBody(d,p,dl){
+  normDress(d);let slv='';const G=dressGeometry(d);const P=d.parts;const out=[];
   const vs=path=>`<path d="${path}" fill="url(#${p}-vshade)" pointer-events="none"/>`;
   const part=(path,k,cls)=>fabricLayer(path,p+'-'+k,P[k].f,cls||'fab')+vs(path);
   const sk=hexToHsl(P.skirt.c);const CL=cuteLayers(d,G,p);const T=teenLayers(d,G,p);out.push(CL.back,T.back,`<clipPath id="${p}-skc"><path d="${G.skirt}"/></clipPath>`);
@@ -1754,7 +1774,8 @@ function dressBody(d,p){
     const det=(SLEEVE_DETAIL[d.sleeves]?`<path d="${SLEEVE_DETAIL[d.sleeves]}" fill="none" stroke="${hsl(sl,-22,0,.35)}" stroke-width="1.4" stroke-linecap="round" pointer-events="none"/><path d="${SLEEVE_DETAIL[d.sleeves]}" transform="translate(3 -1)" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round" pointer-events="none"/>`:'')
       +(SLEEVE_CUFF[d.sleeves]?`<path d="${SLEEVE_CUFF[d.sleeves]}" fill="none" stroke="${hsl(sl,-8,8,.95)}" stroke-width="4.5" stroke-linecap="round" pointer-events="none"/><path d="${SLEEVE_CUFF[d.sleeves]}" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.2" stroke-linecap="round" pointer-events="none"/>`:'')
       +`<path d="${sp}" fill="none" stroke="${hsl(sl,-30,0,.4)}" stroke-width="1.6" stroke-linejoin="round" pointer-events="none"/>`;
-    out.push(`<g>${part(sp,'sleeves')}${det}</g><g transform="translate(400 0) scale(-1 1)">${part(sp,'sleeves')}${det}</g>`);}
+    slv=`<g>${part(sp,'sleeves')}${det}</g><g transform="translate(400 0) scale(-1 1)">${part(sp,'sleeves')}${det}</g>`;}
+  if(FABRICS[P.skirt.f]&&FABRICS[P.skirt.f].sheer)out.push(`<path d="${G.skirt}" fill="${hsl(sk,8,-10,.92)}" pointer-events="none"/>`);
   if(FABRICS[P.skirt.f]&&FABRICS[P.skirt.f].sheer)out.push(`<path d="${G.skirt}" transform="translate(200 ${G.wy}) scale(1.06 1.02) translate(-200 ${-G.wy})" fill="${hsl(sk,10,-10,.4)}" pointer-events="none"/>`);
   out.push(part(G.skirt,'skirt'));
   out.push(`<path d="${G.skirt}" fill="none" stroke="${hsl(sk,-30,0,.38)}" stroke-width="1.8" stroke-linejoin="round" pointer-events="none"/>`);
@@ -1766,6 +1787,7 @@ function dressBody(d,p){
   if(P.overlay&&P.overlay.f!=='none'){const o=`<path d="${G.skirt}" transform="translate(200 ${G.wy}) scale(1.035 1.015) translate(-200 ${-G.wy})"/>`;
     out.push(`<g pointer-events="none" transform="translate(200 ${G.wy}) scale(1.035 1.015) translate(-200 ${-G.wy})">${fabricLayer(G.skirt,p+'-overlay',P.overlay.f,'ovl')}</g>`);}
   out.push(T.skirt,CL.mid);
+  out.push(dollArms(dl,p),slv);
   out.push(part(G.bodice,'bodice'));
   out.push(`<path d="${G.bodice}" fill="none" stroke="${hsl(hexToHsl(P.bodice.c),-30,0,.4)}" stroke-width="1.6" stroke-linejoin="round" pointer-events="none"/>`);
   if(P.overlay&&P.overlay.f!=='none'&&['chantilly','tulle','sequin','georgette','chiffon'].includes(P.overlay.f))out.push(`<g pointer-events="none">${fabricLayer(G.bodice,p+'-overlay',P.overlay.f,'ovl')}</g>`);
@@ -1774,7 +1796,7 @@ function dressBody(d,p){
   if(P.skirt.f==='chantilly'||(P.overlay&&P.overlay.f==='chantilly'))out.push(`<path d="${G.guides.hem.replace(/(\d+\.?\d*),(\d+\.?\d*)/g,(m,x,y)=>x+','+(+y+8))}" fill="none" stroke="${sk.l>70?'rgba(150,120,120,.5)':'rgba(255,255,255,.55)'}" stroke-width="3.2" stroke-dasharray=".1 6" stroke-linecap="round" pointer-events="none"/>`);
   if(P.skirt.f==='denim'||P.bodice.f==='denim')out.push(`<path d="${G.guides.hem.replace(/(\d+\.?\d*),(\d+\.?\d*)/g,(m,x,y)=>x+','+(+y+4))}" fill="none" stroke="#e0a64a" stroke-width="1" stroke-dasharray="3 2" pointer-events="none"/>`);
   out.push(T.top,CL.front,T.front);
-  return{G,markup:out.join('')};
+  return{G,markup:out.join(''),hat:T.hat,shoe:T.shoe};
 }
 /* ---------- cute touches (bows, ruffles, trims, sparkle) ---------- */
 const EXTRA_OPTS={
@@ -1906,42 +1928,104 @@ function teenLayers(d,G,p){const E=d.extras||{};const P=d.parts;const back=[],sk
     front.push(defs+mirror(`<path class="fab" d="${sleeve}" fill="${sfill}" stroke="${hsl(ch,-30,0,.6)}" stroke-width="1.2"/>${cuff}<path class="fab" d="${panel}" fill="${fill}" stroke="${hsl(ch,-30,0,.6)}" stroke-width="1.2"/><g pointer-events="none">${det}</g>`));}
   // ---- necklaces
   const N=E.neck;
-  if(N==='choker')front.push(`<g pointer-events="none"><rect x="185" y="70" width="30" height="6" rx="3" fill="#2a2230"/><path d="${HEART}" transform="translate(200 80) scale(.9)" fill="#ff8fbf" stroke="#fff" stroke-width=".4"/></g>`);
-  if(N==='pearlchoker')front.push(`<g pointer-events="none">${Array.from({length:10},(_,i)=>`<circle cx="${(186.5+i*3).toFixed(1)}" cy="74" r="1.9" fill="url(#${p}-pearl)"/>`).join('')}</g>`);
-  if(N==='locket')front.push(`<g pointer-events="none"><path d="M187,80 Q200,122 213,80" fill="none" stroke="url(#${p}-gold)" stroke-width="1"/><path d="${HEART}" transform="translate(200 104) scale(1.7)" fill="url(#${p}-gold)" stroke="#fff6d8" stroke-width=".3"/></g>`);
-  if(N==='chain'){const pts=[];for(let i=0;i<=12;i++)pts.push(qpt(186,80,200,128,214,80,i/12));front.push(`<g pointer-events="none" fill="none" stroke="url(#${p}-gold)" stroke-width="2.2">${pts.map(([x,y],i)=>`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${i%2?2:3.2}" ry="${i%2?3.2:2}"/>`).join('')}</g>`);}
-  // ---- hats (resting on the stand's head)
-  const Ht=E.hat;if(Ht&&Ht!=='none'){const c=acc(Ht)||'#c8b6e2';const ch=hexToHsl(c);const dk=hsl(ch,-22,0);
-    if(Ht==='bucket')front.push(`<g pointer-events="none"><path d="M166,48 Q200,58 234,48 L224,40 L218,20 Q200,12 182,20 L176,40 Z" fill="${c}" stroke="${dk}" stroke-width="1.2"/><path d="M178,38 Q200,44 222,38" stroke="${dk}" stroke-width="1" stroke-dasharray="2 2" fill="none"/><path d="${HEART}" transform="translate(212 30) scale(1.2)" fill="#fff"/></g>`);
-    if(Ht==='cap')front.push(`<g pointer-events="none"><path d="M177,46 Q177,18 200,16 Q223,18 223,46 Z" fill="${c}" stroke="${dk}" stroke-width="1.2"/><path d="M219,44 Q246,40 254,49 Q234,52 219,48 Z" fill="${dk}"/><circle cx="200" cy="16" r="2.4" fill="${dk}"/><path d="M200,18 V44" stroke="${dk}" stroke-width=".8" opacity=".6"/></g>`);
-    if(Ht==='beret')front.push(`<g pointer-events="none" transform="rotate(-10 200 38)"><ellipse cx="200" cy="38" rx="32" ry="12" fill="${c}" stroke="${dk}" stroke-width="1.2"/><path d="M200,26 l0,-6" stroke="${dk}" stroke-width="2.5" stroke-linecap="round"/><ellipse cx="192" cy="34" rx="14" ry="4" fill="#fff" opacity=".25"/></g>`);
-    if(Ht==='tiara')front.push(`<g pointer-events="none"><path d="M180,49 L185,34 L192,43 L200,26 L208,43 L215,34 L220,49 Q200,45 180,49 Z" fill="url(#${p}-gold)" stroke="#fff6d8" stroke-width=".6"/><circle cx="200" cy="36" r="3" fill="#ff6fae" stroke="#fff" stroke-width=".6"/><circle cx="186" cy="42" r="1.8" fill="#a8d8ff"/><circle cx="214" cy="42" r="1.8" fill="#a8d8ff"/></g>`);}
-  // ---- crossbody bag
-  const B=E.bag;if(B&&B!=='none'){const c=acc(B);const ch=hexToHsl(c);const dk=hsl(ch,-25,0);const by=Math.min(wy+30,H-10);
+  if(N==='choker')front.push(`<g pointer-events="none"><rect x="186" y="80" width="28" height="6" rx="3" fill="#2a2230"/><path d="${HEART}" transform="translate(200 90) scale(.9)" fill="#ff8fbf" stroke="#fff" stroke-width=".4"/></g>`);
+  if(N==='pearlchoker')front.push(`<g pointer-events="none">${Array.from({length:10},(_,i)=>`<circle cx="${(186.5+i*3).toFixed(1)}" cy="83" r="1.9" fill="url(#${p}-pearl)"/>`).join('')}</g>`);
+  if(N==='locket')front.push(`<g pointer-events="none"><path d="M188,84 Q200,122 212,84" fill="none" stroke="url(#${p}-gold)" stroke-width="1"/><path d="${HEART}" transform="translate(200 104) scale(1.7)" fill="url(#${p}-gold)" stroke="#fff6d8" stroke-width=".3"/></g>`);
+  if(N==='chain'){const pts=[];for(let i=0;i<=12;i++)pts.push(qpt(187,84,200,128,213,84,i/12));front.push(`<g pointer-events="none" fill="none" stroke="url(#${p}-gold)" stroke-width="2.2">${pts.map(([x,y],i)=>`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${i%2?2:3.2}" ry="${i%2?3.2:2}"/>`).join('')}</g>`);}
+  // ---- hats (on the doll's head)
+  let hat='';const Ht=E.hat;if(Ht&&Ht!=='none'){const c=acc(Ht)||'#c8b6e2';const ch=hexToHsl(c);const dk=hsl(ch,-22,0);
+    if(Ht==='bucket')hat=`<g class="doll-hat"><path d="M144,8 Q200,24 256,8 L240,-4 L232,-36 Q200,-46 168,-36 L160,-4 Z" fill="${c}" stroke="${dk}" stroke-width="1.2"/><path d="M162,-6 Q200,2 238,-6" stroke="${dk}" stroke-width="1" stroke-dasharray="2 2" fill="none"/><path d="${HEART}" transform="translate(222 -20) scale(1.5)" fill="#fff"/></g>`;
+    if(Ht==='cap')hat=`<g class="doll-hat"><path d="M158,6 Q156,-38 200,-40 Q244,-38 242,6 Q200,-2 158,6 Z" fill="${c}" stroke="${dk}" stroke-width="1.2"/><path d="M238,0 Q274,-6 286,8 Q258,14 238,8 Z" fill="${dk}"/><circle cx="200" cy="-40" r="3" fill="${dk}"/><path d="M200,-38 V-2" stroke="${dk}" stroke-width=".8" opacity=".6"/><path d="${HEART}" transform="translate(200 -16) scale(1.4)" fill="#fff" opacity=".9"/></g>`;
+    if(Ht==='beret')hat=`<g class="doll-hat" transform="rotate(-10 196 -24)"><ellipse cx="196" cy="-22" rx="50" ry="16" fill="${c}" stroke="${dk}" stroke-width="1.2"/><path d="M196,-38 l0,-7" stroke="${dk}" stroke-width="3" stroke-linecap="round"/><ellipse cx="184" cy="-28" rx="20" ry="5" fill="#fff" opacity=".25"/></g>`;
+    if(Ht==='tiara')hat=`<g class="doll-hat"><path d="M174,-16 L179,-34 L188,-24 L200,-46 L212,-24 L221,-34 L226,-16 Q200,-24 174,-16 Z" fill="url(#${p}-gold)" stroke="#fff6d8" stroke-width=".6"/><circle cx="200" cy="-32" r="3.4" fill="#ff6fae" stroke="#fff" stroke-width=".6"/><circle cx="182" cy="-24" r="2" fill="#a8d8ff"/><circle cx="218" cy="-24" r="2" fill="#a8d8ff"/></g>`;}
+  // ---- bag, held in the doll's hand
+  const B=E.bag;if(B&&B!=='none'){const c=acc(B);const ch=hexToHsl(c);const dk=hsl(ch,-25,0);
     let bag='';if(B==='mini')bag=`<rect x="-17" y="-12" width="34" height="25" rx="7" fill="${c}" stroke="${dk}" stroke-width="1.2"/><path d="M-17,-5 Q0,6 17,-5 V-6 Q17,-12 10,-12 H-10 Q-17,-12 -17,-6Z" fill="${hsl(ch,-10,0)}" stroke="${dk}" stroke-width="1"/><circle cy="1" r="2.4" fill="url(#${p}-gold)"/>`;
     if(B==='heart')bag=`<path d="${HEART}" transform="scale(6)" fill="${c}" stroke="${dk}" stroke-width=".25"/><ellipse cx="-7" cy="-6" rx="4" ry="2.5" fill="#fff" opacity=".45"/>`;
     if(B==='star')bag=`<path d="${STAR5}" transform="scale(5.2)" fill="${c}" stroke="${dk}" stroke-width=".25"/><circle cx="-3" cy="-4" r="2" fill="#fff" opacity=".55"/>`;
-    front.push(`<g pointer-events="none"><path d="M163,100 L${244},${by-12}" stroke="${B==='mini'?'url(#'+p+'-gold)':dk}" stroke-width="2.4" ${B==='mini'?'stroke-dasharray="3 1.5"':''}/><g transform="translate(248 ${by})">${bag}</g></g>`);}
-  // ---- shoes (displayed at the foot of the stand)
-  const Sh=E.shoes;if(Sh&&Sh!=='none'){let s='';
+    const top=B==='mini'?-12:B==='heart'?-9:-13;
+    front.push(`<g pointer-events="none" class="doll-bag"><path d="M273,${336+top} Q283,296 293,${336+top}" fill="none" stroke="${B==='mini'?'url(#'+p+'-gold)':dk}" stroke-width="2.6" ${B==='mini'?'stroke-dasharray="3 1.5"':''}/><g transform="translate(283 336)">${bag}</g></g>`);}
+  // ---- shoes: one foot's markup; the doll draws it on both feet
+  let shoe='';const Sh=E.shoes;if(Sh&&Sh!=='none'){let s='';
     if(Sh==='sneakers')s=`<path d="M-23,-6 Q-25,-15 -12,-17 L4,-25 Q14,-27 18,-21 L18,-6 Z" fill="#fff" stroke="#d6c6e2" stroke-width="1"/><rect x="-25" y="-7" width="45" height="7" rx="3.5" fill="#ffb3d1" stroke="#e48db4" stroke-width=".8"/><path d="M-14,-12 Q0,-10 12,-18" stroke="#b993ff" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M-4,-21 l6,4 M0,-23 l6,4" stroke="#c9b8e0" stroke-width="1"/>`;
     if(Sh==='maryjanes')s=`<path d="M-22,-3 Q-23,-13 -10,-14 L12,-14 Q18,-12 18,-3 Z" fill="#1f1a26"/><path d="M-6,-14 Q2,-22 10,-14" stroke="#1f1a26" stroke-width="2.4" fill="none"/><rect x="12" y="-4" width="6" height="4" fill="#1f1a26"/><ellipse cx="-10" cy="-10" rx="6" ry="1.6" fill="#fff" opacity=".35"/><path d="${HEART}" transform="translate(-14 -10) scale(.7)" fill="#ff8fbf"/>`;
     if(Sh==='platform')s=`<rect x="-23" y="-11" width="44" height="11" rx="4" fill="#fff1b8" stroke="#e6cf7a" stroke-width="1"/><path d="M-21,-11 Q-21,-21 -9,-22 L10,-27 L17,-11 Z" fill="#c8b6e2" stroke="#a896c9" stroke-width="1"/><path d="M-4,-23 Q2,-30 9,-26" stroke="#a896c9" stroke-width="2" fill="none"/>`;
     if(Sh==='boots')s=`<path d="M-23,-5 Q-23,-14 -10,-15 L1,-16 L1,-42 L17,-42 L18,-5 Z" fill="#2a2430"/><rect x="-25" y="-6" width="45" height="6" rx="2" fill="#141118"/><path d="M3,-36 h12 M3,-29 h12 M3,-22 h12" stroke="#e9e4ef" stroke-width="1"/><rect x="1" y="-43" width="16" height="4" fill="#3b3344"/>`;
-    front.push(`<g pointer-events="none"><g transform="translate(166 634)">${s}</g><g transform="translate(234 634) scale(-1 1)">${s}</g></g>`);}
-  return{back:back.join(''),skirt:skirt.join(''),top:top.join(''),front:front.join('')};}
+    shoe=s;}
+  return{back:back.join(''),skirt:skirt.join(''),top:top.join(''),front:front.join(''),hat,shoe};}
 function fabricSwatch(f,hex){const p='sw'+(++_gemUid);return `<svg viewBox="0 0 120 60" class="fabsw"><defs>${fabricDefs(f,hex,p)}</defs><rect width="120" height="60" fill="#f3e8de"/><path d="M0,0 H120 V60 H0Z" fill="none"/>${fabricLayer('M0,0 C40,8 80,-6 120,4 L120,60 C80,52 40,64 0,56 Z',p,f,'')}</svg>`;}
-function mannequinMarkup(G){
-  return `<g class="form"><rect x="196" y="${G.H-10}" width="8" height="${Math.max(0,612-G.H)}" rx="4" fill="url(#mq-pole)"/>
-  <path d="M200,610 L158,630 M200,610 L242,630 M200,610 L200,634" stroke="#e29ab8" stroke-width="6" stroke-linecap="round"/>
-  <circle cx="158" cy="630" r="4.5" fill="#ffd1e4"/><circle cx="242" cy="630" r="4.5" fill="#ffd1e4"/><circle cx="200" cy="634" r="4.5" fill="#ffd1e4"/>
-  <path d="${HEART}" transform="translate(200 29) scale(2.3)" fill="#ff9fc8" stroke="#fff" stroke-width=".8"/><rect x="197" y="33" width="6" height="15" rx="3" fill="#e29ab8"/>
-  <path d="M184,50 Q200,44 216,50 L214,84 Q244,90 260,104 Q268,120 258,150 L250,230 L150,230 L142,150 Q132,120 140,104 Q156,90 186,84 Z" fill="url(#mq-linen)" stroke="#f0b8d0" stroke-width="1.2"/>
-  <ellipse cx="200" cy="50" rx="16" ry="5" fill="#f5c3d9"/></g>`;
-}
-const STAGE_DEFS=`<linearGradient id="mq-linen" x1="0" x2="1"><stop offset="0" stop-color="#f7cfe0"/><stop offset=".45" stop-color="#fff2f8"/><stop offset="1" stop-color="#ecc3dc"/></linearGradient>
-<linearGradient id="mq-pole" x1="0" x2="1"><stop offset="0" stop-color="#d98aa8"/><stop offset=".5" stop-color="#ffe6f0"/><stop offset="1" stop-color="#d98aa8"/></linearGradient>
-<radialGradient id="stage-bg" cx="50%" cy="38%" r="72%"><stop offset="0" stop-color="#fffafd"/><stop offset=".6" stop-color="#ffeef7"/><stop offset="1" stop-color="#efe3ff"/></radialGradient>
+/* ---------- the fashion doll (replaces the old dress form) ----------
+   Drawn in the same 400×640 dress space, inside a .world group that is scaled to 90% so the head and hair fit above. */
+const WORLD_T='translate(20 52) scale(.9)';
+const HEAD_T='translate(0 8) translate(200 64) scale(1.12) translate(-200 -64)';
+const DOLL_SKINS=[['light','Light','#ffe4d6','#f3c4b0'],['fair','Fair','#f8d2b8','#e6ad91'],['medium','Medium','#e8b48c','#cf9068'],['tan','Tan','#c98e62','#ad7148'],['brown','Brown','#975f3e','#7b472b'],['deep','Deep','#5f3a26','#472918']];
+const DOLL_HAIRS=[['waves','Long waves'],['pony','High ponytail'],['buns','Space buns'],['bob','Bob'],['braids','Braids'],['puffs','Afro puffs']];
+const DOLL_HAIRCOLS=[['black','Black','#2b2230'],['brown','Brown','#6b4431'],['auburn','Auburn','#a3492b'],['blonde','Blonde','#efcd7a'],['pink','Pastel pink','#ffaacb'],['lavender','Lavender','#c3a3ff'],['mint','Mint','#8fd9c0'],['sky','Sky blue','#8cc3ff']];
+const DOLL_EYES=[['brown','Brown','#6b3f26'],['hazel','Hazel','#9a7a2e'],['green','Green','#2f9467'],['blue','Blue','#3a7bd5'],['violet','Violet','#8a58d6'],['grey','Grey','#6f8093']];
+const DEFAULT_DOLL=()=>({skin:'fair',hair:'waves',hc:'brown',eyes:'brown'});
+function normDoll(o){const d=DEFAULT_DOLL();o=o&&typeof o==='object'?o:{};
+  return{skin:DOLL_SKINS.some(x=>x[0]===o.skin)?o.skin:d.skin,hair:DOLL_HAIRS.some(x=>x[0]===o.hair)?o.hair:d.hair,hc:DOLL_HAIRCOLS.some(x=>x[0]===o.hc)?o.hc:d.hc,eyes:DOLL_EYES.some(x=>x[0]===o.eyes)?o.eyes:d.eyes};}
+const curDoll=()=>normDoll(S&&S.doll);
+const dollCols=dl=>{dl=normDoll(dl);const sk=DOLL_SKINS.find(x=>x[0]===dl.skin),hc=DOLL_HAIRCOLS.find(x=>x[0]===dl.hc)[2],ey=DOLL_EYES.find(x=>x[0]===dl.eyes)[2];const hh=hexToHsl(hc);
+  return{dl,skin:sk[2],shade:sk[3],hair:hc,hdk:hsl(hh,-16,0),hlt:hsl(hh,14,0,.7),eye:ey,eyeDk:hsl(hexToHsl(ey),-22,0),lash:dl.skin==='deep'||dl.skin==='brown'?'#1e1218':'#3b2232'};};
+const mirrorX=s=>`<g>${s}</g><g transform="translate(400 0) scale(-1 1)">${s}</g>`;
+/* scalloped circle for curly puffs */
+function puffPath(cx,cy,r,n){let d='';for(let i=0;i<n;i++){const a0=i/n*Math.PI*2,a1=(i+1)/n*Math.PI*2,am=(a0+a1)/2;const p=(a,rr)=>[(cx+Math.cos(a)*rr).toFixed(1),(cy+Math.sin(a)*rr).toFixed(1)];
+  const [x0,y0]=p(a0,r),[xm,ym]=p(am,r*1.16),[x1,y1]=p(a1,r);d+=(i?'':`M${x0},${y0} `)+`Q${xm},${ym} ${x1},${y1} `;}return d+'Z';}
+/* hair layers: back (behind the body) and front (over the face) */
+function dollHair(C,p){const st=C.dl.hair,c=C.hair,dk=C.hdk,lt=C.hlt;const back=[],front=[];
+  const cap=`M156,34 C148,-8 170,-32 200,-32 C230,-32 252,-8 244,34 C242,24 240,18 236,15 C230,8 220,2 212,7 C206,0 194,0 188,7 C180,2 170,8 164,15 C160,18 158,24 156,34 Z`;
+  const shine=`<path d="M170,-14 Q200,-26 230,-14" fill="none" stroke="${lt}" stroke-width="4.5" stroke-linecap="round"/><path d="M178,-6 Q186,-10 192,-9" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>`;
+  const capEl=`<path d="${cap}" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2" stroke-linejoin="round"/>`;
+  const headBack=`<ellipse cx="200" cy="18" rx="46" ry="46" fill="${c}"/>`;
+  if(st==='waves'){back.push(`<path d="M158,4 C138,40 148,84 136,124 C126,164 150,194 138,232 C172,244 228,244 262,232 C250,194 274,164 264,124 C252,84 262,40 242,4 Z" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2"/><path d="M150,120 C160,150 146,180 156,214 M250,120 C240,150 254,180 244,214 M170,180 C176,200 170,216 176,232 M230,180 C224,200 230,216 224,232" fill="none" stroke="${dk}" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>`);
+    front.push(capEl+mirrorX(`<path d="M158,18 C146,48 160,72 150,98 C160,100 170,84 168,60 C166,44 168,30 164,18 Z" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1"/>`)+shine);}
+  if(st==='pony'){back.push(headBack+`<path d="M222,-30 C264,-46 282,-4 268,44 C258,84 276,118 254,152 C248,112 238,78 242,38 C240,12 234,-10 222,-30 Z" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2"/><path d="M250,0 C262,30 252,70 258,110" fill="none" stroke="${dk}" stroke-opacity=".45" stroke-width="2"/>`);
+    front.push(capEl+`<ellipse cx="226" cy="-26" rx="10" ry="7" transform="rotate(-25 226 -26)" fill="#ff8fbf" stroke="#fff" stroke-width="1.2"/><circle cx="222" cy="-28" r="1.6" fill="#fff"/>`+shine);}
+  if(st==='buns'){back.push(headBack+[164,236].map(x=>`<circle cx="${x}" cy="-26" r="19" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2"/><path d="M${x-10},-30 Q${x},-40 ${x+10},-28 Q${x+4},-18 ${x-6},-22" fill="none" stroke="${dk}" stroke-opacity=".5" stroke-width="1.6"/>`).join(''));
+    front.push(capEl+[172,228].map(x=>`<path d="M${x-8},-14 Q${x},-20 ${x+8},-14" fill="none" stroke="#ff8fbf" stroke-width="3.5" stroke-linecap="round"/>`).join('')+shine);}
+  if(st==='bob'){back.push(`<path d="M154,6 C146,34 148,60 156,70 Q200,78 244,70 C252,60 254,34 246,6 Z" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2"/>`);
+    front.push(`<path d="M156,34 C148,-8 170,-32 200,-32 C230,-32 252,-8 244,34 L244,14 Q200,8 156,14 Z" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2"/>`+mirrorX(`<path d="M157,12 L153,64 Q160,72 169,68 L167,18 Z" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1"/>`)+`<path d="M160,15 Q200,9 240,15" fill="none" stroke="${dk}" stroke-opacity=".5" stroke-width="1.4"/>`+shine+`<rect x="226" y="2" width="12" height="4" rx="2" transform="rotate(-20 232 4)" fill="#ff8fbf"/>`);}
+  if(st==='braids'){back.push(headBack);
+    const braid=Array.from({length:9},(_,i)=>{const y=46+i*12,x=160-i*1.1;return `<ellipse cx="${x.toFixed(1)}" cy="${y}" rx="${(8.5-i*.35).toFixed(1)}" ry="8" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1"/>`;}).join('')+`<path d="M148,150 l5,-4 5,4 -5,4z" fill="#ff8fbf"/><path d="M152,150 q-3,10 2,16 q5,-6 2,-16" fill="${c}" stroke="${dk}" stroke-width=".8"/>`;
+    front.push(mirrorX(braid)+capEl+`<path d="M200,-32 L200,4" stroke="${dk}" stroke-opacity=".4" stroke-width="1.4"/>`+shine);}
+  if(st==='puffs'){back.push(headBack+[160,240].map(x=>`<path d="${puffPath(x,-22,22,11)}" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2"/>${[[-8,-6],[6,-10],[-2,6],[9,4]].map(([a,b])=>`<path d="M${x+a-3},${-22+b} q3,-4 6,0" fill="none" stroke="${dk}" stroke-opacity=".5" stroke-width="1.4"/>`).join('')}`).join(''));
+    front.push(`<path d="${puffPath(200,-8,40,16)}" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.1" clip-path="url(#${p}-dtop)"/>`+[168,232].map(x=>`<path d="M${x-9},-10 Q${x},-16 ${x+9},-10" fill="none" stroke="#c39bff" stroke-width="3.5" stroke-linecap="round"/>`).join('')+`<path d="M174,-16 Q200,-26 226,-16" fill="none" stroke="${lt}" stroke-width="3.5" stroke-linecap="round"/>`);}
+  return{back:back.join(''),front:front.join('')};}
+function dollFace(C,p){
+  const eye=x=>`<g class="doll-eye"><ellipse cx="${x}" cy="31" rx="8.6" ry="10.6" fill="url(#${p}-diris)"/><ellipse cx="${x}" cy="32.5" rx="4.4" ry="5.6" fill="${C.eyeDk}"/><circle cx="${x-3.2}" cy="26.6" r="3.2" fill="#fff"/><circle cx="${x+3.4}" cy="35.4" r="1.5" fill="#fff" opacity=".9"/><path d="M${x-2},38 Q${x},39.6 ${x+3},38" stroke="#fff" stroke-opacity=".55" stroke-width="1.1" fill="none"/>
+    <path d="M${x-11},24 Q${x},15.5 ${x+11},24.5" fill="none" stroke="${C.lash}" stroke-width="3" stroke-linecap="round"/><path d="M${x+(x<200?-11:11)},24.4 l${x<200?-3.5:3.5},-2.6" stroke="${C.lash}" stroke-width="2" stroke-linecap="round"/></g>`;
+  return `<path d="M159,20 C159,-12 178,-24 200,-24 C222,-24 241,-12 241,20 C241,46 224,64 200,64 C176,64 159,46 159,20 Z" fill="url(#${p}-dface)"/>
+    ${eye(183)}${eye(217)}
+    <ellipse cx="173" cy="46" rx="8" ry="4.5" fill="#ff7fae" opacity=".42"/><ellipse cx="227" cy="46" rx="8" ry="4.5" fill="#ff7fae" opacity=".42"/>
+    <path d="M170,44.5 l3,-2 M175,44.5 l3,-2 M222,44.5 l3,-2 M227,44.5 l3,-2" stroke="#fff" stroke-opacity=".6" stroke-width="1" stroke-linecap="round"/>
+    <path d="M198.6,41.4 Q200.6,43 198.8,44" fill="none" stroke="${C.shade}" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M194.5,50 Q200,55.5 205.5,50" fill="#ff9ab8" stroke="#c2416f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>`;}
+function dollDefs(C,p){const sh=hexToHsl(C.skin);
+  return `<linearGradient id="${p}-dskin" x1="0" x2="1"><stop offset="0" stop-color="${C.shade}"/><stop offset=".42" stop-color="${C.skin}"/><stop offset=".6" stop-color="${hsl(sh,4,0)}"/><stop offset="1" stop-color="${C.shade}"/></linearGradient>
+  <radialGradient id="${p}-dface" cx="50%" cy="40%" r="62%"><stop offset="0" stop-color="${hsl(sh,5,0)}"/><stop offset=".75" stop-color="${C.skin}"/><stop offset="1" stop-color="${C.shade}"/></radialGradient>
+  <linearGradient id="${p}-dhair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${hsl(hexToHsl(C.hair),8,0)}"/><stop offset=".55" stop-color="${C.hair}"/><stop offset="1" stop-color="${C.hdk}"/></linearGradient>
+  <linearGradient id="${p}-diris" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.eyeDk}"/><stop offset=".55" stop-color="${C.eye}"/><stop offset="1" stop-color="${hsl(hexToHsl(C.eye),22,0)}"/></linearGradient>
+  <clipPath id="${p}-dtop"><rect x="140" y="-60" width="120" height="67"/></clipPath>`;}
+const DOLL_ARM='M153,99 Q135,102 131,126 L112,296 Q119,302 127,298 L143,170 L148,140 Z';
+const DOLL_HAND='M111.5,295 Q105,311 113,320 Q120,325 125,316 Q129,305 127.5,297 Z';
+const DOLL_LEG='M161,244 C160,320 166,400 171,470 C174,520 176,560 176,604 Q181,612 191,606 C191,560 193,520 195,470 C198,400 201,320 200,244 Z';
+const DOLL_FLAT=`<path d="M-21,-2 Q-23,-12 -9,-13 L10,-13 Q17,-11 17,-2 Z" fill="#ffb3d1" stroke="#e48db4" stroke-width="1"/><path d="M-6,-12 l-4,-3 v6z M-6,-12 l4,-3 v6z" fill="#fff"/>`;
+/* body behind the dress: back hair, legs and feet (with shoes), torso and neck */
+function dollBack(G,dl,p,shoe){const C=dollCols(dl);const H=dollHair(C,p);const sk=`url(#${p}-dskin)`;
+  const foot=`<g transform="translate(183 633) scale(.74)">${shoe||DOLL_FLAT}</g>`;
+  return `<g class="doll doll-backs" pointer-events="none"><defs>${dollDefs(C,p)}</defs><g transform="${HEAD_T}"><g class="doll-hairback">${H.back}</g></g>
+    <g class="doll-legs">${(leg=>`<g class="leg-l">${leg}</g><g class="leg-r"><g transform="translate(400 0) scale(-1 1)">${leg}</g></g>`)(`<path d="${DOLL_LEG}" fill="${sk}" stroke="${C.shade}" stroke-width="1"/><path d="M180,560 Q183,590 181,604" stroke="#fff" stroke-opacity=".25" stroke-width="2" fill="none"/>${foot}`)}</g>
+    <path d="M190,62 L190,88 C186,95 168,95 155,98 C144,101 140,112 141,124 L147,150 C152,180 160,205 164,228 C160,238 160,248 164,256 L236,256 C240,248 240,238 236,228 C240,205 248,180 253,150 L259,124 C260,112 256,101 245,98 C232,95 214,95 210,88 L210,56 Z" fill="${sk}" stroke="${C.shade}" stroke-width="1"/>
+    <path d="M190,66 Q200,74 210,66 L210,58 L190,58 Z" fill="${C.shade}" opacity=".55"/></g>`;}
+/* arms + hands, drawn over the skirt and under the sleeves */
+function dollArms(dl,p){const C=dollCols(dl);return `<g class="doll doll-arms" pointer-events="none">${mirrorX(`<path d="${DOLL_ARM}" fill="url(#${p}-dskin)" stroke="${C.shade}" stroke-width="1"/><path d="${DOLL_HAND}" fill="${C.skin}" stroke="${C.shade}" stroke-width="1"/><path d="M113,306 Q116,312 115,318" stroke="${C.shade}" stroke-width=".8" fill="none" opacity=".7"/>`)}</g>`;}
+/* head, face, front hair and hat, drawn over the dress */
+function dollFront(dl,p,hat){const C=dollCols(dl);const H=dollHair(C,p);return `<g transform="${HEAD_T}"><g class="doll doll-head" pointer-events="none">${dollFace(C,p)}${H.front}${hat||''}</g></g>`;}
+/* small head-only preview for the Doll tab */
+function dollHeadSVG(dl,cls){const p='dh'+(++_gemUid);const C=dollCols(dl);const H=dollHair(C,p);
+  return `<svg class="${cls||'dollhead'}" viewBox="130 -62 140 140" aria-hidden="true" focusable="false"><defs>${dollDefs(C,p)}</defs>${H.back}<rect x="190" y="50" width="20" height="30" fill="${C.skin}"/>${dollFace(C,p)}${H.front}</svg>`;}
+const STAGE_DEFS=`<radialGradient id="stage-bg" cx="50%" cy="38%" r="72%"><stop offset="0" stop-color="#fffafd"/><stop offset=".6" stop-color="#ffeef7"/><stop offset="1" stop-color="#efe3ff"/></radialGradient>
 <radialGradient id="stage-floor" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e58fb5" stop-opacity=".35"/><stop offset="1" stop-color="#e58fb5" stop-opacity="0"/></radialGradient>
 <pattern id="stage-dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="6" cy="6" r="1.6" fill="#ffc6de" opacity=".55"/><path d="M23,21 l1.2,3 3,1.2 -3,1.2 -1.2,3 -1.2,-3 -3,-1.2 3,-1.2z" fill="#d9c8ff" opacity=".5"/></pattern>`;
 const STAGE_BG='<rect width="400" height="640" fill="url(#stage-bg)"/><rect width="400" height="640" fill="url(#stage-dots)"/><ellipse cx="200" cy="628" rx="170" ry="14" fill="url(#stage-floor)"/>';
@@ -1968,7 +2052,7 @@ function kawaiiConfetti(n){if(REDUCED_MOTION())return;const el=document.createEl
 /* Full standalone dress SVG (gallery thumbnails, PNG export, menu art). */
 function dressSVG(design,opt){
   opt=opt||{}; const p=opt.prefix||('x'+(++_gemUid)); const tier=design.tier!=null?design.tier:0;
-  const {G,markup}=dressBody(design.dress,p);
+  const dl=normDoll(design.doll||curDoll());const {G,markup,hat,shoe}=dressBody(design.dress,p,dl);
   const used=[...new Set((design.gems||[]).map(q=>q.g+':'+(q.t!=null?q.t:tier)+':'+(q.c||'')))];
   const syms=used.map(u=>{const [gid,t,c]=u.split(':');return GEM[gid]?gemSymbol(GEM[gid],+t,p,c||undefined):'';}).join('');
   const gems=(design.gems||[]).map(q=>{const t=q.t!=null?q.t:tier;const s=q.s||16;return GEM[q.g]?`<use href="#${symId(p,q.g,t,q.c)}" x="${(q.x-s/2).toFixed(1)}" y="${(q.y-s/2).toFixed(1)}" width="${s}" height="${s}"/>`:'';}).join('');
@@ -1976,7 +2060,7 @@ function dressSVG(design,opt){
   const caption=opt.caption?`<text x="200" y="628" text-anchor="middle" font-family="Fredoka,'Arial Rounded MT Bold','Varela Round',Nunito,sans-serif" font-size="15" fill="#3b2440">${esc(opt.caption)}</text>`:'';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640"${W}><defs>${STAGE_DEFS}${allFabricDefs(design.dress,p)}${syms}</defs>
   ${opt.bg===false?'':vibeBG(design.vibe,p)}
-  ${mannequinMarkup(G)}${markup}<g>${gems}</g>${caption}</svg>`;
+  <g transform="${WORLD_T}">${dollBack(G,dl,p,shoe)}${markup}${dollFront(dl,p,hat)}<g>${gems}</g></g>${caption}</svg>`;
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* =====================================================================
@@ -2189,15 +2273,16 @@ function showInfoQueue(ids,done){if(!ids.length){done&&done();return;}openInfo(i
 function createStage(host,dress,opts){
   host.innerHTML=`<div class="stagewrap"><svg class="stage" viewBox="0 0 400 640" xmlns="http://www.w3.org/2000/svg"><defs><g></g></defs>
     <g class="stagebg"></g>
-    <g class="dress"></g><g class="guides" fill="none" stroke="none"></g><line class="mirror-line" x1="200" y1="70" x2="200" y2="610" stroke="#b98d3e" stroke-width="1.2" stroke-dasharray="4 4" opacity="0" pointer-events="none"/><g class="spots"></g><g class="gems"></g><g class="fx"></g></svg><div class="stage-hud"></div>${mascotSVG('stage-mascot')}</div>`;
+    <g class="world" transform="${WORLD_T}"><g class="dress"></g><g class="guides" fill="none" stroke="none"></g><line class="mirror-line" x1="200" y1="70" x2="200" y2="610" stroke="#b98d3e" stroke-width="1.2" stroke-dasharray="4 4" opacity="0" pointer-events="none"/><g class="spots"></g><g class="gems"></g><g class="fx"></g></g></svg><div class="stage-hud"></div>${mascotSVG('stage-mascot')}</div>`;
   const wrap=host.firstChild, svg=$('svg',wrap), defs=$('defs',svg);
-  const st={wrap,svg,hud:$('.stage-hud',wrap),dress:null,G:null,syms:new Set(),spots:[],onTap:null};
-  st.setDress=d=>{st.dress=d;const {G,markup}=dressBody(d,'st');st.G=G;
+  const st={wrap,svg,world:$('.world',svg),hud:$('.stage-hud',wrap),dress:null,doll:normDoll((opts&&opts.doll)||curDoll()),G:null,syms:new Set(),spots:[],onTap:null};
+  st.setDress=d=>{st.dress=d;const {G,markup,hat,shoe}=dressBody(d,'st',st.doll);st.G=G;
     [...defs.children].forEach(n=>{if(n.dataset&&n.dataset.fab)n.remove();});
     const fd=document.createElementNS('http://www.w3.org/2000/svg','g');fd.dataset.fab='1';fd.innerHTML=allFabricDefs(d,'st');defs.appendChild(fd);
-    if(!defs.querySelector('#mq-linen')){const sd=document.createElementNS('http://www.w3.org/2000/svg','g');sd.innerHTML=STAGE_DEFS;defs.appendChild(sd);$('.stagebg',svg).innerHTML=STAGE_BG;}
-    $('.dress',svg).innerHTML=mannequinMarkup(G)+markup;
+    if(!defs.querySelector('#stage-bg')){const sd=document.createElementNS('http://www.w3.org/2000/svg','g');sd.innerHTML=STAGE_DEFS;defs.appendChild(sd);$('.stagebg',svg).innerHTML=STAGE_BG;}
+    $('.dress',svg).innerHTML=dollBack(G,st.doll,'st',shoe)+markup+dollFront(st.doll,'st',hat);
     $('.guides',svg).innerHTML=Object.entries(G.guides).map(([k,v])=>`<path data-k="${k}" d="${v}"/>`).join('');};
+  st.setDoll=dl=>{st.doll=normDoll(dl);if(st.dress)st.setDress(st.dress);};
   st.setVibe=v=>{$('.stagebg',svg).innerHTML=vibeBG(v,'st');};
   st.ensureSym=(gid,t,c)=>{const k=symId('st',gid,t,c);if(st.syms.has(k))return;st.syms.add(k);const n=document.createElementNS('http://www.w3.org/2000/svg','g');n.innerHTML=gemSymbol(GEM[gid],t,'st',c);defs.appendChild(n);};
   st.gemEl=q=>{st.ensureSym(q.g,q.t,q.c);const s=q.s;const u=document.createElementNS('http://www.w3.org/2000/svg','use');
@@ -2205,7 +2290,7 @@ function createStage(host,dress,opts){
   st.renderGems=list=>{const g=$('.gems',svg);g.innerHTML='';list.forEach(q=>g.appendChild(st.gemEl(q)));};
   st.addGem=q=>{const el=st.gemEl(q);$('.gems',svg).appendChild(el);const o=`${q.x}px ${q.y}px`;if(!REDUCED_MOTION()){el.animate([{transform:'scale(0) rotate(-30deg)',opacity:0,transformOrigin:o},{transform:'scale(1.35) rotate(8deg)',opacity:1,offset:.45,transformOrigin:o},{transform:'scale(.88,1.08)',offset:.7,transformOrigin:o},{transform:'scale(1)',opacity:1,transformOrigin:o}],{duration:520,easing:'ease-out'});burst(q.x,q.y,q.s);
     const mm=$('.stage-mascot',wrap);if(mm){mm.classList.remove('hop');void mm.getBoundingClientRect();mm.classList.add('hop');}}};
-  st.toSvg=(cx,cy)=>{const r=svg.getBoundingClientRect();if(cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)return null;const m=svg.getScreenCTM();if(!m)return null;const p=new DOMPoint(cx,cy).matrixTransform(m.inverse());return{x:p.x,y:p.y};};
+  st.toSvg=(cx,cy)=>{const r=svg.getBoundingClientRect();if(cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)return null;const m=st.world.getScreenCTM();if(!m)return null;const p=new DOMPoint(cx,cy).matrixTransform(m.inverse());return{x:p.x,y:p.y};};
   st.onFabric=(x,y)=>{const ps=$$('.dress .fab',svg);if(!ps.length)return false;try{return ps.some(p=>p.isPointInFill(new DOMPoint(x,y)));}catch(e){return y>90&&y<st.G.H+10&&Math.abs(x-200)<st.G.hw+10;}};
   st.sample=(k,n)=>{const p=$(`.guides path[data-k="${k}"]`,svg);if(!p)return[];const L=p.getTotalLength();const out=[];for(let i=0;i<n;i++){const q=p.getPointAtLength(L*(i+.5)/n);out.push({x:+q.x.toFixed(1),y:+q.y.toFixed(1)});}return out;};
   st.setSpots=spots=>{st.spots=spots;$('.spots',svg).innerHTML=spots.map((s,i)=>s.filled?'':`<g class="spot" data-i="${i}"><circle cx="${s.x}" cy="${s.y}" r="${s.s/2+1.5}" fill="rgba(255,255,255,.7)" stroke="#ff6fae" stroke-width="1.5" stroke-dasharray="3 2.2"><animate attributeName="stroke-opacity" values=".4;1;.4" dur="2s" repeatCount="indefinite"/></circle><path d="${HEART}" transform="translate(${s.x} ${s.y}) scale(.62)" fill="#ff8fbf"/></g>`).join('');};
@@ -2335,7 +2420,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Under <b>Gem relatives</b>, tap a gem made of the same mineral (like ruby and sapphire, both corundum) to compare them. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
    <li><b>🎲 Random gem:</b> in the encyclopedia, open the story of a random discovered gem (ones you have not read yet come first), then keep browsing with Prev/Next.</li>
    <li><b>🧠 Gem quiz:</b> in the encyclopedia, answer five quick questions about the gems you have discovered (their mineral family, which is harder, birthstone months). Your best score is saved.</li>
-   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. The controls are grouped into seven sections (👗 Shape, 🧵 Fabric, 🔥 Trendy, 👜 Extras, 🎀 Cute, ✨ Vibe and 💎 Gems; use the arrow keys to switch between them), and the bar above the dress always has Place / Erase, Undo, Redo, Clear, Save, Story card and Runway. On a phone the sections open in a sheet at the bottom; tap the open section again to fold it away and see the whole dress. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
+   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Your dress is worn by a fashion doll: in <b>🧸 Doll</b> pick her skin tone, hairstyle, hair colour and eye colour (saved with each dress, but never part of a minted dress). The controls are grouped into eight sections (👗 Shape, 🧵 Fabric, 🔥 Trendy, 👜 Extras, 🎀 Cute, ✨ Vibe, 🧸 Doll and 💎 Gems; use the arrow keys to switch between them), and the bar above the dress always has Place / Erase, Undo, Redo, Clear, Save, Story card and Runway. On a phone the sections open in a sheet at the bottom; tap the open section again to fold it away and see the whole dress. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
    <li><b>🔥 Daily challenge:</b> every day has a new style theme (like Galaxy Night or Y2K Pop). Style a look, tap <b>🌟 Walk the runway</b> and three judges rate its colours, style and sparkle out of 100, for up to 5 stars. Walk once a day to grow your streak. Pick a <b>✨ Vibe</b> backdrop and <b>🔥 Trendy pieces</b> (co-ord sets, crop tops, hoodies, corsets, butterfly tops, jackets, hats, bags, necklaces and shoes) in the designer, and tap <b>📲 Story card</b> to download or share a story-sized picture of your look.</li>
    <li><b>💾 Backup:</b> your progress is saved only in this browser. From the main menu, download a backup file now and then; restoring it (here or in another browser) brings back your gems, milestones and gallery.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
@@ -2445,12 +2530,12 @@ function levelComplete(){
   $('#galBtn',m.el).onclick=()=>go('gallery');
 }
 /* ---------- custom dress designer ---------- */
-const DSECS=[['shape','👗','Shape','Silhouette, neckline, sleeves and length'],['fabric','🧵','Fabric','Fabrics, prints and colours for each part'],['style','🔥','Trendy','Tops, skirts and jackets'],['acc','👜','Extras','Necklaces, hats, bags and shoes'],['cute','🎀','Cute','Bows, ruffles, trims and sparkle'],['vibe','✨','Vibe','The backdrop behind your dress'],['gems','💎','Gems','Pick a gem, cut and size, then set it']];
+const DSECS=[['shape','👗','Shape','Silhouette, neckline, sleeves and length'],['fabric','🧵','Fabric','Fabrics, prints and colours for each part'],['style','🔥','Trendy','Tops, skirts and jackets'],['acc','👜','Extras','Necklaces, hats, bags and shoes'],['cute','🎀','Cute','Bows, ruffles, trims and sparkle'],['vibe','✨','Vibe','The backdrop behind your dress'],['doll','🧸','Doll','Skin tone, hairstyle, hair and eye colour'],['gems','💎','Gems','Pick a gem, cut and size, then set it']];
 let DTAB=null,DSHEET=true;
-const FOCUS_ATTRS=['k','v','x','xv','f','c','bc','vibe','part','s','cut'];
+const FOCUS_ATTRS=['k','v','x','xv','f','c','bc','vibe','part','s','cut','dskin','dhair','dhc','deye'];
 function focusKey(el,root){if(!el||!root||!root.contains(el)||el===root)return null;if(el.id)return '#'+el.id;const a=FOCUS_ATTRS.filter(k=>el.dataset&&el.dataset[k]!=null);return a.length?a.map(k=>`[data-${k.replace(/[A-Z]/g,m=>'-'+m.toLowerCase())}="${el.dataset[k]}"]`).join(''):null;}
 function screenDesign(arg){
-  if(arg&&arg.load){S.draft=JSON.parse(JSON.stringify({id:arg.load.id,name:arg.load.name,dress:arg.load.dress,gems:arg.load.gems,vibe:arg.load.vibe||'atelier',runway:arg.load.runway}));save();}
+  if(arg&&arg.load){S.draft=JSON.parse(JSON.stringify({id:arg.load.id,name:arg.load.name,dress:arg.load.dress,gems:arg.load.gems,vibe:arg.load.vibe||'atelier',runway:arg.load.runway,doll:normDoll(arg.load.doll||S.doll)}));save();}
   if(arg&&arg.tab)DTAB=arg.tab;
   const D=S.draft; D.gems=D.gems||[]; normDress(D.dress); let tab=DTAB&&DSECS.some(x=>x[0]===DTAB)?DTAB:D.gems.length?'gems':'shape'; let size=16, mode='place', cut='natural', part='skirt';
   let sel=D.sel&&S.unlocked.includes(D.sel)?D.sel:S.unlocked[S.unlocked.length-1];
@@ -2469,7 +2554,8 @@ function screenDesign(arg){
       <p class="small muted" id="dinfo"></p>
       <p class="small muted dtip">💡 Every gem you place counts toward atelier upgrades: now <b>${TIERS[curTier()].name}</b>, ${(S.placed||0).toLocaleString('en')} gems placed.</p></aside></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
-  const stage=createStage($('#stageHost'),D.dress);stage.setVibe(D.vibe);stage.renderGems(D.gems);
+  D.doll=normDoll(D.doll||S.doll);
+  const stage=createStage($('#stageHost'),D.dress,{doll:D.doll});stage.setVibe(D.vibe);stage.renderGems(D.gems);
   const ed=gemEditor(stage,()=>D.gems,{changed:()=>persist()});UNDO_FN=()=>ed.undo();REDO_FN=()=>ed.redo();
   ON_MS=()=>renderTab();
   const info=()=>{$('#dinfo').textContent=`${D.gems.length} gem${D.gems.length===1?'':'s'} set${D.id?' · saved in gallery':''}`;stage.hud.innerHTML=`<span class="tag">${mode==='erase'?'🧽 Eraser':'💎 '+esc(GEM[sel].name)+(cut!=='natural'?' · '+CUTS.find(c=>c[0]===cut)[1]:'')}</span><button class="tag mirrortag" id="mirrorBtn" aria-pressed="${S.mirror?'true':'false'}" title="Mirror: each gem you set is also set on the other side of the dress">🪞 Mirror ${S.mirror?'on':'off'}</button><span class="tag">${D.gems.length} gems</span>`;
@@ -2498,10 +2584,17 @@ function screenDesign(arg){
       else if(tab==='acc')body=['neck','hat','bag','shoes'].map(k=>xopt(k,TEEN_LABELS[k])).join('');
       else if(tab==='cute')body=xopt('bow','Bows')+xopt('ruffle','Ruffles')+xopt('trim','Hem trim')+xopt('sparkle','Sparkle')+
         `<div class="opt-label">Ribbon &amp; trim colour</div><div class="ribbons">${RIBBONS.map(c=>`<button class="sw ${c==='auto'?'auto':''} ${(EX.bc||'auto')===c?'on':''}" data-bc="${c}" ${c==='auto'?'title="Match the dress"':`style="background:${c}"`} aria-label="Ribbon ${c==='auto'?'matches the dress':c}" aria-pressed="${(EX.bc||'auto')===c}"></button>`).join('')}</div>`;
+      else if(tab==='doll'){const DL=D.doll;const sw=(attr,list,cur,lbl)=>`<div class="opt-label">${lbl}</div><div class="swatches dollsw">${list.map(o=>`<button class="sw ${cur===o[0]?'on':''}" data-${attr}="${o[0]}" style="background:${o[2]}" aria-label="${lbl}: ${esc(o[1])}" title="${esc(o[1])}" aria-pressed="${cur===o[0]}"></button>`).join('')}</div>`;
+        body=`<button class="btn small surprise" id="dollRand" title="A random doll look (your dress and gems stay)">🎲 Random doll</button>`+sw('dskin',DOLL_SKINS,DL.skin,'Skin tone')+
+        `<div class="opt-label">Hairstyle</div><div class="hairgrid">${DOLL_HAIRS.map(([v,l])=>`<button class="hairtile ${DL.hair===v?'on':''}" data-dhair="${v}" aria-pressed="${DL.hair===v}" title="${esc(l)}">${dollHeadSVG(Object.assign({},DL,{hair:v}))}<span>${esc(l)}</span></button>`).join('')}</div>`+
+        sw('dhc',DOLL_HAIRCOLS,DL.hc,'Hair colour')+sw('deye',DOLL_EYES,DL.eyes,'Eye colour')+`<p class="small muted dhint">Your doll is saved with each dress and shows in the gallery, PNGs and story cards. It is not part of the minted dress.</p>`;}
       else if(tab==='vibe')body=`<div class="vibegrid">${VIBES.map(([v,l,e,bg])=>`<button class="vibechip ${(D.vibe||'atelier')===v?'on':''}" data-vibe="${v}" aria-pressed="${(D.vibe||'atelier')===v}" title="${esc(l)} backdrop"><i style="background:${bg}" aria-hidden="true"></i><span>${e} ${esc(l)}</span></button>`).join('')}</div>`;
       tb.innerHTML=head+`<div class="dsec">${body}</div>`+nextBtn();
       $$('[data-k]',tb).forEach(b=>b.onclick=()=>{D.dress[b.dataset.k]=b.dataset.v;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
       $$('[data-part]',tb).forEach(b=>b.onclick=()=>{part=b.dataset.part;renderTab();});
+      const setDoll=(k,v)=>{D.doll=normDoll(Object.assign({},D.doll,{[k]:v}));S.doll=Object.assign({},D.doll);stage.setDoll(D.doll);AudioFX.soft();persist();renderTab();};
+      [['dskin','skin'],['dhair','hair'],['dhc','hc'],['deye','eyes']].forEach(([a,k])=>$$(`[data-${a}]`,tb).forEach(b=>b.onclick=()=>setDoll(k,b.dataset[a])));
+      const dr=$('#dollRand',tb);dr&&(dr.onclick=()=>{const pick=l=>l[Math.floor(Math.random()*l.length)][0];D.doll={skin:pick(DOLL_SKINS),hair:pick(DOLL_HAIRS),hc:pick(DOLL_HAIRCOLS),eyes:pick(DOLL_EYES)};S.doll=Object.assign({},D.doll);stage.setDoll(D.doll);AudioFX.chime();persist();renderTab();});
       $$('[data-vibe]',tb).forEach(b=>b.onclick=()=>{D.vibe=b.dataset.vibe;stage.setVibe(D.vibe);AudioFX.soft();persist();renderTab();});
       $$('[data-x]',tb).forEach(b=>b.onclick=()=>{if(b.dataset.at){toast(`🔒 Unlocks at ${b.dataset.at} gems placed (you have ${S.placed||0})`);return;}EX[b.dataset.x]=b.dataset.xv;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
       $$('[data-bc]',tb).forEach(b=>b.onclick=()=>{EX.bc=b.dataset.bc;stage.setDress(D.dress);persist();renderTab();});
@@ -2554,7 +2647,7 @@ function screenDesign(arg){
   const mb=$('#mintBtn');mb&&(mb.onclick=()=>{if(!D.gems.length){toast('Set some gems first ✨');return;}const rec=saveDraftToGallery();JD_STARKNET.mint(rec);});
   renderTab();info();
 }
-function draftDesign(){const D=S.draft;const o={id:D.id,name:(D.name||'My Dress').trim()||'My Dress',dress:JSON.parse(JSON.stringify(normDress(D.dress))),gems:D.gems.map(({g,x,y,s,t,c})=>(c?{g,x,y,s,t,c}:{g,x,y,s,t})),tier:curTier(),vibe:D.vibe||'atelier'};if(D.runway)o.runway=D.runway;return o;}
+function draftDesign(){const D=S.draft;const o={id:D.id,name:(D.name||'My Dress').trim()||'My Dress',dress:JSON.parse(JSON.stringify(normDress(D.dress))),gems:D.gems.map(({g,x,y,s,t,c})=>(c?{g,x,y,s,t,c}:{g,x,y,s,t})),tier:curTier(),vibe:D.vibe||'atelier',doll:normDoll(D.doll||S.doll)};if(D.runway)o.runway=D.runway;return o;}
 function saveDraftToGallery(){const d=draftDesign();let rec=d.id&&GALLERY.find(x=>x.id===d.id);
   if(rec){if(rec.minted&&JSON.stringify(rec.gems)!==JSON.stringify(d.gems)){rec=null;}else Object.assign(rec,d,{updated:Date.now()});}
   if(!rec){rec=Object.assign(d,{id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),created:Date.now(),from:'design'});GALLERY.unshift(rec);S.draft.id=rec.id;save();}
