@@ -212,7 +212,7 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 @media (max-width:760px){
   .mspill{min-width:70px;padding:4px 8px}
   header.top{gap:6px;padding:8px 10px}.brand{font-size:19px;gap:5px}.pill{padding:6px 9px;font-size:13px}.iconbtn{min-width:34px;height:34px;padding:0 8px}
-  .hero{grid-template-columns:1fr;min-height:auto;padding-top:8px}.hero-art{order:-1}.hero-art svg.dressart{width:min(240px,64%)}
+  .hero{grid-template-columns:1fr;min-height:auto;padding-top:8px}.hero-art{order:-1}.hero-art svg.dressart{width:min(190px,52%)}.hero p.lead{font-size:16px;margin:8px 0}
   .menu-cards{grid-template-columns:1fr 1fr}
   .play{grid-template-columns:1fr}.play .left{order:2}.play .center{order:1}.play .right{order:3}
   .stagewrap svg.stage{max-height:62vh}
@@ -364,6 +364,41 @@ input[type=text]{border-radius:14px}
   .brand .mascot-mini{width:28px;height:28px}
 }
 @media (max-width:420px){.menu-cards{grid-template-columns:1fr}.mcard.feature:before{display:none}}
+/* ---------- teen update: daily challenge, runway, vibes, story card ---------- */
+.mcard.chal{grid-column:1/-1;background:linear-gradient(120deg,#2a1458,#7a2d8f 55%,#ff5fa8);color:#fff;border:2px solid rgba(255,255,255,.7);box-shadow:0 6px 0 #5a1f6e,0 16px 30px rgba(122,45,143,.35);overflow:hidden}
+.mcard.chal .t{color:#fff;font-size:23px}.mcard.chal .d{color:#ffe6f4;font-size:14px}.mcard.chal .ico{background:rgba(255,255,255,.2)}
+.mcard.chal:after{content:"NEW THEME DAILY";position:absolute;right:14px;top:12px;font:700 10px var(--sans);letter-spacing:.14em;background:#ffe27a;color:#5a1f6e;border-radius:999px;padding:3px 8px}
+.stars{color:#ffb400;letter-spacing:2px;text-shadow:0 1px 0 rgba(0,0,0,.15)}.mcard.chal .stars{color:#ffe27a}.streak{color:#fff;white-space:nowrap}
+.chips.vibes{gap:5px}.vibechip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px 4px 4px;font-size:12px}.vibechip i{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.15);flex:none}
+.rw-cta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 14px;padding:10px 12px;border-radius:20px;background:linear-gradient(120deg,rgba(255,214,231,.9),rgba(213,198,255,.9));border:2px solid #fff}
+.rw-cta .small{flex:1 1 100%;color:var(--plum)}.rw-cta.on{background:linear-gradient(120deg,#2a1458,#7a2d8f 55%,#ff5fa8)}.rw-cta.on .small{color:#fff}
+.chal{padding:0 0 22px}.chal>*:not(.th-head){margin-left:24px;margin-right:24px}
+.th-head{display:flex;align-items:center;gap:14px;padding:26px 24px 20px;border-radius:29px 29px 0 0;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.25)}
+.th-head h2{font-size:36px;color:#fff}.th-emoji{font-size:54px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))}.th-lbl{color:#fff;opacity:.95}
+.th-desc{font-size:16px;line-height:1.45}.th-wants{background:rgba(255,255,255,.8);border:2px solid #fff;border-radius:20px;padding:12px 14px;box-shadow:var(--soft)}
+.th-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px}.th-k{width:62px;font-size:12px;font-weight:700;color:var(--muted)}
+.th-sw{width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #f3dcec}.th-chip{font:600 12px var(--serif);background:#fff0f7;border:1px solid #ffd0e4;color:#a8326f;border-radius:999px;padding:3px 9px}
+.th-status{margin-top:12px}.th-acts{margin-top:10px}
+.runway{display:grid;grid-template-columns:minmax(220px,340px) 1fr;gap:0}
+.rw-stage{position:relative;overflow:hidden;border-radius:29px 0 0 29px;background:#1b1040}
+.rw-stage svg{display:block;width:100%;height:auto;animation:rwWalk 1.6s cubic-bezier(.2,.9,.3,1) both}
+@keyframes rwWalk{0%{transform:translateY(-6%) scale(.72);opacity:0}30%{opacity:1}55%{transform:translateY(1%) scale(.9) rotate(-1deg)}75%{transform:translateY(0) scale(.97) rotate(1deg)}100%{transform:none}}
+.rw-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:rwFlash 2.4s ease-out .9s}
+@keyframes rwFlash{0%,100%{opacity:0}4%{opacity:.75}10%{opacity:0}30%{opacity:0}34%{opacity:.6}40%{opacity:0}}
+.rw-tag{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.88);color:var(--plum);font:700 13px var(--serif);border-radius:999px;padding:5px 11px}
+.rw-side{padding:24px 24px 20px}.rw-title{font-size:30px;color:var(--plum);margin:2px 0 10px}
+.rw-judges{display:grid;gap:8px}
+.rw-j{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.85);border:2px solid #fff;border-radius:20px;padding:8px 12px;box-shadow:var(--soft);animation:rwPop .5s var(--bounce) both}
+@keyframes rwPop{from{opacity:0;transform:translateX(24px) scale(.9)}to{opacity:1;transform:none}}
+.rw-face{font-size:28px;width:46px;height:46px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#ffe1ef,#e8deff);flex:none}
+.rw-jt{flex:1;min-width:0;line-height:1.35}.rw-score{font:700 30px var(--serif);color:#c2417f;min-width:52px;text-align:right}
+.rw-total{margin-top:14px;text-align:center;animation:rwPop .6s var(--bounce) both}.stars.big{font-size:40px;letter-spacing:4px}
+.runway.still .rw-stage svg,.runway.still .rw-flash,.runway.still .rw-j,.runway.still .rw-total{animation:none}
+.sharecard{padding:24px;text-align:center}.sharecard h2{font-size:30px;color:var(--plum);margin:2px 0 12px}
+.sc-img{display:block;margin:0 auto 10px;height:min(62vh,560px);width:auto;max-width:100%;border-radius:22px;box-shadow:var(--shadow)}
+.sharecard .tools{justify-content:center}
+.gstars{color:#ffb400;letter-spacing:1px}
+@media (max-width:760px){.runway{grid-template-columns:1fr}.rw-stage{border-radius:29px 29px 0 0;max-height:46vh}.rw-stage svg{width:62%;margin:0 auto}.rw-side{padding:16px}.th-head h2{font-size:28px}.th-emoji{font-size:42px}.mcard.chal:after{display:none}}
 /* Respect the system "reduce motion" setting: calm CSS motion here, SVG sparkles are paused in JS */
 @media (prefers-reduced-motion: reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
@@ -1530,7 +1565,7 @@ function dressSVG(design,opt){
   const W=opt.width?` width="${opt.width}" height="${opt.width*1.6}"`:'';
   const caption=opt.caption?`<text x="200" y="628" text-anchor="middle" font-family="Fredoka,'Arial Rounded MT Bold','Varela Round',Nunito,sans-serif" font-size="15" fill="#3b2440">${esc(opt.caption)}</text>`:'';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640"${W}><defs>${STAGE_DEFS}${allFabricDefs(design.dress,p)}${syms}</defs>
-  ${opt.bg===false?'':STAGE_BG}
+  ${opt.bg===false?'':vibeBG(design.vibe,p)}
   ${mannequinMarkup(G)}${markup}<g>${gems}</g>${caption}</svg>`;
 }
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1748,6 +1783,7 @@ function createStage(host,dress,opts){
     if(!defs.querySelector('#mq-linen')){const sd=document.createElementNS('http://www.w3.org/2000/svg','g');sd.innerHTML=STAGE_DEFS;defs.appendChild(sd);$('.stagebg',svg).innerHTML=STAGE_BG;}
     $('.dress',svg).innerHTML=mannequinMarkup(G)+markup;
     $('.guides',svg).innerHTML=Object.entries(G.guides).map(([k,v])=>`<path data-k="${k}" d="${v}"/>`).join('');};
+  st.setVibe=v=>{$('.stagebg',svg).innerHTML=vibeBG(v,'st');};
   st.ensureSym=(gid,t,c)=>{const k=symId('st',gid,t,c);if(st.syms.has(k))return;st.syms.add(k);const n=document.createElementNS('http://www.w3.org/2000/svg','g');n.innerHTML=gemSymbol(GEM[gid],t,'st',c);defs.appendChild(n);};
   st.gemEl=q=>{st.ensureSym(q.g,q.t,q.c);const s=q.s;const u=document.createElementNS('http://www.w3.org/2000/svg','use');
     u.setAttribute('href','#'+symId('st',q.g,q.t,q.c));u.setAttribute('x',(q.x-s/2).toFixed(1));u.setAttribute('y',(q.y-s/2).toFixed(1));u.setAttribute('width',s);u.setAttribute('height',s);return u;};
@@ -1853,10 +1889,11 @@ function screenMenu(){
   app().innerHTML=`<section class="screen hero"><div>
     <div class="opt-label">✿ A kawaii gem couture game</div>
     <h1>${mascotSVG('mascot','happy')}<span>Jewel <em>Dress</em></span></h1>
-    <p class="lead">Design gowns, set real gemstones on them, and discover where each gem comes from on Earth. Every gem you place makes your atelier better: more lifelike gems, and cute ruffles, bows, hearts and stars for your dresses.</p>
+    <p class="lead">Design your dream dress, cover it in real gems, take on the daily style challenge and show off your look. Every gem you place unlocks prettier gems and cuter touches.</p>
     ${(mp=>`<div class="msmenu"><div class="small"><b>${esc(mp.cur.name)}</b> · 💎 ${mp.n.toLocaleString('en')} gems placed</div><div class="progress"><i style="width:${(mp.f*100).toFixed(1)}%"></i></div><div class="small muted">${(mp.next.n-mp.n).toLocaleString('en')} more to <b>${esc(mp.next.name)}</b>${mp.next.perks.length?': '+mp.next.perks.map(perkLabel).join(' & '):''}${mp.next.tier>mp.cur.tier?` · ${TIERS[mp.next.tier].name} gems`:''}</div></div>`)(msProgress())}
     ${(g=>g?`<button class="gemday" id="gemDay" aria-label="Gem of the day: ${esc(g.name)}. Read its story"><div class="gd-gem">${gemSVG(g,curTier())}</div><div class="gd-txt"><div class="opt-label">💫 Gem of the day</div><div class="gd-name">${esc(g.name)}</div><div class="small muted">${esc(g.family.split('(')[0].trim())}</div></div><span class="gd-more">Read its story ›</span></button>`:'')(gemOfDay())}
     <div class="menu-cards">
+      ${(th=>{const best=chalState().hist[dayKey()]||0,sk=streakNow();return `<button class="mcard chal" id="chalBtn"><div class="t"><span class="ico" aria-hidden="true">${th.emoji}</span>Daily challenge: ${esc(th.name)}</div><div class="d">${best?`<span class="stars">${starsTxt(best)}</span> today. Beat it?`:'Style today’s theme, walk the runway and get rated by the judges.'}${sk?` <b class="streak">🔥 ${sk}-day streak</b>`:''}</div></button>`;})(todayTheme())}
       <button class="mcard feature" data-go="design"><div class="t"><span class="ico" aria-hidden="true">✂️</span>Create your own dress</div><div class="d">Choose the silhouette, neckline, sleeves and length, sew each part from 20 real fabrics, then set gems in any cut, anywhere you like.</div></button>
       <button class="mcard" data-go="play"><div class="t"><span class="ico" aria-hidden="true">💎</span>Atelier levels</div><div class="d">Level ${S.level}: ${esc(next.preset.name)}. Fill the marked spots to unlock new gems.</div></button>
       <button class="mcard" data-go="book"><div class="t"><span class="ico" aria-hidden="true">📖</span>Gem encyclopedia</div><div class="d">${S.unlocked.length} of ${GEMS.length} gems discovered. Names, minerals and origins.</div></button>
@@ -1868,6 +1905,7 @@ function screenMenu(){
       <span class="twk" style="left:18%;top:8%" aria-hidden="true">✦</span><span class="twk" style="right:16%;top:22%;animation-delay:.8s" aria-hidden="true">✧</span><span class="twk" style="right:20%;bottom:14%;animation-delay:1.5s" aria-hidden="true">♡</span></div></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>{AudioFX.soft();go(b.dataset.go);});
   $('#howBtn').onclick=howTo;
+  $('#chalBtn').onclick=()=>{AudioFX.chime();openChallenge();};
   $('#backupBtn').onclick=()=>{AudioFX.soft();backupModal();};
   const gd=$('#gemDay');gd&&(gd.onclick=()=>{AudioFX.soft();openInfo(gemOfDay().id);});
 }
@@ -1883,6 +1921,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>🎲 Random gem:</b> in the encyclopedia, open the story of a random discovered gem (ones you have not read yet come first), then keep browsing with Prev/Next.</li>
    <li><b>🧠 Gem quiz:</b> in the encyclopedia, answer five quick questions about the gems you have discovered (their mineral family, which is harder, birthstone months). Your best score is saved.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
+   <li><b>🔥 Daily challenge:</b> every day has a new style theme (like Galaxy Night or Y2K Pop). Style a look, tap <b>🌟 Walk the runway</b> and three judges rate its colours, style and sparkle out of 100, for up to 5 stars. Walk once a day to grow your streak. Pick a <b>✨ Vibe</b> backdrop in the designer, and tap <b>📲 Story card</b> to download or share a story-sized picture of your look.</li>
    <li><b>💾 Backup:</b> your progress is saved only in this browser. From the main menu, download a backup file now and then; restoring it (here or in another browser) brings back your gems, milestones and gallery.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">${TIERS.map((t,i)=>`<div style="text-align:center;width:110px"><div style="width:70px;height:70px;margin:auto">${gemSVG(GEM.diamond,i)}</div><b style="font-family:var(--serif);font-size:17px">${t.name}</b><div class="small muted">${MILESTONES.find(m=>m.tier===i).n.toLocaleString('en')}+ gems</div></div>`).join('')}</div></div>`);}
@@ -1993,20 +2032,20 @@ function levelComplete(){
 }
 /* ---------- custom dress designer ---------- */
 function screenDesign(arg){
-  if(arg&&arg.load){S.draft=JSON.parse(JSON.stringify({id:arg.load.id,name:arg.load.name,dress:arg.load.dress,gems:arg.load.gems}));save();}
+  if(arg&&arg.load){S.draft=JSON.parse(JSON.stringify({id:arg.load.id,name:arg.load.name,dress:arg.load.dress,gems:arg.load.gems,vibe:arg.load.vibe||'atelier',runway:arg.load.runway}));save();}
   const D=S.draft; D.gems=D.gems||[]; normDress(D.dress); let tab=D.gems.length?'gems':'design'; let size=16, mode='place', cut='natural', part='skirt';
   let sel=D.sel&&S.unlocked.includes(D.sel)?D.sel:S.unlocked[S.unlocked.length-1];
   app().innerHTML=`<section class="screen play">
     <aside class="panel left"><div class="tabs"><button data-tab="design">✂️ Dress</button><button data-tab="gems">💎 Gems</button></div><div id="tabBody"></div></aside>
     <div class="center" id="stageHost"></div>
-    <aside class="panel right"><h3>Your creation</h3>
+    <aside class="panel right">${(th=>`<div class="rw-cta${D.chal===dayKey()?' on':''}"><div class="small"><b>${th.emoji} Today: ${esc(th.name)}</b>${streakNow()?` · 🔥 ${streakNow()}`:''}</div><button class="btn primary" id="runBtn">🌟 Walk the runway</button><button class="btn small" id="themeBtn" title="What the judges want today">👀 Theme</button></div>`)(todayTheme())}<h3>Your creation</h3>
       <label class="opt-label" for="dname">Dress name</label><input type="text" id="dname" maxlength="31" value="${esc(D.name||'')}">
-      <div class="tools" style="margin-top:12px"><button class="btn primary small" id="saveBtn">💾 Save to gallery</button><button class="btn small" id="pngBtn">⬇︎ Download PNG</button></div>
+      <div class="tools" style="margin-top:12px"><button class="btn primary small" id="saveBtn">💾 Save to gallery</button><button class="btn small" id="pngBtn">⬇︎ Download PNG</button><button class="btn small" id="cardBtn" title="A story-sized picture to share">📲 Story card</button></div>
       <div class="tools"><button class="btn small" id="newBtn">✚ New dress</button><button class="btn small" data-go="gallery">🖼️ Gallery</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" id="mintBtn">✦ Mint on Starknet</button>':''}</div>
       <p class="small muted" id="dinfo"></p>
       <p class="small muted">Tip: gems you unlock in the atelier levels appear here. Every gem you place (here or in levels) counts toward atelier upgrades: more realistic gems and new cute touches (now: <b>${TIERS[curTier()].name}</b>, ${(S.placed||0).toLocaleString('en')} gems placed).</p></aside></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
-  const stage=createStage($('#stageHost'),D.dress);stage.renderGems(D.gems);
+  const stage=createStage($('#stageHost'),D.dress);stage.setVibe(D.vibe);stage.renderGems(D.gems);
   const ed=gemEditor(stage,()=>D.gems,{changed:()=>persist()});UNDO_FN=()=>ed.undo();REDO_FN=()=>ed.redo();
   ON_MS=()=>renderTab();
   const info=()=>{$('#dinfo').textContent=`${D.gems.length} gem${D.gems.length===1?'':'s'} set${D.id?' · saved in gallery':''}`;stage.hud.innerHTML=`<span class="tag">${mode==='erase'?'🧽 Eraser':'💎 '+esc(GEM[sel].name)+(cut!=='natural'?' · '+CUTS.find(c=>c[0]===cut)[1]:'')}</span><button class="tag mirrortag" id="mirrorBtn" aria-pressed="${S.mirror?'true':'false'}" title="Mirror: each gem you set is also set on the other side of the dress">🪞 Mirror ${S.mirror?'on':'off'}</button><span class="tag">${D.gems.length} gems</span>`;
@@ -2018,7 +2057,8 @@ function screenDesign(arg){
     if(tab==='design'){const PP=D.dress.parts,cp=PP[part];const flist=part==='overlay'?OVERLAYS:FAB_ORDER;
       const EX=D.dress.extras;
       const xopt=(k,label)=>`<div class="opt-label">${label}</div><div class="chips">${EXTRA_OPTS[k].map(([v,l])=>{const at=extraUnlockAt(k,v);const lk=at>(S.placed||0);return `<button class="chip ${EX[k]===v?'on':''} ${lk?'locked-chip':''}" data-x="${k}" data-xv="${v}" ${lk?`data-at="${at}" title="Unlocks at ${at} gems placed"`:''}>${lk?'🔒 ':''}${l}</button>`;}).join('')}</div>`;
-      tb.innerHTML=`<button class="btn small surprise" id="surpriseBtn" title="Random dress style, fabrics and colours (your gems stay)">🎲 Surprise me</button>`+opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length')+
+      tb.innerHTML=`<button class="btn small surprise" id="surpriseBtn" title="Random dress style, fabrics and colours (your gems stay)">🎲 Surprise me</button>`+
+      `<div class="opt-label">✨ Vibe (backdrop)</div><div class="chips vibes">${VIBES.map(([v,l,e,bg])=>`<button class="chip vibechip ${(D.vibe||'atelier')===v?'on':''}" data-vibe="${v}"><i style="background:${bg}" aria-hidden="true"></i>${e} ${esc(l)}</button>`).join('')}</div>`+opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length')+
       `<div class="opt-label" style="margin-top:6px;color:#c26a8f">♡ Cute touches</div>`+xopt('bow','Bows')+xopt('ruffle','Ruffles')+xopt('trim','Hem trim')+xopt('sparkle','Sparkle')+
       `<div class="opt-label">Ribbon &amp; trim colour</div><div class="ribbons">${RIBBONS.map(c=>`<button class="sw ${c==='auto'?'auto':''} ${(EX.bc||'auto')===c?'on':''}" data-bc="${c}" ${c==='auto'?'title="Match the dress"':`style="background:${c}"`} aria-label="Ribbon ${c}"></button>`).join('')}</div>`+
       `<div class="opt-label">Fabric for…</div><div class="seg" id="partSeg">${DRESS_PARTS.map(([k,l])=>`<button data-part="${k}" class="${part===k?'on':''}">${l}</button>`).join('')}</div>
@@ -2029,6 +2069,7 @@ function screenDesign(arg){
       <button class="btn small primary" id="toGems">Next: set gems →</button>`;
       $$('[data-k]',tb).forEach(b=>b.onclick=()=>{D.dress[b.dataset.k]=b.dataset.v;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
       $$('[data-part]',tb).forEach(b=>b.onclick=()=>{part=b.dataset.part;renderTab();});
+      $$('[data-vibe]',tb).forEach(b=>b.onclick=()=>{D.vibe=b.dataset.vibe;stage.setVibe(D.vibe);AudioFX.soft();persist();renderTab();});
       $$('[data-x]',tb).forEach(b=>b.onclick=()=>{if(b.dataset.at){toast(`🔒 Unlocks at ${b.dataset.at} gems placed (you have ${S.placed||0})`);return;}EX[b.dataset.x]=b.dataset.xv;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
       $$('[data-bc]',tb).forEach(b=>b.onclick=()=>{EX.bc=b.dataset.bc;stage.setDress(D.dress);persist();renderTab();});
       $$('[data-f]',tb).forEach(b=>b.onclick=()=>{cp.f=b.dataset.f;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
@@ -2070,11 +2111,14 @@ function screenDesign(arg){
   $('#dname').oninput=e=>{D.name=e.target.value;persist();};
   $('#saveBtn').onclick=()=>{saveDraftToGallery();toast('Saved to your gallery ✨');info();};
   $('#pngBtn').onclick=()=>downloadPNG(draftDesign());
+  $('#cardBtn').onclick=()=>{AudioFX.soft();openShareCard(draftDesign());};
+  $('#runBtn').onclick=()=>{if(!D.gems.length){toast('Set some gems first, the judges love sparkle 💎');return;}openRunway();info();};
+  $('#themeBtn').onclick=()=>openChallenge();
   $('#newBtn').onclick=()=>{if(D.gems.length&&!D.id&&!confirm('Start a new dress? Unsaved gems will be lost.'))return;S.draft=DEFAULT_DRAFT();save();screenDesign();};
   const mb=$('#mintBtn');mb&&(mb.onclick=()=>{if(!D.gems.length){toast('Set some gems first ✨');return;}const rec=saveDraftToGallery();JD_STARKNET.mint(rec);});
   renderTab();info();
 }
-function draftDesign(){const D=S.draft;return{id:D.id,name:(D.name||'My Dress').trim()||'My Dress',dress:JSON.parse(JSON.stringify(normDress(D.dress))),gems:D.gems.map(({g,x,y,s,t,c})=>(c?{g,x,y,s,t,c}:{g,x,y,s,t})),tier:curTier()};}
+function draftDesign(){const D=S.draft;const o={id:D.id,name:(D.name||'My Dress').trim()||'My Dress',dress:JSON.parse(JSON.stringify(normDress(D.dress))),gems:D.gems.map(({g,x,y,s,t,c})=>(c?{g,x,y,s,t,c}:{g,x,y,s,t})),tier:curTier(),vibe:D.vibe||'atelier'};if(D.runway)o.runway=D.runway;return o;}
 function saveDraftToGallery(){const d=draftDesign();let rec=d.id&&GALLERY.find(x=>x.id===d.id);
   if(rec){if(rec.minted&&JSON.stringify(rec.gems)!==JSON.stringify(d.gems)){rec=null;}else Object.assign(rec,d,{updated:Date.now()});}
   if(!rec){rec=Object.assign(d,{id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),created:Date.now(),from:'design'});GALLERY.unshift(rec);S.draft.id=rec.id;save();}
@@ -2171,18 +2215,19 @@ function screenGallery(){
     ${GALLERY.length?'':'<p class="muted">Nothing here yet. Finish an atelier level or save a dress from the designer.</p>'}
     ${GALLERY.length>1?`<div class="booktools"><label class="booksort small muted">Sort <select id="galSort" aria-label="Sort saved dresses">${GAL_SORTS.map(([v,l])=>`<option value="${v}" ${GAL_SORT===v?'selected':''}>${l}</option>`).join('')}</select></label></div>`:''}
     <div class="grid" id="galGrid" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">${galleryView().map(([d,i])=>`<div class="gcard" data-i="${i}"><div class="thumb">${dressSVG(d,{prefix:'gal'+i})}</div>
-      <div class="meta"><div class="n">${esc(d.name)}</div><div class="small muted">${d.gems.length} gems · ${new Date(d.created).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}${d.minted?` · <a href="${esc(d.minted.url||'#')}" target="_blank" rel="noopener">✦ on Starknet</a>`:''}</div>${gemsUsedHTML(d)}</div>
-      <div class="acts"><button class="btn small" data-a="edit">Edit</button>${d.minted?'':`<button class="btn small" data-a="ren" title="Rename this dress" aria-label="Rename ${esc(d.name)}">✏️ Rename</button>`}<button class="btn small" data-a="dup" title="Make a copy of this dress to try a variation" aria-label="Copy ${esc(d.name)}">📋 Copy</button><button class="btn small" data-a="png">⬇︎ PNG</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" data-a="mint">✦ Mint</button><button class="btn small" data-a="agent" title="Copy a Starknet MCP tool call for an AI agent">🤖</button>':''}<button class="btn small" data-a="del" title="Delete this dress (you can undo)" aria-label="Delete ${esc(d.name)}">🗑</button></div></div>`).join('')}</div></section>`;
+      <div class="meta"><div class="n">${esc(d.name)}</div><div class="small muted">${d.runway?`<span class="gstars" title="Runway: ${d.runway.stars} of 5 stars">${starsTxt(d.runway.stars)}</span> `:''}${d.gems.length} gems · ${new Date(d.created).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}${d.minted?` · <a href="${esc(d.minted.url||'#')}" target="_blank" rel="noopener">✦ on Starknet</a>`:''}</div>${gemsUsedHTML(d)}</div>
+      <div class="acts"><button class="btn small" data-a="edit">Edit</button>${d.minted?'':`<button class="btn small" data-a="ren" title="Rename this dress" aria-label="Rename ${esc(d.name)}">✏️ Rename</button>`}<button class="btn small" data-a="dup" title="Make a copy of this dress to try a variation" aria-label="Copy ${esc(d.name)}">📋 Copy</button><button class="btn small" data-a="png">⬇︎ PNG</button><button class="btn small" data-a="card" title="Story-sized picture to share" aria-label="Story card of ${esc(d.name)}">📲 Card</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" data-a="mint">✦ Mint</button><button class="btn small" data-a="agent" title="Copy a Starknet MCP tool call for an AI agent">🤖</button>':''}<button class="btn small" data-a="del" title="Delete this dress (you can undo)" aria-label="Delete ${esc(d.name)}">🗑</button></div></div>`).join('')}</div></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
   const gs=$('#galSort');if(gs)gs.onchange=e=>{GAL_SORT=e.target.value;screenGallery();const g=$('#galSort');g&&g.focus();};
   $$('.gcard').forEach(c=>{const d=GALLERY[+c.dataset.i];const used=gemsUsed(d).map(x=>x[0]);$$('.gu',c).forEach(b=>b.onclick=()=>openInfo(b.dataset.g,{list:used}));$$('[data-a]',c).forEach(b=>b.onclick=()=>{const a=b.dataset.a;
     if(a==='edit')go('design',{load:d});
-    if(a==='dup'){const nm=copyName(d.name);const c=JSON.parse(JSON.stringify({name:nm,dress:d.dress,gems:d.gems,tier:d.tier}));
+    if(a==='dup'){const nm=copyName(d.name);const c=JSON.parse(JSON.stringify({name:nm,dress:d.dress,gems:d.gems,tier:d.tier,vibe:d.vibe||'atelier'}));
       Object.assign(c,{id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),created:Date.now(),from:'copy'});
       GALLERY.splice(GALLERY.indexOf(d),0,c);saveGallery();AudioFX.soft();screenGallery();toastAct(`Copied as “${nm}” 📋`,'Edit copy',()=>go('design',{load:c}));
       const f=$('.gcard[data-i="'+GALLERY.indexOf(c)+'"] [data-a="edit"]');f&&f.focus();}
     if(a==='ren')renameDress(d);
     if(a==='png')downloadPNG(d);
+    if(a==='card'){AudioFX.soft();openShareCard(d);}
     if(a==='mint')JD_STARKNET.mint(d);
     if(a==='agent')JD_STARKNET.agentCall(d);
     if(a==='del')deleteDress(d);});});
@@ -2240,6 +2285,202 @@ window.JD_GAME={
   refresh(){if(SCREEN!=='play')go(SCREEN);},
   go:n=>go(n),
 };
+/* =====================================================================
+   VIBES: trendy backdrops behind the dress (stage, gallery, PNG, share card)
+   ===================================================================== */
+const VIBES=[
+ ['atelier','Pastel atelier','🎀','linear-gradient(135deg,#fff,#ffe1ef,#eadcff)'],
+ ['clouds','Dreamy clouds','☁️','linear-gradient(180deg,#bfe3ff,#ffe1f0)'],
+ ['galaxy','Galaxy night','🌌','linear-gradient(180deg,#1b1040,#5a2d8f,#c06fb5)'],
+ ['y2k','Y2K chrome','💿','linear-gradient(135deg,#ff9de2,#c7b8ff,#9fe6ff)'],
+ ['cottage','Cottagecore','🌼','linear-gradient(180deg,#fff6dd,#cfeccf)'],
+ ['kpop','K-pop stage','🎤','linear-gradient(180deg,#120a2a,#3b1466,#ff5fa8)'],
+ ['prom','Prom night','🪩','linear-gradient(180deg,#1e1846,#4b2a7a,#e07aa8)'],
+ ['beach','Beach sunset','🌅','linear-gradient(180deg,#ff9a8b,#ffc79a,#7fd3e0)'],
+ ['neon','Neon city','🌃','linear-gradient(180deg,#0b0d2e,#2a1050,#ff3fa4)'],
+];
+const VIBE=Object.fromEntries(VIBES.map(v=>[v[0],v]));
+function vibeBG(v,p){if(!v||v==='atelier'||!VIBE[v])return STAGE_BG;const id=p+'-vb';const R=seeded(60,hashStr(v)%997+3);
+  const tw=(x,y,r,c,i)=>`<path d="${SPARK4}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${r.toFixed(2)})" fill="${c}"><animate attributeName="opacity" values=".25;1;.25" dur="${(1.6+(i%5)*.5).toFixed(1)}s" begin="${((i%7)*.3).toFixed(1)}s" repeatCount="indefinite"/></path>`;
+  const floor=c=>`<ellipse cx="200" cy="628" rx="170" ry="14" fill="${c}" opacity=".35"/>`;
+  switch(v){
+  case 'clouds':return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe3ff"/><stop offset=".6" stop-color="#e9e4ff"/><stop offset="1" stop-color="#ffe1f0"/></linearGradient><rect width="400" height="640" fill="url(#${id})"/>
+    <g fill="none" stroke-width="10" opacity=".45" stroke-linecap="round">${['#ff9cc8','#ffc79a','#fff0a0','#9fe6c8','#9fd0ff','#c7a8ff'].map((c,i)=>`<path d="M${30+i*10},250 A${170-i*10},${170-i*10} 0 0 1 ${370-i*10},250" stroke="${c}"/>`).join('')}</g>
+    ${[[70,120,1.1],[320,90,.9],[90,460,1.3],[320,520,1.2],[200,600,1.6]].map(([x,y,k])=>`<g transform="translate(${x} ${y}) scale(${k})" fill="#fff" opacity=".92"><ellipse cx="0" cy="0" rx="34" ry="16"/><circle cx="-14" cy="-10" r="14"/><circle cx="10" cy="-14" r="18"/></g>`).join('')}
+    ${R.slice(0,14).map(([a,b,c],i)=>tw(a*400,b*600,.6+c*.8,'#fff',i)).join('')}`;
+  case 'galaxy':return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#140c35"/><stop offset=".55" stop-color="#3d1f73"/><stop offset="1" stop-color="#a4569f"/></linearGradient><radialGradient id="${id}n"><stop offset="0" stop-color="#ff8fd0" stop-opacity=".55"/><stop offset="1" stop-color="#ff8fd0" stop-opacity="0"/></radialGradient><radialGradient id="${id}n2"><stop offset="0" stop-color="#7fd0ff" stop-opacity=".45"/><stop offset="1" stop-color="#7fd0ff" stop-opacity="0"/></radialGradient>
+    <rect width="400" height="640" fill="url(#${id})"/><ellipse cx="110" cy="200" rx="170" ry="90" fill="url(#${id}n)" transform="rotate(-25 110 200)"/><ellipse cx="300" cy="420" rx="160" ry="80" fill="url(#${id}n2)" transform="rotate(20 300 420)"/>
+    ${R.map(([a,b,c])=>`<circle cx="${(a*400).toFixed(1)}" cy="${(b*640).toFixed(1)}" r="${(.4+c*1.2).toFixed(2)}" fill="#fff" opacity="${(.4+c*.6).toFixed(2)}"/>`).join('')}
+    ${R.slice(0,10).map(([a,b,c],i)=>tw(a*400,b*560,.8+c,'#fff6c8',i)).join('')}
+    <circle cx="330" cy="80" r="26" fill="#fff4c9"/><circle cx="342" cy="72" r="24" fill="#24124f"/>
+    <g transform="translate(68 520)"><circle r="22" fill="#ffb3d1"/><ellipse rx="40" ry="8" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3" transform="rotate(-18)"/></g>${floor('#ff8fd0')}`;
+  case 'y2k':return `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9de2"/><stop offset=".5" stop-color="#c7b8ff"/><stop offset="1" stop-color="#9fe6ff"/></linearGradient><linearGradient id="${id}c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#c9d3e6"/><stop offset=".55" stop-color="#8e9ab5"/><stop offset="1" stop-color="#f4f7ff"/></linearGradient>
+    <rect width="400" height="640" fill="url(#${id})"/>
+    <g stroke="#fff" stroke-opacity=".5" stroke-width="1.2">${Array.from({length:9},(_,i)=>`<line x1="${200+(i-4)*30}" y1="470" x2="${200+(i-4)*120}" y2="640"/>`).join('')}${[480,505,540,590].map(y=>`<line x1="0" y1="${y}" x2="400" y2="${y}"/>`).join('')}</g>
+    ${[[60,90,2.6],[340,140,3.2],[40,330,2],[355,380,2.4],[300,40,1.6]].map(([x,y,k],i)=>`<path d="${SPARK4}" transform="translate(${x} ${y}) scale(${k})" fill="url(#${id}c)" stroke="#fff" stroke-width=".3"><animateTransform attributeName="transform" additive="sum" type="rotate" values="0;20;0" dur="${3+i}s" repeatCount="indefinite"/></path>`).join('')}
+    <g fill="none" stroke="#fff" stroke-width="2" opacity=".75"><circle cx="80" cy="200" r="18"/><circle cx="330" cy="260" r="12"/><circle cx="320" cy="560" r="22"/></g>
+    <g transform="translate(70 450) scale(1.4)" fill="#ff6fd0" stroke="#fff" stroke-width=".8"><path d="M0,0 C-14,-16 -22,-2 -8,4 C-18,10 -8,18 0,6 Z"/><path d="M0,0 C14,-16 22,-2 8,4 C18,10 8,18 0,6 Z"/></g>`;
+  case 'cottage':return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4d6"/><stop offset=".6" stop-color="#fde9ef"/><stop offset="1" stop-color="#e8f6df"/></linearGradient>
+    <rect width="400" height="640" fill="url(#${id})"/><circle cx="320" cy="90" r="38" fill="#ffe9a6" opacity=".8"/>
+    <path d="M0,470 Q100,420 200,460 T400,450 V640 H0Z" fill="#c9e8b9"/><path d="M0,520 Q120,480 240,520 T400,510 V640 H0Z" fill="#addb9c"/>
+    ${R.slice(0,34).map(([a,b,c],i)=>{const x=a*400,y=480+b*150;const col=['#fff','#ffd1e4','#fff0a0','#d9c8ff'][i%4];return `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(.6+c*.6).toFixed(2)})">${[0,72,144,216,288].map(r=>`<ellipse cx="0" cy="-4" rx="2.6" ry="4" fill="${col}" transform="rotate(${r})"/>`).join('')}<circle r="2" fill="#f6c34a"/></g>`;}).join('')}
+    <g transform="translate(60 150)" fill="none" stroke="#9cc98a" stroke-width="2"><path d="M0,0 Q20,40 0,90"/></g>${[[70,180],[56,215],[72,250]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="4" fill="#b7dca6"/>`).join('')}`;
+  case 'kpop':return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e0824"/><stop offset=".7" stop-color="#2a0f52"/><stop offset="1" stop-color="#5a1a6e"/></linearGradient>
+    <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <rect width="400" height="640" fill="url(#${id})"/>
+    ${[[60,'#ff5fa8',-1],[200,'#7ff0ff',0],[340,'#c58bff',1]].map(([x,c,k],i)=>`<g opacity=".55"><path d="M${x},0 L${x-70+k*40},560 L${x+70+k*40},560 Z" fill="${c}" opacity=".35"><animate attributeName="opacity" values=".2;.45;.2" dur="${2+i*.6}s" repeatCount="indefinite"/></path></g><circle cx="${x}" cy="6" r="10" fill="${c}"/>`).join('')}
+    <rect y="560" width="400" height="80" fill="#1a0b33"/><rect y="560" width="400" height="3" fill="#ff5fa8" opacity=".8"/>
+    ${R.slice(0,40).map(([a,b,c],i)=>`<circle cx="${(a*400).toFixed(1)}" cy="${(590+b*45).toFixed(1)}" r="${(1.8+c*1.6).toFixed(1)}" fill="${['#ff5fa8','#7ff0ff','#c58bff','#fff27f'][i%4]}"><animate attributeName="opacity" values="1;.3;1" dur="${(1+c).toFixed(1)}s" repeatCount="indefinite"/></circle>`).join('')}`;
+  case 'prom':return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b1546"/><stop offset=".65" stop-color="#4b2a7a"/><stop offset="1" stop-color="#c96aa0"/></linearGradient><radialGradient id="${id}d" cx="35%" cy="35%"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#c9cde0"/><stop offset="1" stop-color="#6d7393"/></radialGradient>
+    <rect width="400" height="640" fill="url(#${id})"/>
+    <path d="M0,40 Q100,90 200,50 T400,50" fill="none" stroke="#fff" stroke-opacity=".35"/>${Array.from({length:14},(_,i)=>{const x=i*30+10,y=40+Math.sin(i/2)*18+18;return `<circle cx="${x}" cy="${y.toFixed(1)}" r="4" fill="#fff3b0"><animate attributeName="opacity" values="1;.35;1" dur="${1.4+(i%4)*.3}s" repeatCount="indefinite"/></circle>`;}).join('')}
+    <line x1="330" y1="0" x2="330" y2="74" stroke="#ccc" stroke-width="1.5"/><circle cx="330" cy="100" r="26" fill="url(#${id}d)"/><g stroke="#fff" stroke-opacity=".5" stroke-width=".8"><line x1="304" y1="100" x2="356" y2="100"/><line x1="330" y1="74" x2="330" y2="126"/><ellipse cx="330" cy="100" rx="13" ry="26" fill="none"/></g>
+    ${R.slice(0,16).map(([a,b,c],i)=>tw(a*400,140+b*420,.5+c*.7,i%2?'#fff':'#ffd8f0',i)).join('')}
+    ${[[50,420,'#ff9cc8'],[78,450,'#c7a8ff'],[352,430,'#9fd8ff']].map(([x,y,c])=>`<ellipse cx="${x}" cy="${y}" rx="18" ry="22" fill="${c}" opacity=".9"/><path d="M${x},${y+22} q-6,30 4,70" fill="none" stroke="#fff" stroke-opacity=".6"/>`).join('')}${floor('#ffb3d1')}`;
+  case 'beach':return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8fa8"/><stop offset=".4" stop-color="#ffc79a"/><stop offset=".62" stop-color="#ffe0a8"/></linearGradient>
+    <rect width="400" height="640" fill="url(#${id})"/><circle cx="200" cy="380" r="70" fill="#fff2a8" opacity=".95"/>
+    <rect y="395" width="400" height="120" fill="#7fc9db"/>${[410,430,455,485].map((y,i)=>`<path d="M${20+i*15},${y} h${60-i*8} M${220-i*10},${y+6} h${70-i*10}" stroke="#fff" stroke-opacity=".6" stroke-width="2" stroke-linecap="round"/>`).join('')}
+    <path d="M0,500 Q200,470 400,500 V640 H0Z" fill="#f7dfb5"/>
+    <g transform="translate(52 330)"><path d="M0,190 Q10,90 0,0" fill="none" stroke="#8b5a3c" stroke-width="7"/>${[-60,-20,20,60,100].map(r=>`<path d="M0,0 q30,-10 60,14 q-30,-2 -60,-14z" fill="#5fae7a" transform="rotate(${r})"/>`).join('')}</g>
+    ${R.slice(0,6).map(([a,b,c],i)=>tw(260+a*130,40+b*150,.6+c*.6,'#fff',i)).join('')}`;
+  case 'neon':return `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#090b2a"/><stop offset=".7" stop-color="#26104d"/><stop offset="1" stop-color="#4a0f4f"/></linearGradient><filter id="${id}g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <rect width="400" height="640" fill="url(#${id})"/>
+    ${R.slice(0,30).map(([a,b,c])=>`<circle cx="${(a*400).toFixed(1)}" cy="${(b*200).toFixed(1)}" r="${(.4+c).toFixed(2)}" fill="#fff" opacity=".6"/>`).join('')}
+    ${[[0,300,60],[55,250,50],[100,330,40],[290,270,55],[340,220,60],[255,340,40]].map(([x,y,w],i)=>`<rect x="${x}" y="${y}" width="${w}" height="${640-y}" fill="#151238"/>${Array.from({length:Math.floor((560-y)/22)},(_,r)=>Array.from({length:Math.floor(w/14)},(_,c)=>((r*3+c+i)%4)?'':`<rect x="${x+5+c*14}" y="${y+10+r*22}" width="6" height="8" fill="${(r+c)%2?'#ffd36e':'#7ff0ff'}" opacity=".8"/>`).join('')).join('')}`).join('')}
+    <g filter="url(#${id}g)" fill="none" stroke-width="3" stroke-linecap="round"><path d="${HEART}" transform="translate(320 150) scale(7)" stroke="#ff4fae" stroke-width=".45"><animate attributeName="opacity" values="1;.55;1;1;.6;1" dur="3s" repeatCount="indefinite"/></path><path d="M30,560 H370" stroke="#7ff0ff"/><path d="M50,120 l14,-24 14,24 z" stroke="#c58bff"/></g>`;
+  }
+  return STAGE_BG;}
+/* =====================================================================
+   DAILY STYLE CHALLENGE + RUNWAY JUDGES
+   ===================================================================== */
+const THEMES=[
+ {id:'galaxy',name:'Galaxy Night',emoji:'🌌',vibe:'galaxy',desc:'Midnight colours, starry sparkle and a dramatic long gown.',colors:['#2b2d5c','#3b2440','#c8b6e2','#151318'],fab:['sequin','velvet','lame','tulle'],sil:['ballgown','mermaid'],len:['floor','train'],ex:{sparkle:'dust'},n:30},
+ {id:'y2k',name:'Y2K Pop',emoji:'💿',vibe:'y2k',desc:'Shiny, silver and bubblegum pink: a mini dress straight out of 2003.',colors:['#e8a0b4','#b8c2c9','#d7e9f7','#f9c6d3'],fab:['lame','sequin','denim','satin'],sil:['cocktail','babydoll'],len:['mini'],ex:{bow:'big'},n:20},
+ {id:'cottage',name:'Cottagecore Picnic',emoji:'🌼',vibe:'cottage',desc:'Soft butter yellow, mint and cream, with ruffles, lace and flowers.',colors:['#fff1c1','#d4f0e3','#fbf7ef','#f1d9b5'],fab:['linen','poplin','chantilly','chiffon'],sil:['babydoll','aline','empire'],len:['midi','knee'],ex:{ruffle:'tiers',trim:'scallop'},n:15},
+ {id:'kpop',name:'K-pop Stage',emoji:'🎤',vibe:'kpop',desc:'Bold black and lilac with lots of shine for a concert-ready look.',colors:['#151318','#c8b6e2','#e8a0b4','#b8c2c9'],fab:['sequin','leather','lame'],sil:['cocktail','sheath'],len:['mini','knee'],ex:{bow:'shoulders'},n:35},
+ {id:'prom',name:'Prom Royalty',emoji:'👑',vibe:'prom',desc:'A floor-length gown in a rich jewel colour, with a crystal bow.',colors:['#7a1630','#2b2d5c','#d9b56c','#e8a0b4'],fab:['satin','charmeuse','tulle','organza'],sil:['ballgown','princess','mermaid'],len:['floor','train'],ex:{bow:'crystal'},n:40},
+ {id:'beach',name:'Beach Sunset',emoji:'🌅',vibe:'beach',desc:'Light, floaty fabrics in peach, sea-glass and sky blue.',colors:['#f4c7cf','#fff1c1','#9fc5c0','#d7e9f7'],fab:['chiffon','georgette','linen'],sil:['empire','aline'],len:['midi','knee'],ex:{sparkle:'aura'},n:15},
+ {id:'neon',name:'Neon City',emoji:'🌃',vibe:'neon',desc:'A sleek night-out look in black and electric colours.',colors:['#151318','#e8a0b4','#c9d6f0','#3b2440'],fab:['lame','leather','sequin'],sil:['sheath','cocktail','mermaid'],len:['mini','knee'],ex:{},n:30},
+ {id:'fairy',name:'Fairy Princess',emoji:'🧚',vibe:'clouds',desc:'Lilac and baby pink layers of tulle with a sprinkle of star dust.',colors:['#e9d8f4','#f9c6d3','#d7e9f7','#fde2e4'],fab:['tulle','organza','chiffon'],sil:['princess','ballgown'],len:['floor'],ex:{sparkle:'dust',bow:'waist'},n:25},
+ {id:'coquette',name:'Coquette Bows',emoji:'🎀',vibe:'atelier',desc:'Blush pink, cream, pearls and bows on a short, sweet dress.',colors:['#fde2e4','#f9c6d3','#fbf7ef','#f4c7cf'],fab:['satin','chantilly','tulle'],sil:['babydoll','cocktail'],len:['mini','knee'],ex:{bow:'shoulders',trim:'pearls'},n:20},
+ {id:'mermaid',name:'Mermaidcore',emoji:'🧜',vibe:'beach',desc:'Sea-green and lilac shimmer on a mermaid silhouette.',colors:['#9fc5c0','#d4f0e3','#c8b6e2','#d7e9f7'],fab:['sequin','lame','chiffon'],sil:['mermaid'],len:['floor','train'],ex:{},n:30},
+];
+const THEME=Object.fromEntries(THEMES.map(t=>[t.id,t]));
+const dayKey=d=>{d=d||new Date();const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;};
+const prevDayKey=k=>{const [y,m,d]=k.split('-').map(Number);return dayKey(new Date(y,m-1,d-1));};
+function todayTheme(d){const k=dayKey(d);let h=2166136261;for(const c of 'style'+k){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return THEMES[(h>>>0)%THEMES.length];}
+function chalState(){const c=S.chal&&typeof S.chal==='object'?S.chal:{};c.hist=c.hist&&typeof c.hist==='object'?c.hist:{};c.streak=c.streak||0;S.chal=c;return c;}
+function streakNow(){const c=chalState();const t=dayKey();return c.last===t||c.last===prevDayKey(t)?c.streak:0;}
+const hexRgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+function hslRgb(c){const s=c.s/100,l=c.l/100,k=n=>(n+c.h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,9-k(n),1));return [f(0),f(8),f(4)].map(x=>Math.round(x*255));}
+const rgbDist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
+const nearPal=(rgb,pal)=>Math.min(...pal.map(h=>rgbDist(rgb,hexRgb(h))));
+const optName=(k,v)=>((DRESS_OPTS[k]||[]).find(o=>o[0]===v)||[v,v])[1];
+const extraName=(k,v)=>((EXTRA_OPTS[k]||[]).find(o=>o[0]===v)||[v,v])[1];
+/* three judges score a design against a theme (0-100 each); returns scores, comments and 1-5 stars */
+function judgeDesign(design,th){const d=normDress(JSON.parse(JSON.stringify(design.dress)));const P=d.parts;const gems=(design.gems||[]).filter(q=>GEM[q.g]);
+  const cs=(hex,w)=>w*Math.max(0,1-nearPal(hexRgb(hex),th.colors)/170);
+  const dressCol=(cs(P.skirt.c,.5)+cs(P.bodice.c,.3)+cs(P.sleeves.c,d.sleeves==='none'?0:.2))/(d.sleeves==='none'?.8:1);
+  const gemCol=gems.length?gems.filter(q=>nearPal(hslRgb(GEM[q.g].c),th.colors)<150).length/gems.length:0;
+  const colour=Math.round(100*(dressCol*.75+gemCol*.25));
+  const fabs=[P.skirt.f,P.bodice.f,P.overlay&&P.overlay.f].filter(Boolean);
+  const exK=Object.keys(th.ex),exHit=exK.filter(k=>d.extras[k]===th.ex[k]).length;
+  const st={sil:th.sil.includes(d.silhouette),len:th.len.includes(d.length),fab:th.fab.includes(P.skirt.f),fab2:fabs.slice(1).some(f=>th.fab.includes(f)),vibe:design.vibe===th.vibe,ex:exK.length?exHit/exK.length:1};
+  const style=Math.round(30*st.sil+20*st.len+20*st.fab+10*st.fab2+10*st.vibe+10*st.ex);
+  const n=gems.length,kinds=new Set(gems.map(q=>q.g)).size,sizes=new Set(gems.map(q=>q.s)).size;
+  const sym=n?gems.filter(q=>Math.abs(q.x-200)<3||gems.some(o=>o!==q&&Math.abs(o.x-(400-q.x))<4&&Math.abs(o.y-q.y)<4)).length/n:0;
+  const sparkle=Math.round(55*Math.min(1,n/th.n)+20*Math.min(1,kinds/4)+15*sym+10*Math.min(1,(sizes-1)/1));
+  const total=Math.round((colour+style+sparkle)/3);
+  const stars=total>=86?5:total>=72?4:total>=56?3:total>=38?2:1;
+  const cheer=s=>s>=90?'Iconic. No notes ✨':s>=75?'Serving looks! 💅':s>=55?'Cute, nearly there!':s>=35?'Good start, keep going!':'Hmm, not giving the theme yet.';
+  const tips={colour:dressCol<.6?'Try colours from the theme palette for the skirt and bodice.':gemCol<.5?'Pick gems in the theme colours.':'Love this palette!',
+    style:!st.sil?`A ${optName('silhouette',th.sil[0])} silhouette would fit this theme.`:!st.len?`Try a ${optName('length',th.len[0]).toLowerCase()} length.`:!st.fab?`${FABRICS[th.fab[0]].name} would be perfect for the skirt.`:!st.vibe?`Set the ${VIBE[th.vibe][1]} vibe as your backdrop.`:st.ex<1?`Add the ${exK.filter(k=>d.extras[k]!==th.ex[k]).map(k=>extraName(k,th.ex[k]).toLowerCase())[0]}.`:'The styling is perfect.',
+    sparkle:n<th.n?`More sparkle! Aim for ${th.n}+ gems (you have ${n}).`:kinds<4?'Mix at least 4 different gems.':sym<.6?'Try 🪞 Mirror for a balanced design.':'Dazzling gem work!'};
+  return{judges:[
+    {id:'luna',name:'Luna',role:'Colour',face:'🌙',score:colour,line:cheer(colour),tip:tips.colour},
+    {id:'kiki',name:'Kiki',role:'Style',face:'🎀',score:style,line:cheer(style),tip:tips.style},
+    {id:'gemma',name:'Gemma',role:'Sparkle',face:'💎',score:sparkle,line:cheer(sparkle),tip:tips.sparkle}],total,stars};}
+const starsTxt=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+/* record today's runway result: best stars per day, a daily streak, and a sparkle-point reward for first walks and improvements */
+function recordRunway(stars){const c=chalState();const t=dayKey();const prev=c.hist[t]||0;let reward=0;
+  if(c.last!==t){c.streak=c.last===prevDayKey(t)?c.streak+1:1;c.last=t;reward+=100;}
+  if(stars>prev){reward+=40*(stars-prev);c.hist[t]=stars;}
+  c.bestStreak=Math.max(c.bestStreak||0,c.streak);const ks=Object.keys(c.hist).sort();while(ks.length>60)delete c.hist[ks.shift()];
+  S.points+=reward;save();hud();return{reward,prev,streak:c.streak,isNew:stars>prev};}
+function themeCardHTML(th){return `<div class="th-head" style="background:linear-gradient(120deg,rgba(42,20,88,.78),rgba(122,45,143,.45) 60%,rgba(255,95,168,.25)),${VIBE[th.vibe][3]}"><span class="th-emoji">${th.emoji}</span><div><div class="opt-label th-lbl">🔥 Today's style challenge</div><h2>${esc(th.name)}</h2></div></div>
+  <p class="th-desc">${esc(th.desc)}</p>
+  <div class="th-wants"><div class="opt-label">The judges love</div>
+   <div class="th-row"><span class="th-k">Colours</span>${th.colors.map(c=>`<i class="th-sw" style="background:${c}" title="${c}"></i>`).join('')}</div>
+   <div class="th-row"><span class="th-k">Fabrics</span>${th.fab.map(f=>`<span class="th-chip">${esc(FABRICS[f].name)}</span>`).join('')}</div>
+   <div class="th-row"><span class="th-k">Shape</span>${th.sil.map(v=>`<span class="th-chip">${esc(optName('silhouette',v))}</span>`).join('')}${th.len.map(v=>`<span class="th-chip">${esc(optName('length',v))}</span>`).join('')}</div>
+   <div class="th-row"><span class="th-k">Extras</span><span class="th-chip">${VIBE[th.vibe][2]} ${esc(VIBE[th.vibe][1])} vibe</span>${Object.entries(th.ex).map(([k,v])=>`<span class="th-chip">${esc(extraName(k,v))}</span>`).join('')}<span class="th-chip">💎 ${th.n}+ gems</span></div></div>`;}
+function openChallenge(){const th=todayTheme();const c=chalState();const best=c.hist[dayKey()]||0;const sk=streakNow();
+  const m=modal(`<div class="chal">${themeCardHTML(th)}
+    <div class="th-status">${best?`Your best today: <b class="stars">${starsTxt(best)}</b>`:'Not styled yet today.'} ${sk?`· 🔥 <b>${sk}-day streak</b>`:''}</div>
+    <div class="tools th-acts"><button class="btn primary" id="chStart">✂️ Style a new look</button>${S.draft&&S.draft.gems&&S.draft.gems.length?'<button class="btn" id="chMine">🌟 Judge my current dress</button>':''}</div>
+    <p class="small muted">A new theme every day. Walk the runway once a day to keep your streak going.</p></div>`);
+  $('#chStart',m.el).onclick=()=>{AudioFX.chime();startChallengeDress(th);};
+  const mine=$('#chMine',m.el);mine&&(mine.onclick=()=>{go('design');openRunway();});}
+function startChallengeDress(th){const D=S.draft;
+  if(D&&D.gems&&D.gems.length&&!D.id){saveDraftToGallery();toast('Your last dress was saved to your gallery 🖼️',3000);}
+  const nd=DEFAULT_DRAFT();nd.name=th.name+' look';nd.vibe=th.vibe;nd.chal=dayKey();S.draft=nd;save();go('design');}
+/* the runway: the dress walks in on its vibe, three judges reveal their scores, then stars, streak and share */
+function openRunway(design){const d=design||draftDesign();const th=todayTheme();const R=judgeDesign(d,th);const rm=REDUCED_MOTION();
+  const res=recordRunway(R.stars);const run={theme:th.id,stars:R.stars,score:R.total,day:dayKey()};
+  if(!design){S.draft.runway=run;save();if(S.draft.id){const g=GALLERY.find(x=>x.id===S.draft.id);if(g&&!g.minted){g.runway=run;saveGallery();}}}
+  d.runway=run;
+  const m=modal(`<div class="runway ${rm?'still':''}"><div class="rw-stage">${dressSVG(d,{prefix:'rw'})}<div class="rw-flash" aria-hidden="true"></div><div class="rw-tag">${th.emoji} ${esc(th.name)}</div></div>
+    <div class="rw-side"><div class="opt-label">🌟 Runway · today's theme</div><h2 class="rw-title">${esc(d.name)}</h2>
+    <div class="rw-judges">${R.judges.map((j,i)=>`<div class="rw-j" style="animation-delay:${rm?0:.5+i*.55}s"><span class="rw-face">${j.face}</span><div class="rw-jt"><b>${j.name}</b> <span class="small muted">${j.role}</span><div class="small">${esc(j.line)}</div><div class="small muted">${esc(j.tip)}</div></div><span class="rw-score" data-v="${j.score}">${rm?j.score:0}</span></div>`).join('')}</div>
+    <div class="rw-total" style="animation-delay:${rm?0:2.3}s"><div class="stars big" aria-label="${R.stars} of 5 stars">${starsTxt(R.stars)}</div>
+      <div class="small"><b>${R.total}</b>/100${res.reward?` · +${res.reward} ✨`:''}${res.isNew&&res.prev?' · New best today!':''} · 🔥 ${res.streak}-day streak</div>
+      <div class="tools"><button class="btn primary small" id="rwShare">📲 Share card</button><button class="btn small" id="rwKeep">✂️ Keep styling</button></div></div></div></div>`);
+  AudioFX.fanfare();
+  if(!rm){$$('.rw-score',m.el).forEach((el,i)=>{const v=+el.dataset.v;setTimeout(()=>{const t0=performance.now();const f=t=>{const k=Math.min(1,(t-t0)/600);el.textContent=Math.round(v*k);if(k<1)requestAnimationFrame(f);else AudioFX.soft();};requestAnimationFrame(f);},700+i*550);});
+    setTimeout(()=>{if(R.stars>=4)kawaiiConfetti(48);},2400);}
+  $('#rwShare',m.el).onclick=()=>openShareCard(d);
+  $('#rwKeep',m.el).onclick=()=>m.close();
+  return R;}
+/* =====================================================================
+   STORY SHARE CARD (1080 x 1920 PNG): download or share with the Web Share API
+   ===================================================================== */
+async function svgToImg(svg){const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));const img=new Image();
+  try{await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url;});}finally{setTimeout(()=>URL.revokeObjectURL(url),1000);}return img;}
+function rrect(x,X,Y,W,H,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+W,Y,X+W,Y+H,r);x.arcTo(X+W,Y+H,X,Y+H,r);x.arcTo(X,Y+H,X,Y,r);x.arcTo(X,Y,X+W,Y,r);x.closePath();}
+async function makeShareCard(d){const W=1080,H=1920;const cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  try{await Promise.all([document.fonts.load('700 80px Fredoka'),document.fonts.load('700 40px Nunito')]);}catch(e){}
+  const vb=VIBE[d.vibe]||VIBE.atelier;const dark=['galaxy','kpop','prom','neon'].includes(d.vibe);
+  const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#ffd1e6');g.addColorStop(.5,'#e3d3ff');g.addColorStop(1,'#c9ecff');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.globalAlpha=.55;x.fillStyle='#fff';for(let i=0;i<70;i++){const a=(i*137.5)%W,b=(i*251)%H;x.font=`${18+(i%5)*8}px sans-serif`;x.fillText(['♥','✦','✧','♡'][i%4],a,b);}x.globalAlpha=1;
+  // framed dress photo
+  const fx=90,fy=250,fw=900,fh=1440;x.save();x.shadowColor='rgba(120,60,140,.35)';x.shadowBlur=50;x.shadowOffsetY=18;rrect(x,fx-18,fy-18,fw+36,fh+36,70);x.fillStyle='#fff';x.fill();x.restore();
+  const img=await svgToImg(dressSVG(d,{prefix:'sc',width:900}));x.save();rrect(x,fx,fy,fw,fh,54);x.clip();x.drawImage(img,fx,fy,fw,fh);x.restore();
+  // header: mascot + logo
+  const mas=await svgToImg(mascotSVG('m','happy').replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" '));x.drawImage(mas,80,48,150,150);
+  x.textBaseline='alphabetic';x.font='700 92px Fredoka, Nunito, sans-serif';const lg=x.createLinearGradient(250,0,900,0);lg.addColorStop(0,'#ff5fa8');lg.addColorStop(1,'#8b6cff');x.fillStyle=lg;x.fillText('Jewel Dress',250,150);
+  x.font='700 34px Nunito, sans-serif';x.fillStyle='#8a5fb8';x.fillText(d.runway&&THEME[d.runway.theme]?`${THEME[d.runway.theme].name} challenge`:'my gem couture look',254,200);
+  // title sticker on the photo
+  const name=String(d.name||'My Dress');x.font='700 70px Fredoka, Nunito, sans-serif';const tw=Math.min(860,x.measureText(name).width+90);
+  x.save();x.translate(W/2,fy+fh-40);x.rotate(-.03);x.shadowColor='rgba(120,60,140,.3)';x.shadowBlur=20;rrect(x,-tw/2,-62,tw,104,52);x.fillStyle='#fff';x.fill();x.restore();
+  x.save();x.translate(W/2,fy+fh-40);x.rotate(-.03);x.textAlign='center';x.fillStyle='#5b3a86';x.fillText(name,0,12,tw-60);x.restore();
+  // stats row
+  x.textAlign='center';x.font='700 46px Nunito, sans-serif';x.fillStyle='#5b3a86';
+  const kinds=new Set((d.gems||[]).map(q=>q.g)).size;x.fillText(`${(d.gems||[]).length} gems · ${kinds} kinds · ${vb[1]}`,W/2,1790);
+  if(d.runway){x.font='700 64px sans-serif';x.fillStyle='#ffb400';x.fillText(starsTxt(d.runway.stars),W/2,1868);}
+  else{x.font='600 34px Nunito, sans-serif';x.fillStyle='#8a7896';x.fillText('styled in Jewel Dress ✨',W/2,1860);}
+  x.textAlign='left';
+  return await new Promise(r=>cv.toBlob(r,'image/png'));}
+const cardFileName=d=>((d.name||'jewel-dress').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase()||'jewel-dress')+'-story.png';
+async function openShareCard(d){let blob;try{blob=await makeShareCard(d);}catch(e){console.warn(e);toast('Sorry, the share card could not be made in this browser');return;}
+  const url=URL.createObjectURL(blob);const file=window.File?new File([blob],cardFileName(d),{type:'image/png'}):null;
+  const canShare=!!(file&&navigator.canShare&&navigator.share&&navigator.canShare({files:[file]}));
+  const m=modal(`<div class="sharecard"><div class="opt-label">📲 Story card</div><h2>Show off your look</h2>
+    <img class="sc-img" src="${url}" alt="Story card of ${esc(d.name)}">
+    <p class="small muted">Story-sized (9:16) picture for your stories or your camera roll. It is made on your device; nothing is uploaded.</p>
+    <div class="tools">${canShare?'<button class="btn primary" id="scShare">📲 Share</button>':''}<button class="btn ${canShare?'':'primary'}" id="scDl">⬇︎ Download</button></div></div>`,()=>setTimeout(()=>URL.revokeObjectURL(url),500));
+  $('#scDl',m.el).onclick=()=>{const a=document.createElement('a');a.href=url;a.download=cardFileName(d);document.body.appendChild(a);a.click();a.remove();toast('Story card saved ⬇︎');};
+  const sb=$('#scShare',m.el);sb&&(sb.onclick=async()=>{try{await navigator.share({files:[file],title:d.name,text:'My Jewel Dress look ✨'});}catch(e){}});
+  return blob;}
 /* =====================================================================
    BOOT
    ===================================================================== */
