@@ -54,6 +54,7 @@ header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:
 main{max-width:1280px;margin:0 auto;padding:14px}
 .screen{animation:fade .35s ease}
 @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes fadeonly{from{opacity:0}to{opacity:1}}
 /* ---------- menu ---------- */
 .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;min-height:calc(100vh - 110px)}
 .hero h1{font-size:clamp(40px,6vw,72px);line-height:1;color:var(--plum)}
@@ -400,6 +401,71 @@ input[type=text]{border-radius:14px}
 .gstars{color:#ffb400;letter-spacing:1px}
 @media (max-width:760px){.runway{grid-template-columns:1fr}.rw-stage{border-radius:29px 29px 0 0;max-height:46vh}.rw-stage svg{width:62%;margin:0 auto}.rw-side{padding:16px}.th-head h2{font-size:28px}.th-emoji{font-size:42px}.mcard.chal:after{display:none}}
 /* Respect the system "reduce motion" setting: calm CSS motion here, SVG sparkles are paused in JS */
+
+/* ---- compact designer panel (sections + action bar) ---- */
+.play .center{min-width:0}
+.actbar{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:4px 2px 8px;margin-bottom:2px}
+.actbar::-webkit-scrollbar{display:none}
+.actbar>*{flex:none}.actbar .grow{flex:1 1 0;min-width:4px}
+.actbar .btn.small,.actbar .seg button{white-space:nowrap}
+.actbar .ab{padding:7px 11px;min-width:38px}
+.actbar .seg button{padding:6px 11px}
+.play.designer{grid-template-columns:330px minmax(0,1fr) 250px}
+.dpanel{position:sticky;top:72px;height:calc(100vh - 88px);display:flex;flex-direction:column;padding:10px;overflow:hidden}
+.dtabs{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
+.dtabs button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 2px 5px;border:2px solid #fff;background:rgba(255,255,255,.75);border-radius:14px;box-shadow:0 3px 0 #f3d6e5;font-size:10.5px;font-weight:700;color:var(--ink);transition:transform .25s var(--bounce)}
+.dtabs button i{font-style:normal;font-size:18px;line-height:1.1}
+.dtabs button:hover{transform:translateY(-2px)}
+.dtabs button.on{background:linear-gradient(135deg,#ff8fbf,#b993ff);color:#fff;border-color:transparent;box-shadow:0 3px 8px rgba(169,139,255,.35)}
+#tabBody{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:0 2px 4px}
+.dsec-h{display:flex;flex-direction:column;margin:0 0 8px}.dsec-h b{font-family:var(--serif);font-size:17px;color:var(--plum)}.dsec-h span{font-size:12px;color:var(--muted)}
+.dpanel .orow{margin-bottom:6px}
+.dpanel .chips{gap:5px;margin:3px 0 6px}
+.dpanel .chip{padding:4px 10px;font-size:12px}
+.dpanel .opt-label{font-size:11px;margin-top:2px}
+.dpanel .btn.surprise{margin:0 0 8px}
+.nextsec{display:block;width:100%;margin-top:8px}
+.partseg{display:flex;margin:0 0 8px}.partseg button{flex:1;padding:6px 4px}
+.fabgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:0 0 6px}
+.fabtile{min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px 3px;border:2px solid #fff;background:rgba(255,255,255,.8);border-radius:12px;box-shadow:0 2px 0 #f3d6e5;font-size:9.5px;line-height:1.1;font-weight:600;color:var(--ink);transition:transform .25s var(--bounce)}
+.fabtile .fabsw{width:100%;height:24px;border-radius:7px}
+.fabtile .fnone{font-style:normal;height:24px;font-size:18px;line-height:24px;color:var(--muted)}
+.fabtile span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fabtile:hover{transform:translateY(-2px)}
+.fabtile.on{border-color:#ff8fbf;box-shadow:0 0 0 2px rgba(255,143,191,.45);background:#fff}
+.fabline{margin:2px 0 6px;line-height:1.35;color:var(--muted)}
+.dpanel .swatches,.dpanel .ribbons{gap:5px;margin:3px 0 8px}.dpanel .sw{width:24px;height:24px}
+.vibegrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.vibegrid .vibechip{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 4px;border:2px solid #fff;background:rgba(255,255,255,.8);border-radius:14px;box-shadow:0 2px 0 #f3d6e5;font-size:11px;font-weight:600;color:var(--ink);text-align:center;line-height:1.15}
+.vibegrid .vibechip i{width:100%;height:46px;border-radius:10px;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.vibegrid .vibechip.on{background:linear-gradient(135deg,#ff8fbf,#b993ff);color:#fff;border-color:transparent}
+#tabBody{display:flex;flex-direction:column}#tabBody>*{flex:none}
+#tabBody>.dsec-gems{flex:1 1 auto;min-height:260px;display:flex;flex-direction:column}
+.dsec-gems #pal{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}.dsec-gems .palfind{flex:none}.dsec-gems .palette{flex:1 1 auto;min-height:0;overflow-y:auto}
+.gemtools .cutseg{margin:3px 0 6px}
+.gemrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}.gemrow .opt-label{margin:0}
+.dpanel .palette{max-height:none}
+.play:not(.designer) .palette{max-height:min(calc(100vh - 430px),480px);min-height:150px}
+.dhint{margin:6px 0 0;font-size:11.5px}
+.dright h3{display:none}.dright .rw-cta .btn{width:100%}.dright .tools{margin:8px 0}.dtip{font-size:11.5px}
+.play .stagewrap svg.stage{max-height:calc(100vh - 145px)}
+@media (max-width:1100px){.play.designer{grid-template-columns:300px minmax(0,1fr)}.play.designer .right{grid-column:1/-1}}
+@media (max-width:760px){
+  .play.designer{grid-template-columns:1fr;padding-bottom:calc(32vh + 84px)}
+  .screen.designer{animation:fadeonly .35s ease}
+  .play.designer.sheet-closed{padding-bottom:84px}
+  .designer .center{order:1}.designer .right{order:3}
+  .dpanel{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;z-index:30;border-radius:24px 24px 0 0;padding:8px 8px calc(6px + env(safe-area-inset-bottom));flex-direction:column-reverse;box-shadow:0 -8px 28px rgba(194,65,127,.18)}
+  .dtabs{margin:6px 0 0}
+  .dtabs button{font-size:10px;padding:5px 1px 4px}
+  #tabBody{height:32vh;flex:none}
+  .sheet-closed #tabBody{display:none}
+  .designer .stagewrap svg.stage{max-height:calc(68vh - 205px)}
+  .designer.sheet-closed .stagewrap svg.stage{max-height:calc(100vh - 200px)}
+  .actbar .abl,.actbar #modeSeg span,.actbar .grow{display:none}.actbar{gap:4px;justify-content:space-between}.actbar .ab{padding:6px 7px;min-width:34px}.actbar .seg button{padding:5px 8px}
+  .vibegrid{grid-template-columns:repeat(3,1fr)}.vibegrid .vibechip i{height:34px}
+  .dpanel .palette{grid-template-columns:repeat(auto-fill,minmax(56px,1fr))}
+}
 @media (prefers-reduced-motion: reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -2269,7 +2335,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Under <b>Gem relatives</b>, tap a gem made of the same mineral (like ruby and sapphire, both corundum) to compare them. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
    <li><b>🎲 Random gem:</b> in the encyclopedia, open the story of a random discovered gem (ones you have not read yet come first), then keep browsing with Prev/Next.</li>
    <li><b>🧠 Gem quiz:</b> in the encyclopedia, answer five quick questions about the gems you have discovered (their mineral family, which is harder, birthstone months). Your best score is saved.</li>
-   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
+   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. The controls are grouped into seven sections (👗 Shape, 🧵 Fabric, 🔥 Trendy, 👜 Extras, 🎀 Cute, ✨ Vibe and 💎 Gems; use the arrow keys to switch between them), and the bar above the dress always has Place / Erase, Undo, Redo, Clear, Save, Story card and Runway. On a phone the sections open in a sheet at the bottom; tap the open section again to fold it away and see the whole dress. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
    <li><b>🔥 Daily challenge:</b> every day has a new style theme (like Galaxy Night or Y2K Pop). Style a look, tap <b>🌟 Walk the runway</b> and three judges rate its colours, style and sparkle out of 100, for up to 5 stars. Walk once a day to grow your streak. Pick a <b>✨ Vibe</b> backdrop and <b>🔥 Trendy pieces</b> (co-ord sets, crop tops, hoodies, corsets, butterfly tops, jackets, hats, bags, necklaces and shoes) in the designer, and tap <b>📲 Story card</b> to download or share a story-sized picture of your look.</li>
    <li><b>💾 Backup:</b> your progress is saved only in this browser. From the main menu, download a backup file now and then; restoring it (here or in another browser) brings back your gems, milestones and gallery.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
@@ -2316,11 +2382,10 @@ function screenPlay(){
    <aside class="panel left"><div class="opt-label">Level ${S.level}</div><h3>${esc(spec.preset.name)}</h3>
      <p class="small muted" style="margin:0">Set a gem on every marked spot. Gem quality: <b>${TIERS[t].name}</b> (${TIERS[t].desc}). Every gem you place counts toward your next atelier upgrade.</p>
      <div class="progress"><i id="prog"></i></div><div class="small muted" id="progTxt"></div>
-     <div class="opt-label" style="margin-top:12px">Your gems</div><div id="pal"></div>
-     <div class="tools"><div class="seg" id="modeSeg"><button data-m="place" class="on">💎 Place</button><button data-m="erase">🧽 Eraser</button></div></div>
-     <div class="tools"><button class="btn small" id="undoBtn" title="Undo (Ctrl+Z / ⌘Z)" aria-keyshortcuts="Control+Z Meta+Z">↶ Undo</button><button class="btn small" id="redoBtn" title="Redo (Ctrl+Shift+Z / ⌘⇧Z / Ctrl+Y)" aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z Control+Y">↷ Redo</button><button class="btn small" id="clearBtn">Clear all</button></div>
-     <p class="small muted" style="margin:6px 0 0">Tap a gem on the dress to remove it (or long-press / right-click). The eraser removes several at once as you drag.</p></aside>
-   <div class="center" id="stageHost"></div>
+     <div class="opt-label" style="margin-top:10px">Your gems</div><div id="pal"></div>
+     <p class="small muted dhint">Tap a gem on the dress to remove it (or long-press / right-click). The eraser removes several at once as you drag.</p></aside>
+   <div class="center"><div class="actbar" role="toolbar" aria-label="Gem tools"><div class="seg" id="modeSeg" role="group" aria-label="Tool"><button data-m="place" class="on" aria-pressed="true" title="Place gems">💎<span> Place</span></button><button data-m="erase" aria-pressed="false" title="Eraser: drag over gems to remove several">🧽<span> Erase</span></button></div>
+     <button class="btn small ab" id="undoBtn" title="Undo (Ctrl+Z / ⌘Z)" aria-label="Undo" aria-keyshortcuts="Control+Z Meta+Z">↶</button><button class="btn small ab" id="redoBtn" title="Redo (Ctrl+Shift+Z / ⌘⇧Z / Ctrl+Y)" aria-label="Redo" aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z Control+Y">↷</button><button class="btn small ab" id="clearBtn" title="Remove every gem (you can undo)" aria-label="Clear all gems">🗑️<span class="abl"> Clear</span></button></div><div id="stageHost"></div></div>
    <aside class="panel right"><h3>Atelier notes</h3>
      <p class="small">${spec.unlocks.length?`Finish this dress to unlock: <b>${(n=>n.length>1?n.slice(0,-1).join('</b>, <b>')+'</b> and <b>'+n[n.length-1]:n[0])(spec.unlocks.map(id=>esc(GEM[id].name)))}</b>.`:'You have discovered every gem. Keep designing for sparkle points!'}</p>
      <p class="small muted">Rarer gems are worth more sparkle points. Matching gems in a row looks elegant, but any combination counts.</p>
@@ -2338,7 +2403,7 @@ function screenPlay(){
   const select=(gid,quiet)=>{P.sel=gid;if(!quiet)AudioFX.soft();drawPal();save();};
   let mode='place';
   const ed=gemEditor(stage,()=>P.gems,{onRemove:q=>{if(q.spot!=null&&P.spots[q.spot])P.spots[q.spot].filled=false;},onRestore:q=>{if(q.spot!=null&&P.spots[q.spot])P.spots[q.spot].filled=true;},changed:()=>{stage.setSpots(P.spots);save();upd();}});UNDO_FN=()=>ed.undo();REDO_FN=()=>ed.redo();
-  const setMode=m=>{mode=m;stage.setErasing(m==='erase');$$('#modeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));upd();};
+  const setMode=m=>{mode=m;stage.setErasing(m==='erase');$$('#modeSeg button').forEach(b=>{b.classList.toggle('on',b.dataset.m===m);b.setAttribute('aria-pressed',b.dataset.m===m);});upd();};
   $$('#modeSeg button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
   ON_MS=()=>{drawPal();};
   const place=(gid,p,cx,cy,drop)=>{
@@ -2380,19 +2445,29 @@ function levelComplete(){
   $('#galBtn',m.el).onclick=()=>go('gallery');
 }
 /* ---------- custom dress designer ---------- */
+const DSECS=[['shape','👗','Shape','Silhouette, neckline, sleeves and length'],['fabric','🧵','Fabric','Fabrics, prints and colours for each part'],['style','🔥','Trendy','Tops, skirts and jackets'],['acc','👜','Extras','Necklaces, hats, bags and shoes'],['cute','🎀','Cute','Bows, ruffles, trims and sparkle'],['vibe','✨','Vibe','The backdrop behind your dress'],['gems','💎','Gems','Pick a gem, cut and size, then set it']];
+let DTAB=null,DSHEET=true;
+const FOCUS_ATTRS=['k','v','x','xv','f','c','bc','vibe','part','s','cut'];
+function focusKey(el,root){if(!el||!root||!root.contains(el)||el===root)return null;if(el.id)return '#'+el.id;const a=FOCUS_ATTRS.filter(k=>el.dataset&&el.dataset[k]!=null);return a.length?a.map(k=>`[data-${k.replace(/[A-Z]/g,m=>'-'+m.toLowerCase())}="${el.dataset[k]}"]`).join(''):null;}
 function screenDesign(arg){
   if(arg&&arg.load){S.draft=JSON.parse(JSON.stringify({id:arg.load.id,name:arg.load.name,dress:arg.load.dress,gems:arg.load.gems,vibe:arg.load.vibe||'atelier',runway:arg.load.runway}));save();}
-  const D=S.draft; D.gems=D.gems||[]; normDress(D.dress); let tab=D.gems.length?'gems':'design'; let size=16, mode='place', cut='natural', part='skirt';
+  if(arg&&arg.tab)DTAB=arg.tab;
+  const D=S.draft; D.gems=D.gems||[]; normDress(D.dress); let tab=DTAB&&DSECS.some(x=>x[0]===DTAB)?DTAB:D.gems.length?'gems':'shape'; let size=16, mode='place', cut='natural', part='skirt';
   let sel=D.sel&&S.unlocked.includes(D.sel)?D.sel:S.unlocked[S.unlocked.length-1];
-  app().innerHTML=`<section class="screen play">
-    <aside class="panel left"><div class="tabs"><button data-tab="design">✂️ Dress</button><button data-tab="gems">💎 Gems</button></div><div id="tabBody"></div></aside>
-    <div class="center" id="stageHost"></div>
-    <aside class="panel right">${(th=>`<div class="rw-cta${D.chal===dayKey()?' on':''}"><div class="small"><b>${th.emoji} Today: ${esc(th.name)}</b>${streakNow()?` · 🔥 ${streakNow()}`:''}</div><button class="btn primary" id="runBtn">🌟 Walk the runway</button><button class="btn small" id="themeBtn" title="What the judges want today">👀 Theme</button></div>`)(todayTheme())}<h3>Your creation</h3>
+  const sheetOpen=DSHEET;
+  app().innerHTML=`<section class="screen play designer${sheetOpen?'':' sheet-closed'}">
+    <aside class="panel left dpanel" aria-label="Design controls"><div class="dtabs" role="tablist" aria-label="Design sections">${DSECS.map(([k,ic,l,h])=>`<button role="tab" id="dt-${k}" data-tab="${k}" aria-controls="tabBody" aria-selected="false" tabindex="-1" title="${l}: ${h}"><i aria-hidden="true">${ic}</i><span>${l}</span></button>`).join('')}</div><div id="tabBody" role="tabpanel" tabindex="-1"></div></aside>
+    <div class="center"><div class="actbar" role="toolbar" aria-label="Dress tools">
+      <div class="seg" id="modeSeg" role="group" aria-label="Tool"><button data-m="place" class="${mode==='place'?'on':''}" aria-pressed="${mode==='place'}" title="Place gems">💎<span> Place</span></button><button data-m="erase" class="${mode==='erase'?'on':''}" aria-pressed="${mode==='erase'}" title="Eraser: drag over gems to remove several">🧽<span> Erase</span></button></div>
+      <button class="btn small ab" id="undoBtn" title="Undo (Ctrl+Z / ⌘Z)" aria-label="Undo" aria-keyshortcuts="Control+Z Meta+Z">↶</button><button class="btn small ab" id="redoBtn" title="Redo (Ctrl+Shift+Z / ⌘⇧Z / Ctrl+Y)" aria-label="Redo" aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z Control+Y">↷</button><button class="btn small ab" id="clearBtn" title="Remove every gem (you can undo)" aria-label="Clear all gems">🗑️<span class="abl"> Clear</span></button>
+      <span class="grow"></span>
+      <button class="btn small ab" id="saveBtn" title="Save to your gallery">💾<span class="abl"> Save</span></button><button class="btn small ab" id="cardBtn" title="A story-sized picture to share" aria-label="Story card">📲<span class="abl"> Card</span></button><button class="btn small primary ab" id="runBtn" title="Walk the runway for today's judges">🌟<span> Runway</span></button>
+    </div><div id="stageHost"></div></div>
+    <aside class="panel right dright">${(th=>`<div class="rw-cta${D.chal===dayKey()?' on':''}"><div class="small"><b>${th.emoji} Today: ${esc(th.name)}</b>${streakNow()?` · 🔥 ${streakNow()}`:''}</div><button class="btn small" id="themeBtn" title="What the judges want today">👀 What the judges want</button></div>`)(todayTheme())}
       <label class="opt-label" for="dname">Dress name</label><input type="text" id="dname" maxlength="31" value="${esc(D.name||'')}">
-      <div class="tools" style="margin-top:12px"><button class="btn primary small" id="saveBtn">💾 Save to gallery</button><button class="btn small" id="pngBtn">⬇︎ Download PNG</button><button class="btn small" id="cardBtn" title="A story-sized picture to share">📲 Story card</button></div>
-      <div class="tools"><button class="btn small" id="newBtn">✚ New dress</button><button class="btn small" data-go="gallery">🖼️ Gallery</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" id="mintBtn">✦ Mint on Starknet</button>':''}</div>
+      <div class="tools"><button class="btn small" id="pngBtn" title="Download a PNG picture">⬇︎ PNG</button><button class="btn small" id="newBtn" title="Start a new dress">✚ New</button><button class="btn small" data-go="gallery">🖼️ Gallery</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" id="mintBtn">✦ Mint on Starknet</button>':''}</div>
       <p class="small muted" id="dinfo"></p>
-      <p class="small muted">Tip: gems you unlock in the atelier levels appear here. Every gem you place (here or in levels) counts toward atelier upgrades: more realistic gems and new cute touches (now: <b>${TIERS[curTier()].name}</b>, ${(S.placed||0).toLocaleString('en')} gems placed).</p></aside></section>`;
+      <p class="small muted dtip">💡 Every gem you place counts toward atelier upgrades: now <b>${TIERS[curTier()].name}</b>, ${(S.placed||0).toLocaleString('en')} gems placed.</p></aside></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
   const stage=createStage($('#stageHost'),D.dress);stage.setVibe(D.vibe);stage.renderGems(D.gems);
   const ed=gemEditor(stage,()=>D.gems,{changed:()=>persist()});UNDO_FN=()=>ed.undo();REDO_FN=()=>ed.redo();
@@ -2400,23 +2475,31 @@ function screenDesign(arg){
   const info=()=>{$('#dinfo').textContent=`${D.gems.length} gem${D.gems.length===1?'':'s'} set${D.id?' · saved in gallery':''}`;stage.hud.innerHTML=`<span class="tag">${mode==='erase'?'🧽 Eraser':'💎 '+esc(GEM[sel].name)+(cut!=='natural'?' · '+CUTS.find(c=>c[0]===cut)[1]:'')}</span><button class="tag mirrortag" id="mirrorBtn" aria-pressed="${S.mirror?'true':'false'}" title="Mirror: each gem you set is also set on the other side of the dress">🪞 Mirror ${S.mirror?'on':'off'}</button><span class="tag">${D.gems.length} gems</span>`;
     $('#mirrorBtn').onclick=()=>{S.mirror=!S.mirror;stage.setMirror(S.mirror);AudioFX.soft();save();info();toast(S.mirror?'🪞 Mirror on: gems are set on both sides':'Mirror off');};};
   const persist=()=>{D.sel=sel;save();info();};
-  const opt=(key,label)=>`<div class="opt-label">${label}</div><div class="chips">${DRESS_OPTS[key].map(([v,l])=>`<button class="chip ${D.dress[key]===v?'on':''}" data-k="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
-  const renderTab=()=>{$$('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
-    const tb=$('#tabBody');
-    if(tab==='design'){const PP=D.dress.parts,cp=PP[part];const flist=part==='overlay'?OVERLAYS:FAB_ORDER;
+  const syncMode=()=>$$('#modeSeg button').forEach(b=>{b.classList.toggle('on',b.dataset.m===mode);b.setAttribute('aria-pressed',b.dataset.m===mode);});
+  const row=(label,html,cls)=>`<div class="orow"><div class="opt-label">${label}</div><div class="chips${cls?' '+cls:''}">${html}</div></div>`;
+  const nextBtn=()=>{const ix=DSECS.findIndex(x=>x[0]===tab);const n=DSECS[ix+1];return n?`<button class="btn small primary nextsec" id="nextSec" data-next="${n[0]}">Next: ${n[1]} ${n[2]} →</button>`:'';};
+  const renderTab=()=>{if(tab==='design')tab='shape';DTAB=tab;
+    $$('[data-tab]').forEach(b=>{const on=b.dataset.tab===tab;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;});
+    const tb=$('#tabBody');const sec=DSECS.find(x=>x[0]===tab);tb.setAttribute('aria-labelledby','dt-'+tab);
+    const same=tb.dataset.sec===tab,sc=tb.scrollTop,fk=focusKey(document.activeElement,tb);tb.dataset.sec=tab;
+    const head=`<div class="dsec-h"><b>${sec[1]} ${sec[2]}</b><span>${sec[3]}</span></div>`;
+    if(tab!=='gems'){const PP=D.dress.parts,cp=PP[part];const flist=part==='overlay'?OVERLAYS:FAB_ORDER;
       const EX=D.dress.extras;
-      const xopt=(k,label)=>`<div class="opt-label">${label}</div><div class="chips">${EXTRA_OPTS[k].map(([v,l])=>{const at=extraUnlockAt(k,v);const lk=at>(S.placed||0);return `<button class="chip ${EX[k]===v?'on':''} ${lk?'locked-chip':''}" data-x="${k}" data-xv="${v}" ${lk?`data-at="${at}" title="Unlocks at ${at} gems placed"`:''}>${lk?'🔒 ':''}${l}</button>`;}).join('')}</div>`;
-      tb.innerHTML=`<button class="btn small surprise" id="surpriseBtn" title="Random dress style, fabrics and colours (your gems stay)">🎲 Surprise me</button>`+
-      `<div class="opt-label">✨ Vibe (backdrop)</div><div class="chips vibes">${VIBES.map(([v,l,e,bg])=>`<button class="chip vibechip ${(D.vibe||'atelier')===v?'on':''}" data-vibe="${v}"><i style="background:${bg}" aria-hidden="true"></i>${e} ${esc(l)}</button>`).join('')}</div>`+opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length')+
-      `<div class="opt-label" style="margin-top:6px;color:#c26a8f">♡ Cute touches</div>`+xopt('bow','Bows')+xopt('ruffle','Ruffles')+xopt('trim','Hem trim')+xopt('sparkle','Sparkle')+
-      `<div class="opt-label trendy-h">🔥 Trendy pieces</div>`+Object.keys(TEEN_OPTS).map(k=>xopt(k,TEEN_LABELS[k])).join('')+
-      `<div class="opt-label">Ribbon &amp; trim colour</div><div class="ribbons">${RIBBONS.map(c=>`<button class="sw ${c==='auto'?'auto':''} ${(EX.bc||'auto')===c?'on':''}" data-bc="${c}" ${c==='auto'?'title="Match the dress"':`style="background:${c}"`} aria-label="Ribbon ${c}"></button>`).join('')}</div>`+
-      `<div class="opt-label">Fabric for…</div><div class="seg" id="partSeg">${DRESS_PARTS.map(([k,l])=>`<button data-part="${k}" class="${part===k?'on':''}">${l}</button>`).join('')}</div>
-      <div class="chips fabchips">${flist.map(f=>`<button class="chip ${cp.f===f?'on':''}" data-f="${f}">${f==='none'?'None':esc(FABRICS[f].name)}</button>`).join('')}</div>
-      ${cp.f!=='none'?`<div class="fabinfo" id="fabInfo">${fabricSwatch(cp.f,cp.c)}<div><b>${esc(FABRICS[cp.f].name)}</b><p class="small">${esc(FABRICS[cp.f].info)}</p></div></div>`:''}
-      <div class="opt-label">${DRESS_PARTS.find(x=>x[0]===part)[1]} colour</div><div class="swatches">${FABRIC_COLORS.map(c=>`<button class="sw ${cp.c===c?'on':''}" data-c="${c}" style="background:${c}" aria-label="Colour ${c}"></button>`).join('')}<input type="color" id="cpick" value="${cp.c}" aria-label="Custom colour"></div>
-      ${part!=='overlay'?`<button class="btn small" id="sameAll">Use this fabric &amp; colour everywhere</button>`:''}
-      <button class="btn small primary" id="toGems">Next: set gems →</button>`;
+      const xopt=(k,label)=>row(label,EXTRA_OPTS[k].map(([v,l])=>{const at=extraUnlockAt(k,v);const lk=at>(S.placed||0);return `<button class="chip ${EX[k]===v?'on':''} ${lk?'locked-chip':''}" data-x="${k}" data-xv="${v}" aria-pressed="${EX[k]===v}" ${lk?`data-at="${at}" title="Unlocks at ${at} gems placed"`:`title="${esc(l)}"`}>${lk?'🔒 ':''}${l}</button>`;}).join(''));
+      const opt=(key,label)=>row(label,DRESS_OPTS[key].map(([v,l])=>`<button class="chip ${D.dress[key]===v?'on':''}" data-k="${key}" data-v="${v}" aria-pressed="${D.dress[key]===v}">${l}</button>`).join(''));
+      let body='';
+      if(tab==='shape')body=`<button class="btn small surprise" id="surpriseBtn" title="Random dress style, fabrics and colours (your gems stay)">🎲 Surprise me</button>`+opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length');
+      else if(tab==='fabric')body=`<div class="seg partseg" id="partSeg" role="group" aria-label="Part of the dress">${DRESS_PARTS.map(([k,l])=>`<button data-part="${k}" class="${part===k?'on':''}" aria-pressed="${part===k}">${l}</button>`).join('')}</div>
+        <div class="fabgrid">${flist.map(f=>`<button class="fabtile ${cp.f===f?'on':''}" data-f="${f}" aria-pressed="${cp.f===f}" title="${f==='none'?'No overlay':esc(FABRICS[f].name+': '+FABRICS[f].info)}">${f==='none'?'<i class="fnone" aria-hidden="true">∅</i>':fabricSwatch(f,cp.c)}<span>${f==='none'?'None':esc(FABRICS[f].name)}</span></button>`).join('')}</div>
+        ${cp.f!=='none'?`<p class="small fabline" id="fabInfo"><b>${esc(FABRICS[cp.f].name)}:</b> ${esc(FABRICS[cp.f].info)}</p>`:''}
+        <div class="opt-label">${DRESS_PARTS.find(x=>x[0]===part)[1]} colour</div><div class="swatches">${FABRIC_COLORS.map(c=>`<button class="sw ${cp.c===c?'on':''}" data-c="${c}" style="background:${c}" aria-label="Colour ${c}" aria-pressed="${cp.c===c}"></button>`).join('')}<input type="color" id="cpick" value="${cp.c}" aria-label="Custom colour" title="Any colour"></div>
+        ${part!=='overlay'?`<button class="btn small" id="sameAll">Use this fabric &amp; colour everywhere</button>`:''}`;
+      else if(tab==='style')body=['top','skirt','layer'].map(k=>xopt(k,TEEN_LABELS[k])).join('');
+      else if(tab==='acc')body=['neck','hat','bag','shoes'].map(k=>xopt(k,TEEN_LABELS[k])).join('');
+      else if(tab==='cute')body=xopt('bow','Bows')+xopt('ruffle','Ruffles')+xopt('trim','Hem trim')+xopt('sparkle','Sparkle')+
+        `<div class="opt-label">Ribbon &amp; trim colour</div><div class="ribbons">${RIBBONS.map(c=>`<button class="sw ${c==='auto'?'auto':''} ${(EX.bc||'auto')===c?'on':''}" data-bc="${c}" ${c==='auto'?'title="Match the dress"':`style="background:${c}"`} aria-label="Ribbon ${c==='auto'?'matches the dress':c}" aria-pressed="${(EX.bc||'auto')===c}"></button>`).join('')}</div>`;
+      else if(tab==='vibe')body=`<div class="vibegrid">${VIBES.map(([v,l,e,bg])=>`<button class="vibechip ${(D.vibe||'atelier')===v?'on':''}" data-vibe="${v}" aria-pressed="${(D.vibe||'atelier')===v}" title="${esc(l)} backdrop"><i style="background:${bg}" aria-hidden="true"></i><span>${e} ${esc(l)}</span></button>`).join('')}</div>`;
+      tb.innerHTML=head+`<div class="dsec">${body}</div>`+nextBtn();
       $$('[data-k]',tb).forEach(b=>b.onclick=()=>{D.dress[b.dataset.k]=b.dataset.v;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
       $$('[data-part]',tb).forEach(b=>b.onclick=()=>{part=b.dataset.part;renderTab();});
       $$('[data-vibe]',tb).forEach(b=>b.onclick=()=>{D.vibe=b.dataset.vibe;stage.setVibe(D.vibe);AudioFX.soft();persist();renderTab();});
@@ -2424,30 +2507,31 @@ function screenDesign(arg){
       $$('[data-bc]',tb).forEach(b=>b.onclick=()=>{EX.bc=b.dataset.bc;stage.setDress(D.dress);persist();renderTab();});
       $$('[data-f]',tb).forEach(b=>b.onclick=()=>{cp.f=b.dataset.f;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
       $$('[data-c]',tb).forEach(b=>b.onclick=()=>{cp.c=b.dataset.c;stage.setDress(D.dress);persist();renderTab();});
-      $('#cpick').oninput=e=>{cp.c=e.target.value;stage.setDress(D.dress);persist();};
-      $('#cpick').onchange=()=>renderTab();
-      const sa=$('#sameAll');sa&&(sa.onclick=()=>{['bodice','skirt','sleeves'].forEach(k=>PP[k]={f:cp.f,c:cp.c});stage.setDress(D.dress);persist();toast(FABRICS[cp.f].name+' everywhere');});
-      $('#toGems').onclick=()=>{tab='gems';renderTab();};
-      $('#surpriseBtn').onclick=()=>{const prev=JSON.parse(JSON.stringify(D.dress));surpriseDress(D.dress);stage.setDress(D.dress);AudioFX.chime();persist();renderTab();
-        toastAct('🎲 A surprise design! Your gems stay put','Undo',()=>{D.dress=prev;stage.setDress(D.dress);AudioFX.soft();persist();if(SCREEN==='design'&&tab==='design')renderTab();},5000);};
+      const cpk=$('#cpick',tb);if(cpk){cpk.oninput=e=>{cp.c=e.target.value;stage.setDress(D.dress);persist();};cpk.onchange=()=>renderTab();}
+      const sa=$('#sameAll',tb);sa&&(sa.onclick=()=>{['bodice','skirt','sleeves'].forEach(k=>PP[k]={f:cp.f,c:cp.c});stage.setDress(D.dress);persist();toast(FABRICS[cp.f].name+' everywhere');});
+      const sb=$('#surpriseBtn',tb);sb&&(sb.onclick=()=>{const prev=JSON.parse(JSON.stringify(D.dress));surpriseDress(D.dress);stage.setDress(D.dress);AudioFX.chime();persist();renderTab();
+        toastAct('🎲 A surprise design! Your gems stay put','Undo',()=>{D.dress=prev;stage.setDress(D.dress);AudioFX.soft();persist();if(SCREEN==='design'&&tab!=='gems')renderTab();},5000);});
     }else{
       const cuts=cutsFor(GEM[sel]);if(!cuts.includes(cut))cut='natural';
-      tb.innerHTML=`<div class="opt-label">Cut</div><div class="seg cutseg" id="cutSeg">${CUTS.filter(c=>cuts.includes(c[0])).map(([v,l])=>`<button data-cut="${v}" class="${cut===v?'on':''}" title="${l}">${gemSVG(GEM[sel],curTier(),'cutic',v)}<span>${v==='natural'?'Classic':l}</span></button>`).join('')}</div>
-        <div class="opt-label">Gem size</div><div class="tools"><div class="seg" id="sizeSeg">${[[10,'S'],[16,'M'],[24,'L'],[34,'XL']].map(([v,l])=>`<button data-s="${v}" class="${size===v?'on':''}">${l}</button>`).join('')}</div>
-        <div class="seg" id="modeSeg"><button data-m="place" class="${mode==='place'?'on':''}">💎 Place</button><button data-m="erase" class="${mode==='erase'?'on':''}">🧽 Eraser</button></div></div>
-        <div id="pal"></div><div class="tools"><button class="btn small" id="undoBtn" title="Undo (Ctrl+Z / ⌘Z)" aria-keyshortcuts="Control+Z Meta+Z">↶ Undo</button><button class="btn small" id="redoBtn" title="Redo (Ctrl+Shift+Z / ⌘⇧Z / Ctrl+Y)" aria-keyshortcuts="Control+Shift+Z Meta+Shift+Z Control+Y">↷ Redo</button><button class="btn small" id="clearBtn">Clear all</button><button class="btn small" id="pattBtn">✨ Auto-trim</button></div>
-        <p class="small muted">Tap a gem, then tap anywhere on the dress (or drag it there). Tap a placed gem to remove it, or long-press / right-click it. The eraser removes several as you drag.</p>`;
+      tb.innerHTML=head+`<div class="dsec dsec-gems"><div class="gemtools"><div><div class="opt-label">Cut</div><div class="seg cutseg" id="cutSeg" role="group" aria-label="Cut">${CUTS.filter(c=>cuts.includes(c[0])).map(([v,l])=>`<button data-cut="${v}" class="${cut===v?'on':''}" aria-pressed="${cut===v}" title="${l}">${gemSVG(GEM[sel],curTier(),'cutic',v)}<span>${v==='natural'?'Classic':l}</span></button>`).join('')}</div></div>
+        <div class="gemrow"><div class="opt-label">Size</div><div class="seg" id="sizeSeg" role="group" aria-label="Gem size">${[[10,'S'],[16,'M'],[24,'L'],[34,'XL']].map(([v,l])=>`<button data-s="${v}" class="${size===v?'on':''}" aria-pressed="${size===v}" title="${l==='S'?'Small':l==='M'?'Medium':l==='L'?'Large':'Extra large'}">${l}</button>`).join('')}</div><button class="btn small" id="pattBtn" title="Trim the neckline, waist and hem with the chosen gem">✨ Auto-trim</button></div></div>
+        <div id="pal"></div>
+        <p class="small muted dhint">Tap a gem, then tap the dress (or drag it there). Tap a placed gem to remove it.</p></div>`;
       const pal=$('#pal');const drawPal=()=>{pal.innerHTML=paletteHTML(mode==='erase'?'':sel);};drawPal();
-      bindPalette(pal,stage,(gid,quiet)=>{sel=gid;mode='place';stage.setErasing(false);if(!quiet)AudioFX.soft();renderTab();persist();},(gid,p,cx,cy)=>{sel=gid;mode='place';stage.setErasing(false);place(p,cx,cy,true);renderTab();});
+      bindPalette(pal,stage,(gid,quiet)=>{sel=gid;mode='place';stage.setErasing(false);syncMode();if(!quiet)AudioFX.soft();renderTab();persist();},(gid,p,cx,cy)=>{sel=gid;mode='place';stage.setErasing(false);syncMode();place(p,cx,cy,true);renderTab();});
       $$('#sizeSeg button').forEach(b=>b.onclick=()=>{size=+b.dataset.s;renderTab();});
-      $$('#cutSeg button').forEach(b=>b.onclick=()=>{cut=b.dataset.cut;mode='place';AudioFX.soft();renderTab();info();});
-      $$('#modeSeg button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;stage.setErasing(mode==='erase');renderTab();info();});
-      $('#undoBtn').onclick=()=>{ed.undo();};$('#redoBtn').onclick=()=>{if(!ed.redo())toast('Nothing to redo');};
-      $('#clearBtn').onclick=()=>{if(D.gems.length&&confirm(`Remove all ${D.gems.length} gems from this dress? (You can undo.)`))ed.clearAll();};
-      $('#pattBtn').onclick=()=>{const t=curTier();const add=[];[['neck',9,12],['belt',7,11],['hem',13,14]].forEach(([k,n,s])=>stage.sample(k,n).forEach(q=>add.push(Object.assign({g:sel,x:q.x,y:q.y,s,t},cut!=='natural'?{c:cut}:{}))));
+      $$('#cutSeg button').forEach(b=>b.onclick=()=>{cut=b.dataset.cut;mode='place';stage.setErasing(false);syncMode();AudioFX.soft();renderTab();info();});
+      $('#pattBtn',tb).onclick=()=>{const t=curTier();const add=[];[['neck',9,12],['belt',7,11],['hem',13,14]].forEach(([k,n,s])=>stage.sample(k,n).forEach(q=>add.push(Object.assign({g:sel,x:q.x,y:q.y,s,t},cut!=='natural'?{c:cut}:{}))));
         add.forEach((q,i)=>setTimeout(()=>{D.gems.push(q);ed.pushAdd(q);stage.addGem(q);if(i%3===0)AudioFX.chime();if(i===add.length-1){persist();countPlaced(add.length);}},i*35));};
     }
+    const nb=$('#nextSec',tb);nb&&(nb.onclick=()=>{tab=nb.dataset.next;renderTab();tb.scrollTop=0;$('#dt-'+tab).focus();});
+    if(same)tb.scrollTop=sc;else tb.scrollTop=0;
+    if(fk){const el=tb.querySelector(fk);el&&el.focus({preventScroll:true});}
   };
+  const setMode=m=>{mode=m;stage.setErasing(m==='erase');$$('#modeSeg button').forEach(b=>{b.classList.toggle('on',b.dataset.m===m);b.setAttribute('aria-pressed',b.dataset.m===m);});if(tab==='gems')renderTab();info();};
+  $$('#modeSeg button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+  $('#undoBtn').onclick=()=>{ed.undo();};$('#redoBtn').onclick=()=>{if(!ed.redo())toast('Nothing to redo');};
+  $('#clearBtn').onclick=()=>{if(!D.gems.length){toast('No gems to clear');return;}if(confirm(`Remove all ${D.gems.length} gems from this dress? (You can undo.)`))ed.clearAll();};
   const place=(p,cx,cy,drop)=>{
     if(mode==='erase'){ed.eraseAt(p,'start');ed.eraseAt(null,'end');return;}
     if(!drop){const hc=ed.hitCenter(p);if(hc>=0){ed.removeWithToast(hc);return;}}
@@ -2457,7 +2541,9 @@ function screenDesign(arg){
     qs.forEach(m=>{D.gems.push(m);stage.addGem(m);});if(qs.length>1)ed.pushAdds(qs);else ed.pushAdd(q);AudioFX.chime();countPlaced(qs.length);
     const pts=Math.max(1,Math.round(GEM[sel].value*.2))*qs.length;S.points+=pts;stage.float(cx,cy,'+'+pts);hud();persist();};
   stage.onTap=place;stage.setMirror(!!S.mirror);
-  $$('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderTab();});
+  const scr=$('.designer');
+  $$('[data-tab]').forEach(b=>{b.onclick=()=>{if(b.dataset.tab===tab&&matchMedia('(max-width:760px)').matches){DSHEET=!DSHEET;scr.classList.toggle('sheet-closed',!DSHEET);b.setAttribute('aria-expanded',DSHEET);return;}tab=b.dataset.tab;if(!DSHEET){DSHEET=true;scr.classList.remove('sheet-closed');}renderTab();};
+    b.onkeydown=e=>{const ks=DSECS.map(x=>x[0]);let ix=ks.indexOf(b.dataset.tab);if(e.key==='ArrowRight'||e.key==='ArrowDown')ix=(ix+1)%ks.length;else if(e.key==='ArrowLeft'||e.key==='ArrowUp')ix=(ix+ks.length-1)%ks.length;else if(e.key==='Home')ix=0;else if(e.key==='End')ix=ks.length-1;else return;e.preventDefault();tab=ks[ix];renderTab();$('#dt-'+tab).focus();};});
   $('#dname').oninput=e=>{D.name=e.target.value;persist();};
   $('#saveBtn').onclick=()=>{saveDraftToGallery();toast('Saved to your gallery ✨');info();};
   $('#pngBtn').onclick=()=>downloadPNG(draftDesign());
