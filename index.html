@@ -179,8 +179,22 @@ input[type=text]{font:inherit;border:1px solid var(--line);border-radius:10px;pa
 .qopts{display:grid;gap:8px}.qopt{display:flex;align-items:center;gap:10px;font:inherit;font-size:16px;font-weight:700;color:var(--plum);text-align:left;background:#fff;border:1px solid #ecd3b5;border-radius:16px;padding:8px 14px;cursor:pointer;min-height:48px}
 .qopt svg{width:34px;height:34px;flex:none}.qopt:hover:not(:disabled){background:#fdf1e4}.qopt:disabled{cursor:default}.qopt.right{background:#e8f6ec;border-color:#5aa874}.qopt.right::after{content:"✓";margin-left:auto;color:#2f7d4a}
 .qopt.wrong{background:#fdecef;border-color:#d9788c}.qopt.wrong::after{content:"✕";margin-left:auto;color:#b0435a}.qopt:disabled:not(.right):not(.wrong){opacity:.6}.qfb p{line-height:1.5;margin:12px 0 10px}.qscore{font-size:18px}
-.map{width:100%;height:auto;border-radius:14px;background:linear-gradient(180deg,#e8f0f3,#dfe9ee);border:1px solid #d6e2e7}
-.srclist{margin:8px 0 0;padding-left:18px;font-size:13.5px;line-height:1.5}
+.mapbox{position:relative;border-radius:18px;padding:4px;background:linear-gradient(135deg,#ffd6ea,#e3d7ff 50%,#c9efff);box-shadow:0 6px 18px rgba(197,120,190,.22)}
+.map{display:block;width:100%;height:auto;border-radius:14px;background:#e9e4ff}
+.map .pin{cursor:pointer;outline:none}
+.map .pinb{transition:transform .25s cubic-bezier(.3,1.6,.5,1);transform-box:fill-box;transform-origin:50% 100%}
+.map .pin.hot .pinb,.map .pin:focus-visible .pinb{transform:scale(1.35) translateY(-1px)}
+.map .ping{transform-box:fill-box;transform-origin:center;animation:mping 2.4s ease-out infinite}
+.map .pin:nth-child(2n) .ping{animation-delay:.6s}.map .pin:nth-child(3n) .ping{animation-delay:1.2s}
+@keyframes mping{0%{transform:scale(.6);opacity:.55}80%,100%{transform:scale(2.2);opacity:0}}
+.mapcount{position:absolute;left:12px;top:10px;font-size:11.5px;font-weight:800;color:#7a3e86;background:rgba(255,255,255,.85);border-radius:99px;padding:2px 9px;box-shadow:0 2px 6px rgba(150,90,170,.18)}
+.mapzoom{position:absolute;right:12px;top:8px;font:inherit;font-size:11.5px;font-weight:800;color:#7a3e86;background:#fff;border:2px solid #f3c4e0;border-radius:99px;padding:2px 10px;cursor:pointer;box-shadow:0 2px 6px rgba(150,90,170,.18)}
+.mapzoom:hover,.mapzoom:focus-visible{background:#fff0f8;outline:none;border-color:#ff8fc8}
+.srclist{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px;font-size:13px;line-height:1.3}
+.srclist li{display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #f0dcef;border-radius:99px;padding:3px 10px 3px 3px;cursor:pointer;transition:transform .15s,border-color .15s}
+.srclist li.hot,.srclist li:focus-visible{border-color:#ff8fc8;transform:translateY(-1px);outline:none;background:#fff5fb}
+.srclist .pnum{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+@media (prefers-reduced-motion:reduce){.map .ping{animation:none}}
 .badge{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--gold);border-radius:999px;padding:3px 9px}
 .mspill{flex-direction:column;align-items:stretch;gap:3px;padding:5px 12px;min-width:92px}
 .mspill span{font-size:13px;line-height:1;white-space:nowrap}.mspill small{color:var(--muted);font-size:11px}
@@ -424,6 +438,18 @@ input[type=text]{border-radius:14px}
 .dpanel .chip{padding:4px 10px;font-size:12px}
 .dpanel .opt-label{font-size:11px;margin-top:2px}
 .dpanel .btn.surprise{margin:0 0 8px}
+.lookrow{display:flex;gap:6px}.lookrow .btn.surprise{flex:1;width:auto;min-width:0}
+.btn.looksbtn{background:linear-gradient(135deg,#ff8fc8,#b78bff);color:#fff;border-color:transparent}
+.looks{padding:22px 22px 20px}.looks h2{font-size:30px;color:var(--plum);margin:2px 0 4px}.lookgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.lookcard{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;color:#3b2440;background:#fff;border:2px solid #f3dcef;border-radius:20px;padding:6px 6px 10px;cursor:pointer;transition:transform .18s cubic-bezier(.3,1.6,.5,1),border-color .15s,box-shadow .15s}
+.lookcard:hover,.lookcard:focus-visible{transform:translateY(-3px) rotate(-.6deg);border-color:#ff8fc8;box-shadow:0 10px 22px rgba(230,110,180,.25);outline:none}
+.lookcard.today{border-color:#ffb36b;box-shadow:0 0 0 3px #ffe6c9}
+.lthumb{width:100%;aspect-ratio:400/560;overflow:hidden;border-radius:15px}.lthumb svg{display:block;width:100%;height:auto;margin-top:-4%}
+.lookcard b{font-size:13.5px;margin-top:4px;text-align:center}.lpieces{font-size:11px;color:#8a6f95;text-align:center;min-height:14px;line-height:1.25}
+.lstars{color:#ffb020;font-size:13px;letter-spacing:1px}
+.ltag{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#ffb36b,#ff7aa8);color:#fff;font-size:11px;font-weight:800;border-radius:99px;padding:2px 8px;box-shadow:0 2px 6px rgba(255,120,120,.3)}
+.lookfoot{display:flex;justify-content:center;margin-top:14px}
+@media (max-width:640px){.lookgrid{grid-template-columns:repeat(2,1fr);gap:8px}}
 .nextsec{display:block;width:100%;margin-top:8px}
 .partseg{display:flex;margin:0 0 8px}.partseg button{flex:1;padding:6px 4px}
 .fabgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:0 0 6px}
@@ -2108,12 +2134,38 @@ const LAND=[
  [[131,-1],[141,-3],[150,-10],[141,-9],[138,-8]],[[105,-6.5],[114,-7.5],[114,-8.5],[106,-7]],[[120,18],[122,18],[126,7],[122,7]],
  [[-24,64],[-14,64],[-14,66.5],[-22,66.5]],[[-85,22],[-74,20],[-78,22]],[[119,-1],[125,1],[121,-5]],[[-150,-17.4],[-149,-17.9],[-149.6,-17.9]],
 ];
-function worldMap(g,uid){
-  const land=LAND.map(r=>`<polygon points="${r.map(q=>q[0]+','+(-q[1])).join(' ')}"/>`).join('');
+/* kawaii pastel map: mint sticker continents on a dreamy sea, heart pins in the gem's colour, auto zoom on the mines */
+function mapFit(src){const xs=src.map(q=>q.lon),ys=src.map(q=>-q.lat);let x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  let w=Math.max(x1-x0+50,150),h=Math.max(y1-y0+44,60);if(w/h<2.5)w=h*2.5;else h=w/2.5;if(w>=300)return null;
+  let cx=(x0+x1)/2,cy=(y0+y1)/2-4;let x=Math.max(-180,Math.min(180-w,cx-w/2)),y=Math.max(-84,Math.min(60-h,cy-h/2));return{vb:`${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`,k:+Math.max(.55,w/360).toFixed(3)};}
+function worldMap(g,uid){const u='wm'+(uid||++_gemUid);const fit=mapFit(g.src);const k=fit?fit.k:1;
+  const pts=r=>r.map(q=>q[0]+','+(-q[1])).join(' ');
+  const land=LAND.map(r=>`<polygon points="${pts(r)}"/>`).join('');
   const grid=[-60,-30,0,30,60].map(l=>`<line x1="-180" x2="180" y1="${-l}" y2="${-l}"/>`).join('')+[-120,-60,0,60,120].map(l=>`<line y1="-84" y2="60" x1="${l}" x2="${l}"/>`).join('');
-  const pins=g.src.map((s,i)=>`<g class="pin" transform="translate(${s.lon} ${-s.lat})"><circle r="5.5" fill="${hsl(g.c,0,0,.25)}"><animate attributeName="r" values="3;8;3" dur="2.4s" begin="${i*.3}s" repeatCount="indefinite"/></circle><path d="M0,0 C-3,-4 -4.2,-6 -4.2,-8 A4.2,4.2 0 1 1 4.2,-8 C4.2,-6 3,-4 0,0Z" fill="${hsl(g.c,-6,10)}" stroke="#fff" stroke-width="1"/><circle cy="-8" r="1.6" fill="#fff"/><text y="-14" text-anchor="middle" font-size="6" font-weight="700" fill="#3b2440" stroke="#fff" stroke-width="1.6" paint-order="stroke">${i+1}</text><title>${esc(s.n)}</title></g>`).join('');
-  return `<svg class="map" viewBox="-180 -84 360 144" role="img" aria-label="World map of ${esc(g.name)} sources"><g fill="none" stroke="#c9d8de" stroke-width=".4">${grid}</g><g fill="#efe4d3" stroke="#d6c3a6" stroke-width=".6" stroke-linejoin="round">${land}</g>${pins}</svg>`;
+  const deco=[[-150,-62,'✦'],[-30,36,'♡'],[150,-70,'✧'],[-95,40,'✦'],[95,46,'♡'],[160,20,'✧'],[-170,10,'♡']].map(([x,y,t])=>`<text x="${x}" y="${y}" font-size="7" fill="#fff" opacity=".85">${t}</text>`).join('');
+  const waves=[[-160,-20],[-40,-48],[-130,30],[60,30],[165,-35],[-10,20]].map(([x,y])=>`<path d="M${x},${y} q3,-3 6,0 t6,0" fill="none" stroke="#fff" stroke-width=".9" stroke-linecap="round" opacity=".8"/>`).join('');
+  const gc=hsl(g.c,-4,8),gd=hsl(g.c,-22,-6);
+  const pins=g.src.map((s,i)=>`<g class="pin" data-i="${i}" tabindex="0" role="button" aria-label="${i+1}: ${esc(s.n)}" transform="translate(${s.lon} ${-s.lat}) scale(${k})"><g class="pinb"><ellipse cx="0" cy="1" rx="4.2" ry="1.4" fill="#7a4f8a" opacity=".22"/><circle class="ping" r="5" fill="none" stroke="${gc}" stroke-width="1.4"/>
+    <path d="M0,0 C-1.5,-2.6 -6.5,-6.5 -6.5,-11 A3.4,3.4 0 0 1 0,-13.4 A3.4,3.4 0 0 1 6.5,-11 C6.5,-6.5 1.5,-2.6 0,0Z" fill="${gc}" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"/>
+    <path d="M-3.8,-11.6 a1.7,1.7 0 0 1 2.6,-1.4" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" opacity=".8"/>
+    <circle cy="-17.5" r="3.6" fill="#fff" stroke="${gd}" stroke-width=".7"/><text y="-15.9" text-anchor="middle" font-size="4.6" font-weight="800" fill="#3b2440">${i+1}</text></g><title>${esc(s.n)}</title></g>`).join('');
+  return `<div class="mapbox" data-full="-180 -84 360 144" data-zoom="${fit?fit.vb:''}" data-k="${k}"><svg class="map" viewBox="${fit?fit.vb:'-180 -84 360 144'}" role="img" aria-label="Pastel world map with ${g.src.length} pin${g.src.length>1?'s':''} for where ${esc(g.name)} is found">
+  <defs><linearGradient id="${u}s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9f1ff"/><stop offset=".55" stop-color="#e9e4ff"/><stop offset="1" stop-color="#ffe3f1"/></linearGradient>
+  <linearGradient id="${u}l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6f7e6"/><stop offset="1" stop-color="#b6ead0"/></linearGradient></defs>
+  <rect x="-180" y="-84" width="360" height="144" fill="url(#${u}s)"/><g fill="none" stroke="#fff" stroke-width=".5" stroke-dasharray="1 2.4" opacity=".9">${grid}</g>${waves}${deco}
+  <g fill="#f6c3dc" transform="translate(1.6 1.8)" stroke="#f6c3dc" stroke-width="1.6" stroke-linejoin="round">${land}</g>
+  <g fill="url(#${u}l)" stroke="#fff" stroke-width="1.6" stroke-linejoin="round" paint-order="stroke">${land}</g>
+  <g class="pins">${pins}</g></svg>
+  <span class="mapcount">📍 ${g.src.length} mine${g.src.length>1?'s':''}</span>${fit?`<button class="mapzoom" type="button" aria-pressed="true" title="Switch between the zoomed-in view and the whole world">🌍 Whole world</button>`:''}</div>
+  <ol class="srclist">${g.src.map((s,i)=>`<li data-i="${i}" tabindex="0"><span class="pnum" style="background:${gc}">${i+1}</span>${esc(s.n)}</li>`).join('')}</ol>`;
 }
+function bindMap(root){$$('.mapbox',root).forEach(mb=>{const svg=$('svg',mb);const list=mb.nextElementSibling;
+  const hot=i=>{$$('.pin',svg).forEach(p=>p.classList.toggle('hot',p.dataset.i===String(i)));list&&$$('li',list).forEach(l=>l.classList.toggle('hot',l.dataset.i===String(i)));
+    const p=$(`.pin[data-i="${i}"]`,svg);p&&p.parentNode.appendChild(p);};
+  const z=$('.mapzoom',mb);z&&(z.onclick=()=>{const on=z.getAttribute('aria-pressed')!=='true';z.setAttribute('aria-pressed',on);z.textContent=on?'🌍 Whole world':'🔍 Zoom in';
+    svg.setAttribute('viewBox',on?mb.dataset.zoom:mb.dataset.full);const k=on?+mb.dataset.k:1;$$('.pin',svg).forEach(p=>p.setAttribute('transform',p.getAttribute('transform').replace(/scale\([^)]*\)/,`scale(${k})`)));AudioFX.soft();});
+  $$('.pin',svg).forEach(p=>{p.onmouseenter=p.onfocus=p.onclick=()=>hot(p.dataset.i);});
+  list&&$$('li',list).forEach(l=>{l.onmouseenter=l.onfocus=l.onclick=()=>hot(l.dataset.i);});});}
 /* =====================================================================
    PRESET DRESSES & LEVELS
    ===================================================================== */
@@ -2177,6 +2229,23 @@ function surpriseDress(d,r){r=r||Math.random;const pick=a=>a[Math.min(a.length-1
   return d;}
 function styledDress(d){const c=normDress(JSON.parse(JSON.stringify(d)));const E=c.extras;
   Object.keys(EXTRA_OPTS).forEach(k=>{const opts=EXTRA_OPTS[k].map(o=>o[0]);let i=opts.indexOf(E[k]);if(i<0)i=0;while(i>0&&!extraUnlocked(k,opts[i]))i--;E[k]=opts[i];});return c;}
+/* ✨ Complete looks: a head-to-toe outfit from a style aesthetic (silhouette, fabrics, trendy pieces, extras and backdrop). Gems and doll stay; only unlocked pieces are used */
+const LOOK_POOL={neck:.35,bag:.4,shoes:.55,hat:.18,bow:.3,trim:.3,sparkle:.3,ruffle:.2};
+function lookFrom(th,base,r){r=r||Math.random;const pick=a=>a[Math.min(a.length-1,Math.floor(r()*a.length))];const mix=a=>a.map(v=>[r(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+  const d=normDress(JSON.parse(JSON.stringify(base)));d.silhouette=pick(th.sil);d.length=pick(th.len);
+  d.neckline=pick(DRESS_OPTS.neckline)[0];d.sleeves=pick(DRESS_OPTS.sleeves)[0];
+  const cs=mix(th.colors),fs=mix(th.fab);const c1=cs[0],c2=r()<.5?c1:cs[1],f1=fs[0],f2=r()<.55?f1:(fs[1]||f1);
+  const ov=fs.find(f=>OVERLAYS.includes(f)&&f!==f1);
+  d.parts={bodice:{f:f1,c:c1},skirt:{f:f2,c:c2},sleeves:{f:f1,c:c1},overlay:ov&&r()<.4?{f:ov,c:cs[2]||'#fbf7ef'}:{f:'none',c:'#ffffff'}};
+  const E=d.extras=DEFAULT_EXTRAS();const ok=(k,v)=>EXTRA_OPTS[k]&&EXTRA_OPTS[k].some(o=>o[0]===v)&&extraUnlockAt(k,v)<=(S.placed||0);
+  Object.entries(th.ex||{}).forEach(([k,v])=>{if(ok(k,v))E[k]=v;});
+  Object.entries(LOOK_POOL).forEach(([k,pr])=>{if(E[k]!=='none'||r()>pr)return;const o=EXTRA_OPTS[k].filter(([v])=>v!=='none'&&ok(k,v));if(o.length)E[k]=pick(o)[0];});
+  E.bc=r()<.5?'auto':pick(RIBBONS.slice(1));
+  return{th,dress:d,vibe:th.vibe};}
+function makeLooks(base,n){const t=todayTheme();const rest=THEMES.filter(x=>x.id!==t.id).map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+  return [t].concat(rest.slice(0,(n||6)-1)).map(th=>lookFrom(th,base));}
+function lookPieces(d){const E=d.extras||{};const out=[];['top','layer','skirt','neck','hat','bag','shoes','bow'].forEach(k=>{if(E[k]&&E[k]!=='none'){const o=EXTRA_OPTS[k].find(x=>x[0]===E[k]);o&&out.push(o[1]);}});
+  return out.length?out.slice(0,3).join(' · '):(FABRICS[d.parts.skirt.f]?FABRICS[d.parts.skirt.f].name||d.parts.skirt.f:'');}
 const SKEY='jewel-dress-v1', GKEY='jewel-dress-gallery-v1';
 const DEFAULT_DRAFT=()=>({name:'My Dream Dress',dress:{silhouette:'princess',neckline:'sweetheart',sleeves:'puff',length:'floor',parts:PF(['satin','#f9c6d3'],['tulle','#f9c6d3']),extras:X('waist','none','pearls','none','#ffffff')},gems:[]});
 function loadJSON(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
@@ -2278,11 +2347,11 @@ function openInfo(gid,opts){
      <dt>Hardness</dt><dd><div class="mohs">${mohsBar}<span style="margin-left:8px"><b>${g.mohsTxt}</b> on the Mohs scale</span></div><div class="mohsref small muted">${mohsCompare(g)}</div></dd>
      ${birthMonth(gid)?`<dt>Birthstone</dt><dd><span class="bstone">🎂 ${birthMonth(gid)}</span> on the modern birthstone list${BIRTH[gid]===new Date().getMonth()+1?' (that’s this month!)':''}</dd>`:''}
      ${relRow}<dt>Did you know?</dt><dd>${esc(g.fact)}</dd></dl>
-     <div class="opt-label">Where it is found on Earth</div>${worldMap(g)}<ol class="srclist">${g.src.map(s=>`<li>${esc(s.n)}</li>`).join('')}</ol></div>`;
+     <div class="opt-label">📍 Where it is found on Earth</div>${worldMap(g)}</div>`;
   const m=modal(`<div class="infocard"><div class="gemside"><div id="infoGem">${gemSVG(g,locked?0:t)}</div>
      <div class="small muted" id="infoTier">${locked?'':`Your atelier cuts it at: <b>${TIERS[t].name}</b>`}</div>
      ${locked||t>=4?'':`<button class="btn small" id="masterBtn">✨ Preview the master cut</button>`}
-     ${opts&&opts.unlocked?'<div class="badge" style="background:linear-gradient(135deg,#6fd6b0,#3f9a78)">New gem unlocked! ♡</div>':''}${nav}</div>${body}</div>`,opts&&opts.onClose);
+     ${opts&&opts.unlocked?'<div class="badge" style="background:linear-gradient(135deg,#6fd6b0,#3f9a78)">New gem unlocked! ♡</div>':''}${nav}</div>${body}</div>`,opts&&opts.onClose);bindMap(m.el);
   if(list){const step=d=>{const id=list[(li+d+list.length)%list.length];openInfo(id,{list,focus:d<0?'prev':'next',onClose:opts.onClose});};
     $('#infoPrev',m.el).onclick=()=>step(-1);$('#infoNext',m.el).onclick=()=>step(1);
     document.addEventListener('keydown',function k(e){if($('#modalRoot').firstChild!==m.el){document.removeEventListener('keydown',k);return;}
@@ -2452,6 +2521,8 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li><b>🧠 Gem quiz:</b> in the encyclopedia, answer five quick questions about the gems you have discovered (their mineral family, which is harder, birthstone months). Your best score is saved.</li>
    <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Your dress is worn by a fashion doll: in <b>🧸 Doll</b> pick her skin tone, hairstyle, hair colour and eye colour (saved with each dress, but never part of a minted dress). The controls are grouped into eight sections (👗 Shape, 🧵 Fabric, 🔥 Trendy, 👜 Extras, 🎀 Cute, ✨ Vibe, 🧸 Doll and 💎 Gems; use the arrow keys to switch between them), and the bar above the dress always has Place / Erase, Undo, Redo, Clear, Save, Story card and Runway. On a phone the sections open in a sheet at the bottom; tap the open section again to fold it away and see the whole dress. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
    <li><b>🏅 Badges:</b> earn stickers for things you do (your first gem, finding 25 gems, a 3-day runway streak, a perfect quiz, styling your doll and more). Open <b>My badges</b> on the main menu to see your collection and what to earn next.</li>
+   <li>Not sure what to wear? In the designer's <b>👗 Shape</b> tab tap <b>✨ Complete looks</b> for six head-to-toe outfits (dress, fabrics, trendy pieces, extras and backdrop) in different styles, with a star preview for today's challenge. Tap one to wear it (your gems and doll stay, and Undo brings your old outfit back), or 🎲 Shuffle looks for new ideas.</li>
+   <li>Every gem card has a pastel map with a numbered heart pin for each mine: hover or tap a place in the list to make its pin bounce, and use 🌍 Whole world / 🔍 Zoom in when the mines are close together.</li>
    <li><b>🔥 Daily challenge:</b> every day has a new style theme (like Galaxy Night or Y2K Pop). Style a look, tap <b>🌟 Walk the runway</b> and three judges rate its colours, style and sparkle out of 100, for up to 5 stars. Walk once a day to grow your streak. Pick a <b>✨ Vibe</b> backdrop and <b>🔥 Trendy pieces</b> (co-ord sets, crop tops, hoodies, corsets, butterfly tops, jackets, hats, bags, necklaces and shoes) in the designer, and tap <b>📲 Story card</b> to download or share a story-sized picture of your look.</li>
    <li><b>💾 Backup:</b> your progress is saved only in this browser. From the main menu, download a backup file now and then; restoring it (here or in another browser) brings back your gems, milestones and gallery.</li></ol>
   <div class="opt-label" style="margin-top:12px">Gem quality by gems placed</div>
@@ -2583,6 +2654,7 @@ const BADGES=[
   ['stylist','🧸','Doll Stylist','Give your doll a new look.','#ffc29a',()=>{const a=normDoll(S.doll),b=DEFAULT_DOLL();return[['skin','hair','hc','eyes','size','face'].some(k=>a[k]!==b[k])?1:0,1];}],
   ['trend','🛍️','Trendsetter','Use 6 different trendy pieces in saved dresses.','#c39bff',()=>{const u=new Set();GALLERY.forEach(g=>{const E=(g.dress&&g.dress.extras)||{};TEEN_KEYS.forEach(k=>{if(E[k]&&E[k]!=='none')u.add(k+':'+E[k]);});});return[u.size,6];}],
   ['vibes','🎨','Vibe Curator','Save dresses on 5 different vibes.','#8fd8ff',()=>[new Set(GALLERY.map(g=>g.vibe||'atelier')).size,5]],
+  ['lookbook','👗','Head-to-Toe','Wear 5 complete looks from the lookbook.','#ff9ecf',()=>[S.looks||0,5]],
   ['collector','🏅','Badge Collector','Collect 12 other badges.','#ffd36e',()=>[Object.keys(S.badges||{}).filter(k=>k!=='collector').length,12]],
 ];
 function badgeProg(b){try{const [c,g]=b[5]();return[Math.min(c,g),g];}catch(e){return[0,1];}}
@@ -2602,6 +2674,19 @@ function openBadges(){checkBadges(true);const n=Object.keys(S.badges).length;
     <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${BADGES.length}" aria-valuenow="${n}" aria-label="Badges collected"><i style="width:${(n/BADGES.length*100).toFixed(1)}%"></i></div>
     <div class="bgrid">${BADGES.map(b=>{const on=!!S.badges[b[0]];const [c,g]=badgeProg(b);return `<div class="bcard ${on?'on':''}" title="${esc(b[3])}">${badgeMedal(b,on)}<b>${esc(b[2])}</b><span class="small">${esc(b[3])}</span>${on?`<span class="bdate">✓ ${new Date(S.badges[b[0]]).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>`:`<div class="bprog" aria-label="${c} of ${g}"><i style="width:${(c/g*100).toFixed(0)}%"></i></div><span class="bdate">${c.toLocaleString('en')} / ${g.toLocaleString('en')}</span>`}</div>`;}).join('')}</div></div>`);
   return m;}
+function openLooks(D,stage,after){const th=todayTheme();let looks=makeLooks(D.dress,6);let m;
+  const html=()=>`<div class="looks"><div class="opt-label">✨ Lookbook</div><h2>Complete looks</h2><p class="small muted">Head-to-toe outfits: dress, fabrics, trendy pieces, extras and backdrop, all matched. Your gems and doll stay. Stars are a preview for today's ${th.emoji} ${esc(th.name)} challenge.</p>
+    <div class="lookgrid">${looks.map((L,i)=>{const R=judgeDesign({dress:L.dress,gems:D.gems},th);return `<button class="lookcard${i===0?' today':''}" data-look="${i}" aria-label="Wear the ${esc(L.th.name)} look, ${R.stars} of 5 stars">
+      <div class="lthumb">${dressSVG({dress:L.dress,gems:D.gems,vibe:L.vibe,doll:D.doll},{prefix:'lk'+i+'_'+(++_gemUid)})}</div>${i===0?'<span class="ltag">🔥 Today</span>':''}
+      <b>${L.th.emoji} ${esc(L.th.name)}</b><span class="lpieces">${esc(lookPieces(L.dress))}</span><span class="lstars" aria-hidden="true">${starsTxt(R.stars)}</span></button>`;}).join('')}</div>
+    <div class="lookfoot"><button class="btn" id="moreLooks">🎲 Shuffle looks</button></div></div>`;
+  const bind=()=>{$('#moreLooks',m.el).onclick=()=>{looks=makeLooks(D.dress,6);$('.sheet',m.el).querySelector('.looks').outerHTML=html();bind();AudioFX.soft();$('#moreLooks',m.el).focus();};
+    $$('[data-look]',m.el).forEach(b=>b.onclick=()=>{const L=looks[+b.dataset.look];const prev={dress:JSON.parse(JSON.stringify(D.dress)),vibe:D.vibe};
+      D.dress=JSON.parse(JSON.stringify(L.dress));D.vibe=L.vibe;stage.setDress(D.dress);stage.setVibe(D.vibe);S.looks=(S.looks||0)+1;AudioFX.chime();persistLook();m.close();after&&after();
+      setTimeout(()=>setFace($('#stageHost'),'happy',1800),60);
+      toastAct(`${L.th.emoji} ${L.th.name} look on! Your gems stay put`,'Undo',()=>{D.dress=prev.dress;D.vibe=prev.vibe;stage.setDress(D.dress);stage.setVibe(D.vibe);AudioFX.soft();persistLook();after&&after();},5000);});};
+  const persistLook=()=>{S.draft=D;save();};
+  m=modal(html());bind();const f=$('[data-look]',m.el);f&&f.focus();return m;}
 /* ---------- custom dress designer ---------- */
 const DSECS=[['shape','👗','Shape','Silhouette, neckline, sleeves and length'],['fabric','🧵','Fabric','Fabrics, prints and colours for each part'],['style','🔥','Trendy','Tops, skirts and jackets'],['acc','👜','Extras','Necklaces, hats, bags and shoes'],['cute','🎀','Cute','Bows, ruffles, trims and sparkle'],['vibe','✨','Vibe','The backdrop behind your dress'],['doll','🧸','Doll','Skin tone, hairstyle, hair and eye colour'],['gems','💎','Gems','Pick a gem, cut and size, then set it']];
 let DTAB=null,DSHEET=true;
@@ -2647,7 +2732,7 @@ function screenDesign(arg){
       const xopt=(k,label)=>row(label,EXTRA_OPTS[k].map(([v,l])=>{const at=extraUnlockAt(k,v);const lk=at>(S.placed||0);return `<button class="chip ${EX[k]===v?'on':''} ${lk?'locked-chip':''}" data-x="${k}" data-xv="${v}" aria-pressed="${EX[k]===v}" ${lk?`data-at="${at}" title="Unlocks at ${at} gems placed"`:`title="${esc(l)}"`}>${lk?'🔒 ':''}${l}</button>`;}).join(''));
       const opt=(key,label)=>row(label,DRESS_OPTS[key].map(([v,l])=>`<button class="chip ${D.dress[key]===v?'on':''}" data-k="${key}" data-v="${v}" aria-pressed="${D.dress[key]===v}">${l}</button>`).join(''));
       let body='';
-      if(tab==='shape')body=`<button class="btn small surprise" id="surpriseBtn" title="Random dress style, fabrics and colours (your gems stay)">🎲 Surprise me</button>`+opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length');
+      if(tab==='shape')body=`<div class="lookrow"><button class="btn small surprise looksbtn" id="looksBtn" title="Head-to-toe outfit ideas: dress, fabrics, trendy pieces, extras and backdrop (your gems and doll stay)">✨ Complete looks</button><button class="btn small surprise" id="surpriseBtn" title="Random dress style, fabrics and colours (your gems stay)">🎲 Surprise me</button></div>`+opt('silhouette','Silhouette')+opt('neckline','Neckline')+opt('sleeves','Sleeves')+opt('length','Length');
       else if(tab==='fabric')body=`<div class="seg partseg" id="partSeg" role="group" aria-label="Part of the dress">${DRESS_PARTS.map(([k,l])=>`<button data-part="${k}" class="${part===k?'on':''}" aria-pressed="${part===k}">${l}</button>`).join('')}</div>
         <div class="fabgrid">${flist.map(f=>`<button class="fabtile ${cp.f===f?'on':''}" data-f="${f}" aria-pressed="${cp.f===f}" title="${f==='none'?'No overlay':esc(FABRICS[f].name+': '+FABRICS[f].info)}">${f==='none'?'<i class="fnone" aria-hidden="true">∅</i>':fabricSwatch(f,cp.c)}<span>${f==='none'?'None':esc(FABRICS[f].name)}</span></button>`).join('')}</div>
         ${cp.f!=='none'?`<p class="small fabline" id="fabInfo"><b>${esc(FABRICS[cp.f].name)}:</b> ${esc(FABRICS[cp.f].info)}</p>`:''}
@@ -2676,6 +2761,7 @@ function screenDesign(arg){
       $$('[data-c]',tb).forEach(b=>b.onclick=()=>{cp.c=b.dataset.c;stage.setDress(D.dress);persist();renderTab();});
       const cpk=$('#cpick',tb);if(cpk){cpk.oninput=e=>{cp.c=e.target.value;stage.setDress(D.dress);persist();};cpk.onchange=()=>renderTab();}
       const sa=$('#sameAll',tb);sa&&(sa.onclick=()=>{['bodice','skirt','sleeves'].forEach(k=>PP[k]={f:cp.f,c:cp.c});stage.setDress(D.dress);persist();toast(FABRICS[cp.f].name+' everywhere');});
+      const lb=$('#looksBtn',tb);lb&&(lb.onclick=()=>openLooks(D,stage,()=>{if(SCREEN==='design'&&tab!=='gems')renderTab();}));
       const sb=$('#surpriseBtn',tb);sb&&(sb.onclick=()=>{const prev=JSON.parse(JSON.stringify(D.dress));surpriseDress(D.dress);stage.setDress(D.dress);AudioFX.chime();persist();renderTab();
         toastAct('🎲 A surprise design! Your gems stay put','Undo',()=>{D.dress=prev;stage.setDress(D.dress);AudioFX.soft();persist();if(SCREEN==='design'&&tab!=='gems')renderTab();},5000);});
     }else{
