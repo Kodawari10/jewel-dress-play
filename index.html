@@ -536,7 +536,6 @@ input[type=text]{border-radius:14px}
   <span class="pill hide-m" id="hudLevel">Level <b>1</b></span>
   <span class="pill mspill" id="hudMs" title="Gems placed"></span>
   <span class="pill" id="hudPoints">✨ <b>0</b></span>
-  <button class="iconbtn" id="chainBtn" title="Starknet (optional)" aria-label="Starknet">✦</button>
   <button class="iconbtn" id="muteBtn" title="Sound on/off" aria-label="Sound">🔔</button>
 </header>
 <main id="app"></main>
@@ -2519,7 +2518,7 @@ function howTo(){modal(`<div style="padding:26px 24px"><h2 style="font-size:34px
    <li>Tap the small <b>i</b> on any gem to read its story: the meaning of its name, its mineral, what gives it colour, its hardness and a <b>world map</b> of where it is mined. Under <b>Gem relatives</b>, tap a gem made of the same mineral (like ruby and sapphire, both corundum) to compare them. Tap <b>♡ Favourite</b> to keep it in your ♥ Favourites in the encyclopedia.</li>
    <li><b>🎲 Random gem:</b> in the encyclopedia, open the story of a random discovered gem (ones you have not read yet come first), then keep browsing with Prev/Next.</li>
    <li><b>🧠 Gem quiz:</b> in the encyclopedia, answer five quick questions about the gems you have discovered (their mineral family, which is harder, birthstone months). Your best score is saved.</li>
-   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Your dress is worn by a fashion doll: in <b>🧸 Doll</b> pick her skin tone, hairstyle, hair colour and eye colour (saved with each dress, but never part of a minted dress). The controls are grouped into eight sections (👗 Shape, 🧵 Fabric, 🔥 Trendy, 👜 Extras, 🎀 Cute, ✨ Vibe, 🧸 Doll and 💎 Gems; use the arrow keys to switch between them), and the bar above the dress always has Place / Erase, Undo, Redo, Clear, Save, Story card and Runway. On a phone the sections open in a sheet at the bottom; tap the open section again to fold it away and see the whole dress. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
+   <li>In <b>Create your own dress</b> you design everything yourself, then save it to your gallery or download it as a PNG. Your dress is worn by a fashion doll: in <b>🧸 Doll</b> pick her skin tone, hairstyle, hair colour and eye colour (saved with each dress). The controls are grouped into eight sections (👗 Shape, 🧵 Fabric, 🔥 Trendy, 👜 Extras, 🎀 Cute, ✨ Vibe, 🧸 Doll and 💎 Gems; use the arrow keys to switch between them), and the bar above the dress always has Place / Erase, Undo, Redo, Clear, Save, Story card and Runway. On a phone the sections open in a sheet at the bottom; tap the open section again to fold it away and see the whole dress. Stuck for ideas? <b>🎲 Surprise me</b> picks a random style, fabrics and colours and keeps your gems. In your <b>gallery</b>, the little gems under each dress show which gems it uses (most used first); tap one to read its story. Use <b>✏️ Rename</b> to give a saved dress a new name, and if you delete one by mistake, tap <b>Undo</b> in the message that pops up. With two or more saved dresses, the <b>Sort</b> menu orders them by newest, oldest, recently edited, name or number of gems.</li>
    <li><b>🏅 Badges:</b> earn stickers for things you do (your first gem, finding 25 gems, a 3-day runway streak, a perfect quiz, styling your doll and more). Open <b>My badges</b> on the main menu to see your collection and what to earn next.</li>
    <li>Not sure what to wear? In the designer's <b>👗 Shape</b> tab tap <b>✨ Complete looks</b> for six head-to-toe outfits (dress, fabrics, trendy pieces, extras and backdrop) in different styles, with a star preview for today's challenge. Tap one to wear it (your gems and doll stay, and Undo brings your old outfit back), or 🎲 Shuffle looks for new ideas.</li>
    <li>Every gem card has a pastel map with a numbered heart pin for each mine: hover or tap a place in the list to make its pin bounce, and use 🌍 Whole world / 🔍 Zoom in when the mines are close together.</li>
@@ -2708,7 +2707,7 @@ function screenDesign(arg){
     </div><div id="stageHost"></div></div>
     <aside class="panel right dright">${(th=>`<div class="rw-cta${D.chal===dayKey()?' on':''}"><div class="small"><b>${th.emoji} Today: ${esc(th.name)}</b>${streakNow()?` · 🔥 ${streakNow()}`:''}</div><button class="btn small" id="themeBtn" title="What the judges want today">👀 What the judges want</button></div>`)(todayTheme())}
       <label class="opt-label" for="dname">Dress name</label><input type="text" id="dname" maxlength="31" value="${esc(D.name||'')}">
-      <div class="tools"><button class="btn small" id="pngBtn" title="Download a PNG picture">⬇︎ PNG</button><button class="btn small" id="newBtn" title="Start a new dress">✚ New</button><button class="btn small" data-go="gallery">🖼️ Gallery</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" id="mintBtn">✦ Mint on Starknet</button>':''}</div>
+      <div class="tools"><button class="btn small" id="pngBtn" title="Download a PNG picture">⬇︎ PNG</button><button class="btn small" id="newBtn" title="Start a new dress">✚ New</button><button class="btn small" data-go="gallery">🖼️ Gallery</button></div>
       <p class="small muted" id="dinfo"></p>
       <p class="small muted dtip">💡 Every gem you place counts toward atelier upgrades: now <b>${TIERS[curTier()].name}</b>, ${(S.placed||0).toLocaleString('en')} gems placed.</p></aside></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
@@ -2746,7 +2745,7 @@ function screenDesign(arg){
         body=`<button class="btn small surprise" id="dollRand" title="A random doll look (your dress and gems stay)">🎲 Random doll</button>`+sw('dskin',DOLL_SKINS,DL.skin,'Skin tone')+
         `<div class="opt-label">Hairstyle</div><div class="hairgrid">${DOLL_HAIRS.map(([v,l])=>`<button class="hairtile ${DL.hair===v?'on':''}" data-dhair="${v}" aria-pressed="${DL.hair===v}" title="${esc(l)}">${dollHeadSVG(Object.assign({},DL,{hair:v}))}<span>${esc(l)}</span></button>`).join('')}</div>`+
         sw('dhc',DOLL_HAIRCOLS,DL.hc,'Hair colour')+sw('deye',DOLL_EYES,DL.eyes,'Eye colour')+
-        row('Head',DOLL_SIZES.map(([v,l])=>`<button class="chip ${DL.size===v?'on':''}" data-dsize="${v}" aria-pressed="${DL.size===v}">${l}</button>`).join(''))+row('Resting face',DOLL_FACES.map(([v,l])=>`<button class="chip ${DL.face===v?'on':''}" data-dface="${v}" aria-pressed="${DL.face===v}">${l}</button>`).join(''))+`<p class="small muted dhint">She winks when you set a gem and reacts to the runway judges. Your doll is saved with each dress and shows in the gallery, PNGs and story cards. It is not part of the minted dress.</p>`;}
+        row('Head',DOLL_SIZES.map(([v,l])=>`<button class="chip ${DL.size===v?'on':''}" data-dsize="${v}" aria-pressed="${DL.size===v}">${l}</button>`).join(''))+row('Resting face',DOLL_FACES.map(([v,l])=>`<button class="chip ${DL.face===v?'on':''}" data-dface="${v}" aria-pressed="${DL.face===v}">${l}</button>`).join(''))+`<p class="small muted dhint">She winks when you set a gem and reacts to the runway judges. Your doll is saved with each dress and shows in the gallery, PNGs and story cards.</p>`;}
       else if(tab==='vibe')body=`<div class="vibegrid">${VIBES.map(([v,l,e,bg])=>`<button class="vibechip ${(D.vibe||'atelier')===v?'on':''}" data-vibe="${v}" aria-pressed="${(D.vibe||'atelier')===v}" title="${esc(l)} backdrop"><i style="background:${bg}" aria-hidden="true"></i><span>${e} ${esc(l)}</span></button>`).join('')}</div>`;
       tb.innerHTML=head+`<div class="dsec">${body}</div>`+nextBtn();
       $$('[data-k]',tb).forEach(b=>b.onclick=()=>{D.dress[b.dataset.k]=b.dataset.v;stage.setDress(D.dress);AudioFX.soft();persist();renderTab();});
@@ -2804,12 +2803,11 @@ function screenDesign(arg){
   $('#runBtn').onclick=()=>{if(!D.gems.length){toast('Set some gems first, the judges love sparkle 💎');return;}openRunway();info();};
   $('#themeBtn').onclick=()=>openChallenge();
   $('#newBtn').onclick=()=>{if(D.gems.length&&!D.id&&!confirm('Start a new dress? Unsaved gems will be lost.'))return;S.draft=DEFAULT_DRAFT();save();screenDesign();};
-  const mb=$('#mintBtn');mb&&(mb.onclick=()=>{if(!D.gems.length){toast('Set some gems first ✨');return;}const rec=saveDraftToGallery();JD_STARKNET.mint(rec);});
   renderTab();info();
 }
 function draftDesign(){const D=S.draft;const o={id:D.id,name:(D.name||'My Dress').trim()||'My Dress',dress:JSON.parse(JSON.stringify(normDress(D.dress))),gems:D.gems.map(({g,x,y,s,t,c})=>(c?{g,x,y,s,t,c}:{g,x,y,s,t})),tier:curTier(),vibe:D.vibe||'atelier',doll:normDoll(D.doll||S.doll)};if(D.runway)o.runway=D.runway;return o;}
 function saveDraftToGallery(){const d=draftDesign();let rec=d.id&&GALLERY.find(x=>x.id===d.id);
-  if(rec){if(rec.minted&&JSON.stringify(rec.gems)!==JSON.stringify(d.gems)){rec=null;}else Object.assign(rec,d,{updated:Date.now()});}
+  if(rec)Object.assign(rec,d,{updated:Date.now()});
   if(!rec){rec=Object.assign(d,{id:'d'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),created:Date.now(),from:'design'});GALLERY.unshift(rec);S.draft.id=rec.id;save();}
   saveGallery();return rec;}
 /* ---------- encyclopedia ---------- */
@@ -2904,8 +2902,8 @@ function screenGallery(){
     ${GALLERY.length?'':'<p class="muted">Nothing here yet. Finish an atelier level or save a dress from the designer.</p>'}
     ${GALLERY.length>1?`<div class="booktools"><label class="booksort small muted">Sort <select id="galSort" aria-label="Sort saved dresses">${GAL_SORTS.map(([v,l])=>`<option value="${v}" ${GAL_SORT===v?'selected':''}>${l}</option>`).join('')}</select></label></div>`:''}
     <div class="grid" id="galGrid" style="grid-template-columns:repeat(auto-fill,minmax(210px,1fr))">${galleryView().map(([d,i])=>`<div class="gcard" data-i="${i}"><div class="thumb">${dressSVG(d,{prefix:'gal'+i})}</div>
-      <div class="meta"><div class="n">${esc(d.name)}</div><div class="small muted">${d.runway?`<span class="gstars" title="Runway: ${d.runway.stars} of 5 stars">${starsTxt(d.runway.stars)}</span> `:''}${d.gems.length} gems · ${new Date(d.created).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}${d.minted?` · <a href="${esc(d.minted.url||'#')}" target="_blank" rel="noopener">✦ on Starknet</a>`:''}</div>${gemsUsedHTML(d)}</div>
-      <div class="acts"><button class="btn small" data-a="edit">Edit</button>${d.minted?'':`<button class="btn small" data-a="ren" title="Rename this dress" aria-label="Rename ${esc(d.name)}">✏️ Rename</button>`}<button class="btn small" data-a="dup" title="Make a copy of this dress to try a variation" aria-label="Copy ${esc(d.name)}">📋 Copy</button><button class="btn small" data-a="png">⬇︎ PNG</button><button class="btn small" data-a="card" title="Story-sized picture to share" aria-label="Story card of ${esc(d.name)}">📲 Card</button>${window.JD_STARKNET&&JD_STARKNET.enabled?'<button class="btn small gold" data-a="mint">✦ Mint</button><button class="btn small" data-a="agent" title="Copy a Starknet MCP tool call for an AI agent">🤖</button>':''}<button class="btn small" data-a="del" title="Delete this dress (you can undo)" aria-label="Delete ${esc(d.name)}">🗑</button></div></div>`).join('')}</div></section>`;
+      <div class="meta"><div class="n">${esc(d.name)}</div><div class="small muted">${d.runway?`<span class="gstars" title="Runway: ${d.runway.stars} of 5 stars">${starsTxt(d.runway.stars)}</span> `:''}${d.gems.length} gems · ${new Date(d.created).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</div>${gemsUsedHTML(d)}</div>
+      <div class="acts"><button class="btn small" data-a="edit">Edit</button><button class="btn small" data-a="ren" title="Rename this dress" aria-label="Rename ${esc(d.name)}">✏️ Rename</button><button class="btn small" data-a="dup" title="Make a copy of this dress to try a variation" aria-label="Copy ${esc(d.name)}">📋 Copy</button><button class="btn small" data-a="png">⬇︎ PNG</button><button class="btn small" data-a="card" title="Story-sized picture to share" aria-label="Story card of ${esc(d.name)}">📲 Card</button><button class="btn small" data-a="del" title="Delete this dress (you can undo)" aria-label="Delete ${esc(d.name)}">🗑</button></div></div>`).join('')}</div></section>`;
   $$('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
   const gs=$('#galSort');if(gs)gs.onchange=e=>{GAL_SORT=e.target.value;screenGallery();const g=$('#galSort');g&&g.focus();};
   $$('.gcard').forEach(c=>{const d=GALLERY[+c.dataset.i];const used=gemsUsed(d).map(x=>x[0]);$$('.gu',c).forEach(b=>b.onclick=()=>openInfo(b.dataset.g,{list:used}));$$('[data-a]',c).forEach(b=>b.onclick=()=>{const a=b.dataset.a;
@@ -2917,8 +2915,6 @@ function screenGallery(){
     if(a==='ren')renameDress(d);
     if(a==='png')downloadPNG(d);
     if(a==='card'){AudioFX.soft();openShareCard(d);}
-    if(a==='mint')JD_STARKNET.mint(d);
-    if(a==='agent')JD_STARKNET.agentCall(d);
     if(a==='del')deleteDress(d);});});
 }
 /* gallery display order (the stored order stays as it is; "My order" = newest saved first, copies beside their original) */
@@ -2927,15 +2923,15 @@ const GAL_SORTS=[['mine','My order'],['new','Newest first'],['old','Oldest first
 const GAL_CMP={new:(a,b)=>(b.created||0)-(a.created||0),old:(a,b)=>(a.created||0)-(b.created||0),edited:(a,b)=>(b.updated||b.created||0)-(a.updated||a.created||0),
   name:(a,b)=>String(a.name).localeCompare(String(b.name),'en',{sensitivity:'base',numeric:true}),gems:(a,b)=>(b.gems||[]).length-(a.gems||[]).length};
 function galleryView(){const v=GALLERY.map((d,i)=>[d,i]);const cmp=GAL_CMP[GAL_SORT];if(cmp)v.sort((x,y)=>cmp(x[0],y[0])||x[1]-y[1]);return v;}
-/* delete a saved dress right away, with Undo in the toast (minted ones still ask first) */
-function deleteDress(d){if(d.minted&&!confirm(`Delete “${d.name}” from your gallery? (It stays on Starknet.)`))return;
+/* delete a saved dress right away, with Undo in the toast */
+function deleteDress(d){
   const at=GALLERY.indexOf(d);if(at<0)return;const wasDraft=S.draft.id===d.id;
   GALLERY.splice(at,1);saveGallery();if(wasDraft){S.draft.id=null;save();}AudioFX.soft();screenGallery();
   toastAct(`Deleted “${d.name}” 🗑`,'Undo',()=>{if(GALLERY.some(x=>x.id===d.id))return;GALLERY.splice(Math.min(at,GALLERY.length),0,d);saveGallery();
     if(wasDraft&&!S.draft.id){S.draft.id=d.id;save();}if(SCREEN==='gallery')screenGallery();toast(`“${d.name}” is back ✨`);
     const f=$('.gcard[data-i="'+GALLERY.indexOf(d)+'"] [data-a="edit"]');f&&f.focus();},7000);
 }
-/* rename a saved dress (not minted ones, whose name is on-chain) */
+/* rename a saved dress */
 function renameDress(d){const m=modal(`<div class="body"><h2>Rename dress</h2><form id="renForm"><label class="opt-label" for="renInput">Dress name</label>
     <input type="text" id="renInput" maxlength="31" value="${esc(d.name)}" style="width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin:6px 0 12px">
     <div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" class="btn" id="renCancel">Cancel</button><button type="submit" class="btn primary">Save name</button></div></form></div>`);
@@ -2960,20 +2956,8 @@ async function downloadPNG(d){
     setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('PNG downloaded ⬇︎');
   }catch(e){console.warn(e);toast('Sorry, the PNG could not be created in this browser');}
 }
-/* =====================================================================
-   API for the optional Starknet layer (js/starknet.js)
-   ===================================================================== */
-window.JD_GAME={
-  toast, gems:GEMS, gallery:()=>GALLERY,
-  async fingerprint(d){const canon=JSON.stringify({dress:d.dress,gems:d.gems.map(q=>{const r=[q.g,Math.round(q.x*10),Math.round(q.y*10),q.s,q.t];if(q.c)r.push(q.c);return r;})});
-    try{const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canon));return '0x'+[...new Uint8Array(buf)].slice(0,31).map(b=>b.toString(16).padStart(2,'0')).join('');}
-    catch(e){let a=hashStr(canon),b=hashStr(canon+'#'),c=hashStr('#'+canon);return '0x'+[a,b,c].map(x=>x.toString(16).padStart(8,'0')).join('');}},
-  nameFelt(n){const ascii=[...String(n||'')].filter(ch=>{const c=ch.charCodeAt(0);return c>=32&&c<127;}).slice(0,31);return ascii.length?'0x'+ascii.map(ch=>ch.charCodeAt(0).toString(16).padStart(2,'0')).join(''):'0x0';},
-  gemMask(d){let m=0n;new Set(d.gems.map(q=>q.g)).forEach(id=>{if(GEM[id])m|=1n<<BigInt(GEM[id].idx%64);});return '0x'+m.toString(16);},
-  markMinted(id,info){const r=GALLERY.find(x=>x.id===id);if(r){r.minted=info;saveGallery();if(SCREEN==='gallery')screenGallery();}},
-  refresh(){if(SCREEN!=='play')go(SCREEN);},
-  go:n=>go(n),
-};
+/* small read-only hooks used by the headless tests */
+window.JD_GAME={toast, gems:GEMS, gallery:()=>GALLERY, go:n=>go(n)};
 /* =====================================================================
    VIBES: trendy backdrops behind the dress (stage, gallery, PNG, share card)
    ===================================================================== */
@@ -3119,7 +3103,7 @@ function startChallengeDress(th){const D=S.draft;
 /* the runway: the dress walks in on its vibe, three judges reveal their scores, then stars, streak and share */
 function openRunway(design){const d=design||draftDesign();const th=todayTheme();const R=judgeDesign(d,th);const rm=REDUCED_MOTION();
   const res=recordRunway(R.stars);const run={theme:th.id,stars:R.stars,score:R.total,day:dayKey()};
-  if(!design){S.draft.runway=run;save();if(S.draft.id){const g=GALLERY.find(x=>x.id===S.draft.id);if(g&&!g.minted){g.runway=run;saveGallery();}}}
+  if(!design){S.draft.runway=run;save();if(S.draft.id){const g=GALLERY.find(x=>x.id===S.draft.id);if(g){g.runway=run;saveGallery();}}}
   d.runway=run;
   const m=modal(`<div class="runway ${rm?'still':''}"><div class="rw-stage">${dressSVG(d,{prefix:'rw',live:true})}<div class="rw-flash" aria-hidden="true"></div><div class="rw-tag">${th.emoji} ${esc(th.name)}</div></div>
     <div class="rw-side"><div class="opt-label">🌟 Runway · today's theme</div><h2 class="rw-title">${esc(d.name)}</h2>
@@ -3180,7 +3164,6 @@ async function openShareCard(d){let blob;try{blob=await makeShareCard(d);}catch(
 $('#brandMascot').outerHTML=mascotSVG('mascot-mini','happy');
 $('#homeBtn').onclick=()=>go('menu');
 $('#muteBtn').onclick=()=>{S.muted=!S.muted;save();hud();if(!S.muted)AudioFX.chime();};
-$('#chainBtn').onclick=()=>{if(window.JD_STARKNET&&JD_STARKNET.enabled)JD_STARKNET.openPanel();else modal(`<div style="padding:26px"><h2 style="color:var(--plum)">Starknet (optional)</h2><p>The on-chain layer isn’t loaded in this copy. The game works fully offline without it.</p></div>`);};
 go('menu');
 // Reduced motion: freeze SVG (SMIL) sparkle, glint and shimmer animations when the system asks for less motion
 (function(){const mq=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)');if(!mq)return;let obs=null;
@@ -3190,8 +3173,5 @@ go('menu');
   apply();if(mq.addEventListener)mq.addEventListener('change',apply);})();
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
-<script src="js/starknet-config.js"></script>
-<script src="js/starknet-abi.js"></script>
-<script src="js/starknet.js"></script>
 </body>
 </html>
