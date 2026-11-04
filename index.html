@@ -1677,7 +1677,7 @@ const SLEEVE={
   puff:'M157,100 C112,84 100,150 130,157 C140,156 146,145 148,136 Z',
   bubble:'M157,100 C104,82 94,160 132,160 C141,158 147,147 148,136 Z',
   flutter:'M156,100 Q126,94 112,124 Q118,129 123,126 Q126,133 131,131 Q135,138 140,135 Q144,140 148,138 L150,118 Z',
-  long:'M155,101 Q130,102 125,130 L106,300 Q117,308 130,302 L146,168 L148,138 Z',
+  long:'M155,101 C136,101 127,114 126,132 C125,160 127,182 124,202 C120,236 111,268 106,300 Q117,308 130,302 C135,270 142,236 145,206 C147,186 147,160 148,138 Z',
   offshoulder:'M152,138 C136,125 116,127 103,142 C105,154 109,164 114,173 C126,161 138,156 152,161 Z',
 };
 /* gathers + cuff ribbon that make puff and bubble sleeves look soft and pillowy */
@@ -1685,7 +1685,8 @@ const SLEEVE_DETAIL={
   puff:'M152,104 Q130,108 122,126 M150,112 Q136,124 132,146 M147,124 Q142,136 140,152',
   bubble:'M152,103 Q124,104 112,124 M150,112 Q130,124 124,152 M147,126 Q140,140 138,158',
 };
-const SLEEVE_CUFF={puff:'M124,149 Q136,158 148,140',bubble:'M118,152 Q132,163 147,142'};
+const SLEEVE_CUFF={puff:'M124,149 Q136,158 148,140',bubble:'M118,152 Q132,163 147,142',long:'M107.5,294 Q118,301 130.5,296'};
+const SLEEVE_FOLD={long:'M129,196 Q135,202 143,197 M127,214 Q133,219 141,214',cap:'M132,120 Q140,126 148,124',flutter:'M120,124 Q128,120 134,126 M130,130 Q137,127 142,132'};
 function dressGeometry(d){
   const empire=d.silhouette==='empire'||d.silhouette==='babydoll';
   const wy=empire?172:225, wL=empire?150:158, wR=empire?250:242;
@@ -1798,13 +1799,13 @@ function fabricLayer(path,pid,f,cls){
   s+=`<path d="${path}" fill="url(#${pid}-sh)" pointer-events="none"/>`;
   return s;
 }
-function allFabricDefs(d,p){normDress(d);const P=d.parts;let g=`<linearGradient id="${p}-vshade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".10"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient><filter id="${p}-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>`;
+function allFabricDefs(d,p){normDress(d);const P=d.parts;let g=`<linearGradient id="${p}-vshade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".10"/><stop offset=".3" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".14"/></linearGradient><filter id="${p}-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter><filter id="${p}-soft2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6"/></filter><linearGradient id="${p}-hshade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".16"/><stop offset=".18" stop-color="#000" stop-opacity="0"/><stop offset=".82" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".16"/></linearGradient>`;
   ['bodice','skirt','sleeves'].forEach(k=>g+=fabricDefs(P[k].f,P[k].c,p+'-'+k));
   if(P.overlay&&P.overlay.f!=='none')g+=fabricDefs(P.overlay.f,P.overlay.c,p+'-overlay');
   return g+CUTE_DEFS(p);}
 function dressBody(d,p,dl){
   normDress(d);let slv='';const G=dressGeometry(d);const P=d.parts;const out=[];
-  const vs=path=>`<path d="${path}" fill="url(#${p}-vshade)" pointer-events="none"/>`;
+  const vs=path=>`<path d="${path}" fill="url(#${p}-vshade)" pointer-events="none"/><path d="${path}" fill="url(#${p}-hshade)" pointer-events="none"/>`;
   const part=(path,k,cls)=>fabricLayer(path,p+'-'+k,P[k].f,cls||'fab')+vs(path);
   const sk=hexToHsl(P.skirt.c);const CL=cuteLayers(d,G,p);const T=teenLayers(d,G,p);out.push(CL.back,T.back,`<clipPath id="${p}-skc"><path d="${G.skirt}"/></clipPath>`);
   if(G.train) out.push(part(G.train,'skirt')+`<path d="${G.train}" fill="#000" opacity=".12" pointer-events="none"/>`);
@@ -1812,17 +1813,22 @@ function dressBody(d,p,dl){
   if(d.sleeves&&d.sleeves!=='none'&&SLEEVE[d.sleeves]){const sp=SLEEVE[d.sleeves];
     const det=(SLEEVE_DETAIL[d.sleeves]?`<path d="${SLEEVE_DETAIL[d.sleeves]}" fill="none" stroke="${hsl(sl,-22,0,.35)}" stroke-width="1.4" stroke-linecap="round" pointer-events="none"/><path d="${SLEEVE_DETAIL[d.sleeves]}" transform="translate(3 -1)" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round" pointer-events="none"/>`:'')
       +(SLEEVE_CUFF[d.sleeves]?`<path d="${SLEEVE_CUFF[d.sleeves]}" fill="none" stroke="${hsl(sl,-8,8,.95)}" stroke-width="4.5" stroke-linecap="round" pointer-events="none"/><path d="${SLEEVE_CUFF[d.sleeves]}" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.2" stroke-linecap="round" pointer-events="none"/>`:'')
+      +(SLEEVE_FOLD[d.sleeves]?`<path d="${SLEEVE_FOLD[d.sleeves]}" fill="none" stroke="${hsl(sl,-26,0,.38)}" stroke-width="1.3" stroke-linecap="round" pointer-events="none"/>`:'')
       +`<path d="${sp}" fill="none" stroke="${hsl(sl,-30,0,.4)}" stroke-width="1.6" stroke-linejoin="round" pointer-events="none"/>`;
     slv=`<g>${part(sp,'sleeves')}${det}</g><g transform="translate(400 0) scale(-1 1)">${part(sp,'sleeves')}${det}</g>`;}
   if(FABRICS[P.skirt.f]&&FABRICS[P.skirt.f].sheer)out.push(`<path d="${G.skirt}" fill="${hsl(sk,8,-10,.92)}" pointer-events="none"/>`);
   if(FABRICS[P.skirt.f]&&FABRICS[P.skirt.f].sheer)out.push(`<path d="${G.skirt}" transform="translate(200 ${G.wy}) scale(1.06 1.02) translate(-200 ${-G.wy})" fill="${hsl(sk,10,-10,.4)}" pointer-events="none"/>`);
   out.push(part(G.skirt,'skirt'));
   out.push(`<path d="${G.skirt}" fill="none" stroke="${hsl(sk,-30,0,.38)}" stroke-width="1.8" stroke-linejoin="round" pointer-events="none"/>`);
-  if(d.silhouette!=='sheath'){const folds=[];const n=7;for(let i=0;i<n;i++){const t=(i+.5)/n;const xh=200-G.hw+2*G.hw*t, xw=G.wL+(G.wR-G.wL)*t;
+  if(d.silhouette!=='sheath'){const folds=[];const n={ballgown:9,princess:9,skater:10,cocktail:9,mermaid:6,slip:5,empire:6}[d.silhouette]||7;for(let i=0;i<n;i++){const t=(i+.5)/n;const xh=200-G.hw+2*G.hw*t, xw=G.wL+(G.wR-G.wL)*t;
     folds.push(`M${xw.toFixed(1)},${G.wy+6} Q${((xw+xh)/2+(t-.5)*20).toFixed(1)},${(G.wy+G.H)/2} ${xh.toFixed(1)},${G.H-2}`);}
     const vel=P.skirt.f==='velvet';
     out.push(`<path d="${folds.join(' ')}" fill="none" stroke="#000" stroke-opacity="${vel?.16:.09}" stroke-width="9" filter="url(#${p}-soft)" pointer-events="none"/>`);
-    out.push(`<path d="${folds.join(' ')}" transform="translate(7 0)" fill="none" stroke="#fff" stroke-opacity="${vel?.05:.12}" stroke-width="4" filter="url(#${p}-soft)" pointer-events="none"/>`);}
+    out.push(`<path d="${folds.join(' ')}" transform="translate(7 0)" fill="none" stroke="#fff" stroke-opacity="${vel?.05:.12}" stroke-width="4" filter="url(#${p}-soft)" pointer-events="none"/>`);
+    const crisp=['skater','cocktail','aline'].includes(d.silhouette)||FABRICS[P.skirt.f].kind==='crisp';
+    out.push(`<g clip-path="url(#${p}-skc)" pointer-events="none"><path d="${folds.join(' ')}" fill="none" stroke="${hsl(sk,-30,0,crisp?.34:.2)}" stroke-width="${crisp?1.1:.8}" stroke-linecap="round"/><path d="${folds.join(' ')}" transform="translate(2.5 0)" fill="none" stroke="#fff" stroke-opacity="${crisp?.4:.22}" stroke-width=".9" stroke-linecap="round"/></g>`);}
+  {const hb=`M${200-G.hw-4},${G.H-14} Q200,${G.H+G.curve-14} ${200+G.hw+4},${G.H-14} L${200+G.hw+4},${G.H+40} L${200-G.hw-4},${G.H+40} Z`;
+    out.push(`<g clip-path="url(#${p}-skc)" pointer-events="none"><path d="${hb}" fill="${hsl(sk,-14,0,.22)}"/><path d="${G.guides.hem}" fill="none" stroke="${sk.l>70?hsl(sk,-35,0,.55):'rgba(255,255,255,.55)'}" stroke-width="1" stroke-dasharray="3 2.5"/></g>`);}
   if(P.overlay&&P.overlay.f!=='none'){const o=`<path d="${G.skirt}" transform="translate(200 ${G.wy}) scale(1.035 1.015) translate(-200 ${-G.wy})"/>`;
     out.push(`<g pointer-events="none" transform="translate(200 ${G.wy}) scale(1.035 1.015) translate(-200 ${-G.wy})">${fabricLayer(G.skirt,p+'-overlay',P.overlay.f,'ovl')}</g>`);}
   out.push(T.skirt,CL.mid);
@@ -1830,8 +1836,9 @@ function dressBody(d,p,dl){
   out.push(part(G.bodice,'bodice'));
   out.push(`<path d="${G.bodice}" fill="none" stroke="${hsl(hexToHsl(P.bodice.c),-30,0,.4)}" stroke-width="1.6" stroke-linejoin="round" pointer-events="none"/>`);
   if(P.overlay&&P.overlay.f!=='none'&&['chantilly','tulle','sequin','georgette','chiffon'].includes(P.overlay.f))out.push(`<g pointer-events="none">${fabricLayer(G.bodice,p+'-overlay',P.overlay.f,'ovl')}</g>`);
-  const bc=hexToHsl(P.bodice.c);
-  out.push(`<path d="M${G.wL},${G.wy} Q200,${G.wy+(d.silhouette==='empire'?6:8)} ${G.wR},${G.wy}" fill="none" stroke="${hsl(bc,-25,0,.5)}" stroke-width="1.6" pointer-events="none"/>`);
+  const bc=hexToHsl(P.bodice.c);const wq=d.silhouette==='empire'||d.silhouette==='babydoll'?6:8;
+  out.push(`<clipPath id="${p}-bdc"><path d="${G.bodice}"/></clipPath><g clip-path="url(#${p}-bdc)" pointer-events="none">${mirrorX(`<path d="M178,118 C174,${(118+G.wy)/2} 176,${G.wy-14} 180,${G.wy+4}" fill="none" stroke="${hsl(bc,-28,0,.4)}" stroke-width="1.1"/><path d="M180.5,118 C176.5,${(118+G.wy)/2} 178.5,${G.wy-14} 182.5,${G.wy+4}" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width=".9"/><ellipse cx="183" cy="128" rx="9" ry="5" fill="#fff" opacity=".16" filter="url(#${p}-soft2)"/>`)}</g>`);
+  out.push(`<path d="M${G.wL},${G.wy} Q200,${G.wy+wq} ${G.wR},${G.wy}" fill="none" stroke="${hsl(bc,-25,0,.55)}" stroke-width="2.6" pointer-events="none"/><path d="M${G.wL+2},${G.wy-1.2} Q200,${G.wy+wq-1.2} ${G.wR-2},${G.wy-1.2}" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1" pointer-events="none"/><path d="M${G.wL+4},${G.wy+3.5} Q200,${G.wy+wq+3.5} ${G.wR-4},${G.wy+3.5}" fill="none" stroke="${bc.l>70?hsl(bc,-35,0,.5):'rgba(255,255,255,.5)'}" stroke-width=".9" stroke-dasharray="2.5 2" pointer-events="none"/>`);
   if(P.skirt.f==='chantilly'||(P.overlay&&P.overlay.f==='chantilly'))out.push(`<path d="${G.guides.hem.replace(/(\d+\.?\d*),(\d+\.?\d*)/g,(m,x,y)=>x+','+(+y+8))}" fill="none" stroke="${sk.l>70?'rgba(150,120,120,.5)':'rgba(255,255,255,.55)'}" stroke-width="3.2" stroke-dasharray=".1 6" stroke-linecap="round" pointer-events="none"/>`);
   if(P.skirt.f==='denim'||P.bodice.f==='denim')out.push(`<path d="${G.guides.hem.replace(/(\d+\.?\d*),(\d+\.?\d*)/g,(m,x,y)=>x+','+(+y+4))}" fill="none" stroke="#e0a64a" stroke-width="1" stroke-dasharray="3 2" pointer-events="none"/>`);
   out.push(T.top,CL.front,T.front);
@@ -2019,7 +2026,8 @@ function puffPath(cx,cy,r,n){let d='';for(let i=0;i<n;i++){const a0=i/n*Math.PI*
 function dollHair(C,p){const st=C.dl.hair,c=C.hair,dk=C.hdk,lt=C.hlt;const back=[],front=[];
   const cap=`M156,34 C148,-8 170,-32 200,-32 C230,-32 252,-8 244,34 C242,24 240,18 236,15 C230,8 220,2 212,7 C206,0 194,0 188,7 C180,2 170,8 164,15 C160,18 158,24 156,34 Z`;
   const shine=`<path d="M170,-14 Q200,-26 230,-14" fill="none" stroke="${lt}" stroke-width="4.5" stroke-linecap="round"/><path d="M178,-6 Q186,-10 192,-9" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>`;
-  const capEl=`<path d="${cap}" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2" stroke-linejoin="round"/>`;
+  const strands=`<path d="M176,-22 Q170,0 166,18 M188,-28 Q182,-6 180,8 M212,-28 Q218,-6 220,8 M224,-22 Q230,0 234,18" fill="none" stroke="${dk}" stroke-opacity=".32" stroke-width="1.3" stroke-linecap="round"/><path d="M196,-30 Q190,-14 192,4" fill="none" stroke="${lt}" stroke-width="2.2" stroke-linecap="round"/>`;
+  const capEl=`<path d="${cap}" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2" stroke-linejoin="round"/>${strands}`;
   const headBack=`<ellipse cx="200" cy="18" rx="46" ry="46" fill="${c}"/>`;
   if(st==='waves'){back.push(`<path d="M158,4 C138,40 148,84 136,124 C126,164 150,194 138,232 C172,244 228,244 262,232 C250,194 274,164 264,124 C252,84 262,40 242,4 Z" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1.2"/><path d="M150,120 C160,150 146,180 156,214 M250,120 C240,150 254,180 244,214 M170,180 C176,200 170,216 176,232 M230,180 C224,200 230,216 224,232" fill="none" stroke="${dk}" stroke-opacity=".45" stroke-width="2" stroke-linecap="round"/>`);
     front.push(capEl+mirrorX(`<path d="M158,18 C146,48 160,72 150,98 C160,100 170,84 168,60 C166,44 168,30 164,18 Z" fill="url(#${p}-dhair)" stroke="${dk}" stroke-width="1"/>`)+shine);}
@@ -2048,30 +2056,33 @@ function dollFace(C,p,mood,live){mood=mood||'smile';
   return `<path d="M159,20 C159,-12 178,-24 200,-24 C222,-24 241,-12 241,20 C241,46 224,64 200,64 C176,64 159,46 159,20 Z" fill="url(#${p}-dface)"/>
     <ellipse cx="173" cy="46" rx="8" ry="4.5" fill="#ff7fae" opacity=".42"/><ellipse cx="227" cy="46" rx="8" ry="4.5" fill="#ff7fae" opacity=".42"/>
     <path d="M170,44.5 l3,-2 M175,44.5 l3,-2 M222,44.5 l3,-2 M227,44.5 l3,-2" stroke="#fff" stroke-opacity=".6" stroke-width="1" stroke-linecap="round"/>
-    <path d="M198.6,41.4 Q200.6,43 198.8,44" fill="none" stroke="${C.shade}" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M198.6,41.4 Q200.6,43 198.8,44" fill="none" stroke="${C.shade}" stroke-width="1.3" stroke-linecap="round"/><path d="M178,58 Q200,70 222,58" fill="none" stroke="${C.shade}" stroke-opacity=".14" stroke-width="3" stroke-linecap="round"/><circle cx="169" cy="42" r="1.6" fill="#fff" opacity=".5"/><circle cx="231" cy="42" r="1.6" fill="#fff" opacity=".5"/>
     <g class="doll-face" data-rest="${mood}">${body}</g>`;}
 /* show an expression on every live doll inside root; with ms, go back to her resting face afterwards */
 function setFace(root,m,ms){if(!root)return;const show=(el,mm)=>$$('.fv',el).forEach(g=>g.setAttribute('display',g.dataset.m===mm?'inline':'none'));
   $$('.doll-face',root).forEach(f=>{show(f,m);if(ms){clearTimeout(f._ft);f._ft=setTimeout(()=>show(f,f.dataset.rest||'smile'),ms);}});}
 function dollDefs(C,p){const sh=hexToHsl(C.skin);
-  return `<linearGradient id="${p}-dskin" x1="0" x2="1"><stop offset="0" stop-color="${C.shade}"/><stop offset=".42" stop-color="${C.skin}"/><stop offset=".6" stop-color="${hsl(sh,4,0)}"/><stop offset="1" stop-color="${C.shade}"/></linearGradient>
+  return `<linearGradient id="${p}-dskin" x1="0" x2="1"><stop offset="0" stop-color="${C.shade}"/><stop offset=".22" stop-color="${C.skin}"/><stop offset=".5" stop-color="${hsl(sh,6,0)}"/><stop offset=".78" stop-color="${C.skin}"/><stop offset="1" stop-color="${C.shade}"/></linearGradient>
   <radialGradient id="${p}-dface" cx="50%" cy="40%" r="62%"><stop offset="0" stop-color="${hsl(sh,5,0)}"/><stop offset=".75" stop-color="${C.skin}"/><stop offset="1" stop-color="${C.shade}"/></radialGradient>
   <linearGradient id="${p}-dhair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${hsl(hexToHsl(C.hair),8,0)}"/><stop offset=".55" stop-color="${C.hair}"/><stop offset="1" stop-color="${C.hdk}"/></linearGradient>
   <linearGradient id="${p}-diris" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.eyeDk}"/><stop offset=".55" stop-color="${C.eye}"/><stop offset="1" stop-color="${hsl(hexToHsl(C.eye),22,0)}"/></linearGradient>
-  <clipPath id="${p}-dtop"><rect x="140" y="-60" width="120" height="67"/></clipPath>`;}
-const DOLL_ARM='M153,99 Q135,102 131,126 L112,296 Q119,302 127,298 L143,170 L148,140 Z';
-const DOLL_HAND='M111.5,295 Q105,311 113,320 Q120,325 125,316 Q129,305 127.5,297 Z';
-const DOLL_LEG='M161,244 C160,320 166,400 171,470 C174,520 176,560 176,604 Q181,612 191,606 C191,560 193,520 195,470 C198,400 201,320 200,244 Z';
-const DOLL_FLAT=`<path d="M-21,-2 Q-23,-12 -9,-13 L10,-13 Q17,-11 17,-2 Z" fill="#ffb3d1" stroke="#e48db4" stroke-width="1"/><path d="M-6,-12 l-4,-3 v6z M-6,-12 l4,-3 v6z" fill="#fff"/>`;
+  <clipPath id="${p}-dtop"><rect x="140" y="-60" width="120" height="67"/></clipPath><filter id="${p}-dsoft" filterUnits="userSpaceOnUse" x="-100" y="-100" width="600" height="840"><feGaussianBlur stdDeviation="2.5"/></filter>`;}
+const DOLL_ARM='M153,99 C139,99 131,110 130,128 C129,152 132,176 130,198 C128,226 119,262 113,293 Q119,300 126,297 C131,266 138,232 141,206 C143,186 144,162 146,144 L148,140 Z';
+const DOLL_ELBOW='M131.5,197 Q135,201 139.5,198';
+const DOLL_HAND='M112.5,292 C106,299 104.5,312 109.5,320 C113.5,326 120.5,326 123.5,319 C126.5,311 127,302 126,295 Z';
+const DOLL_THUMB='M124.5,301 Q130,305 127,313';
+const DOLL_LEG='M158,244 C156,300 160,362 167,414 C169,432 166,448 168,470 C172,510 177,548 176,582 C176,592 176,598 177,604 Q183,612 191,606 C190,598 190,590 191,582 C192,556 197,520 197,482 C197,456 193,438 196,418 C200,362 202,300 201,244 Z';
+const DOLL_FLAT=`<path d="M-22,-1 Q-25,-13 -9,-15 L9,-15 Q19,-13 18,-1 Q0,2 -22,-1 Z" fill="#ffb3d1" stroke="#e48db4" stroke-width="1.1" stroke-linejoin="round"/><path d="M-20,-3 Q0,-1 17,-3" fill="none" stroke="#e48db4" stroke-width="1.6"/><path d="M-12,-14 Q-2,-20 8,-14" fill="none" stroke="#ff8fbf" stroke-width="2.2" stroke-linecap="round"/><path d="M-4,-15 l-5,-3.6 v7.2z M-4,-15 l5,-3.6 v7.2z" fill="#fff" stroke="#f3a9c8" stroke-width=".6"/><circle cx="-4" cy="-15" r="1.5" fill="#ff8fbf"/><path d="M-17,-10 Q-12,-13 -6,-12" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.4" stroke-linecap="round"/>`;
 /* body behind the dress: back hair, legs and feet (with shoes), torso and neck */
 function dollBack(G,dl,p,shoe){const C=dollCols(dl);const H=dollHair(C,p);const sk=`url(#${p}-dskin)`;
-  const foot=`<g transform="translate(183 633) scale(.74)">${shoe||DOLL_FLAT}</g>`;
+  const foot=`<g transform="translate(183.5 634) scale(.78)">${shoe||DOLL_FLAT}</g>`;
   return `<g class="doll doll-backs" pointer-events="none"><defs>${dollDefs(C,p)}</defs><g transform="${headT(C.dl)}"><g class="doll-hairback">${H.back}</g></g>
-    <g class="doll-legs">${(leg=>`<g class="leg-l">${leg}</g><g class="leg-r"><g transform="translate(400 0) scale(-1 1)">${leg}</g></g>`)(`<path d="${DOLL_LEG}" fill="${sk}" stroke="${C.shade}" stroke-width="1"/><path d="M180,560 Q183,590 181,604" stroke="#fff" stroke-opacity=".25" stroke-width="2" fill="none"/>${foot}`)}</g>
+    <g class="doll-legs">${(leg=>`<g class="leg-l">${leg}</g><g class="leg-r"><g transform="translate(400 0) scale(-1 1)">${leg}</g></g>`)(`<path d="${DOLL_LEG}" fill="${sk}" stroke="${C.shade}" stroke-width="1.1" stroke-linejoin="round"/><ellipse cx="182" cy="428" rx="7" ry="4.5" fill="#ff8fa8" opacity=".1"/><path d="M174,431 Q182,437 190,431" fill="none" stroke="${C.shade}" stroke-opacity=".55" stroke-width="1.1" stroke-linecap="round"/><path d="M179,588 Q184,591 189,588" fill="none" stroke="${C.shade}" stroke-opacity=".5" stroke-width="1" stroke-linecap="round"/>${foot}`)}</g>
     <path d="M190,62 L190,88 C186,95 168,95 155,98 C144,101 140,112 141,124 L147,150 C152,180 160,205 164,228 C160,238 160,248 164,256 L236,256 C240,248 240,238 236,228 C240,205 248,180 253,150 L259,124 C260,112 256,101 245,98 C232,95 214,95 210,88 L210,56 Z" fill="${sk}" stroke="${C.shade}" stroke-width="1"/>
-    <path d="M190,66 Q200,74 210,66 L210,58 L190,58 Z" fill="${C.shade}" opacity=".55"/></g>`;}
+    <path d="M190,66 Q200,76 210,66 L210,58 L190,58 Z" fill="${C.shade}" opacity=".55"/><path d="M192,88 Q200,93 208,88" fill="none" stroke="${C.shade}" stroke-opacity=".5" stroke-width="1.2" stroke-linecap="round"/>
+    ${mirrorX(`<path d="M172,101 Q182,99 192,103" fill="none" stroke="${C.shade}" stroke-opacity=".55" stroke-width="1.2" stroke-linecap="round"/><path d="M152,104 Q160,99 170,99" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/><path d="M152,150 C158,180 164,206 166,228" fill="none" stroke="${C.shade}" stroke-opacity=".35" stroke-width="5" stroke-linecap="round" filter="url(#${p}-dsoft)"/>`)}</g>`;}
 /* arms + hands, drawn over the skirt and under the sleeves */
-function dollArms(dl,p){const C=dollCols(dl);return `<g class="doll doll-arms" pointer-events="none">${mirrorX(`<path d="${DOLL_ARM}" fill="url(#${p}-dskin)" stroke="${C.shade}" stroke-width="1"/><path d="${DOLL_HAND}" fill="${C.skin}" stroke="${C.shade}" stroke-width="1"/><path d="M113,306 Q116,312 115,318" stroke="${C.shade}" stroke-width=".8" fill="none" opacity=".7"/>`)}</g>`;}
+function dollArms(dl,p){const C=dollCols(dl);return `<g class="doll doll-arms" pointer-events="none">${mirrorX(`<path d="${DOLL_ARM}" fill="url(#${p}-dskin)" stroke="${C.shade}" stroke-width="1.1" stroke-linejoin="round"/><path d="${DOLL_ELBOW}" fill="none" stroke="${C.shade}" stroke-opacity=".6" stroke-width="1" stroke-linecap="round"/><ellipse cx="135.5" cy="201" rx="4.5" ry="3" fill="#ff8fa8" opacity=".14"/><path d="${DOLL_HAND}" fill="${C.skin}" stroke="${C.shade}" stroke-width="1.1" stroke-linejoin="round"/><path d="${DOLL_THUMB}" fill="${C.skin}" stroke="${C.shade}" stroke-width="1" stroke-linecap="round"/><path d="M112,307 Q114,314 113.5,319 M116,309 Q118,316 117,321" stroke="${C.shade}" stroke-width=".8" fill="none" opacity=".6" stroke-linecap="round"/><ellipse cx="116" cy="300" rx="3" ry="2" fill="#ff8fa8" opacity=".18"/>`)}</g>`;}
 /* head, face, front hair and hat, drawn over the dress */
 function dollFront(dl,p,hat,live){const C=dollCols(dl);const H=dollHair(C,p);return `<g transform="${headT(C.dl)}"><g class="doll doll-head" pointer-events="none">${dollFace(C,p,C.dl.face,live)}${H.front}${hat||''}</g></g>`;}
 /* small head-only preview for the Doll tab */
