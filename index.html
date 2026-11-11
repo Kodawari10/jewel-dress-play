@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Jewel Dress · Gem Couture Atelier</title>
-<meta name="description" content="Design dresses, set real gemstones on them, and learn where every gem on Earth comes from.">
+<title>Kira Kira Closet · Gem Couture Atelier</title>
+<meta name="description" content="Kira Kira Closet: design dresses, set real gemstones on them, and learn where every gem on Earth comes from.">
 <meta name="theme-color" content="#ffe9f3">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
@@ -37,7 +37,7 @@ button,.btn,.chip,.pill,.opt-label,.tag,.seg button{font-family:var(--serif)}
 .hidden{display:none!important}
 header.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:10px 14px;
   padding-top:calc(10px + env(safe-area-inset-top));background:rgba(251,246,239,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:22px;font-weight:700;color:var(--plum);cursor:pointer;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:20px;font-weight:700;color:var(--plum);cursor:pointer;white-space:nowrap}
 .brand small{font-family:var(--sans);font-size:11px;font-weight:500;color:var(--gold);letter-spacing:.18em;text-transform:uppercase}
 .spacer{flex:1}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:14px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
@@ -532,7 +532,7 @@ input[type=text]{border-radius:14px}
 </head>
 <body>
 <header class="top">
-  <div class="brand" id="homeBtn" title="Main menu"><span id="brandMascot" aria-hidden="true"></span><span class="brand-word">Jewel Dress</span> <small>Gem couture atelier</small></div>
+  <div class="brand" id="homeBtn" title="Main menu"><span id="brandMascot" aria-hidden="true"></span><span class="brand-word">Kira Kira Closet</span> <small>Gem couture atelier</small></div>
   <div class="spacer"></div>
   <span class="pill hide-m" id="hudLevel">Level <b>1</b></span>
   <span class="pill mspill" id="hudMs" title="Gems placed"></span>
@@ -2533,7 +2533,7 @@ function screenMenu(){
   const next=levelSpec(S.level);
   app().innerHTML=`<section class="screen hero"><div>
     <div class="opt-label">✿ A kawaii gem couture game</div>
-    <h1>${mascotSVG('mascot','happy')}<span>Jewel <em>Dress</em></span></h1>
+    <h1>${mascotSVG('mascot','happy')}<span>Kira Kira <em>Closet</em></span></h1>
     <p class="lead">Design your dream dress, cover it in real gems, take on the daily style challenge and show off your look. Every gem you place unlocks prettier gems and cuter touches.</p>
     ${(mp=>`<div class="msmenu"><div class="small"><b>${esc(mp.cur.name)}</b> · 💎 ${mp.n.toLocaleString('en')} gems placed</div><div class="progress"><i style="width:${(mp.f*100).toFixed(1)}%"></i></div><div class="small muted">${(mp.next.n-mp.n).toLocaleString('en')} more to <b>${esc(mp.next.name)}</b>${mp.next.perks.length?': '+mp.next.perks.map(perkLabel).join(' & '):''}${mp.next.tier>mp.cur.tier?` · ${TIERS[mp.next.tier].name} gems`:''}</div></div>`)(msProgress())}
     ${(g=>g?`<button class="gemday" id="gemDay" aria-label="Gem of the day: ${esc(g.name)}. Read its story"><div class="gd-gem">${gemSVG(g,curTier())}</div><div class="gd-txt"><div class="opt-label">💫 Gem of the day</div><div class="gd-name">${esc(g.name)}</div><div class="small muted">${esc(g.family.split('(')[0].trim())}</div></div><span class="gd-more">Read its story ›</span></button>`:'')(gemOfDay())}
@@ -2595,13 +2595,13 @@ function backupModal(){const md=modal(`<div style="padding:26px 24px" class="bac
   <div class="opt-label">Right now</div><p class="small" style="margin:4px 0 10px">${backupSummary(S,GALLERY)}</p>
   <button class="btn primary" id="bkSave">⬇️ Download backup</button>
   <div class="opt-label" style="margin-top:18px">Restore</div>
-  <p class="small muted" style="margin:4px 0 8px">Pick a Jewel Dress backup file. You'll see what's inside before anything changes.</p>
-  <label class="btn filebtn">📂 Choose backup file…<input type="file" id="bkFile" accept=".json,application/json" aria-label="Choose a Jewel Dress backup file to restore"></label>
+  <p class="small muted" style="margin:4px 0 8px">Pick a Kira Kira Closet backup file. You'll see what's inside before anything changes.</p>
+  <label class="btn filebtn">📂 Choose backup file…<input type="file" id="bkFile" accept=".json,application/json" aria-label="Choose a Kira Kira Closet backup file to restore"></label>
   <div id="bkOut" role="status" aria-live="polite" style="margin-top:10px"></div></div>`);
   const el=md.el;el.querySelector('#bkSave').onclick=()=>{AudioFX.soft();downloadBackup();};
   el.querySelector('#bkFile').onchange=async e=>{const f=e.target.files&&e.target.files[0];const out=el.querySelector('#bkOut');e.target.value='';if(!f)return;
     const txt=f.size>20e6?'':await f.text().catch(()=>'');const b=parseBackup(txt);
-    if(!b){out.innerHTML=`<p class="small" style="color:#b0405a;margin:0">“${esc(f.name)}” isn't a Jewel Dress backup file, so nothing was changed.</p>`;return;}
+    if(!b){out.innerHTML=`<p class="small" style="color:#b0405a;margin:0">“${esc(f.name)}” isn't a Kira Kira Closet backup file, so nothing was changed.</p>`;return;}
     const when=new Date(b.saved);
     out.innerHTML=`<div style="border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--card)"><div class="small"><b>${esc(f.name)}</b>${isNaN(when)?'':` · saved ${esc(when.toLocaleString('en',{dateStyle:'medium',timeStyle:'short'}))}`}</div>
       <p class="small" style="margin:6px 0">${backupSummary(b.state,b.gallery)}</p>
@@ -3004,7 +3004,7 @@ async function downloadPNG(d){
     await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url;});
     const cv=document.createElement('canvas');cv.width=800;cv.height=1280;cv.getContext('2d').drawImage(img,0,0,800,1280);URL.revokeObjectURL(url);
     const b=await new Promise(r=>cv.toBlob(r,'image/png'));const a=document.createElement('a');a.href=URL.createObjectURL(b);
-    a.download=(d.name||'jewel-dress').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase()+'.png';document.body.appendChild(a);a.click();a.remove();
+    a.download=(d.name||'kira-kira-closet').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase()+'.png';document.body.appendChild(a);a.click();a.remove();
     setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('PNG downloaded ⬇︎');
   }catch(e){console.warn(e);toast('Sorry, the PNG could not be created in this browser');}
 }
@@ -3196,7 +3196,7 @@ async function makeShareCard(d){const W=1080,H=1920;const cv=document.createElem
   const img=await svgToImg(dressSVG(d,{prefix:'sc',width:900}));x.save();rrect(x,fx,fy,fw,fh,54);x.clip();x.drawImage(img,fx,fy,fw,fh);x.restore();
   // header: mascot + logo
   const mas=await svgToImg(mascotSVG('m','happy').replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" '));x.drawImage(mas,80,48,150,150);
-  x.textBaseline='alphabetic';x.font='700 92px Fredoka, Nunito, sans-serif';const lg=x.createLinearGradient(250,0,900,0);lg.addColorStop(0,'#ff5fa8');lg.addColorStop(1,'#8b6cff');x.fillStyle=lg;x.fillText('Jewel Dress',250,150);
+  x.textBaseline='alphabetic';x.font='700 72px Fredoka, Nunito, sans-serif';const lg=x.createLinearGradient(250,0,1020,0);lg.addColorStop(0,'#ff5fa8');lg.addColorStop(1,'#8b6cff');x.fillStyle=lg;x.fillText('Kira Kira Closet',250,150,800);
   x.font='700 34px Nunito, sans-serif';x.fillStyle='#8a5fb8';x.fillText(d.runway&&THEME[d.runway.theme]?`${THEME[d.runway.theme].name} challenge`:'my gem couture look',254,200);
   // title sticker on the photo
   const name=String(d.name||'My Dress');x.font='700 70px Fredoka, Nunito, sans-serif';const tw=Math.min(860,x.measureText(name).width+90);
@@ -3206,10 +3206,10 @@ async function makeShareCard(d){const W=1080,H=1920;const cv=document.createElem
   x.textAlign='center';x.font='700 46px Nunito, sans-serif';x.fillStyle='#5b3a86';
   const kinds=new Set((d.gems||[]).map(q=>q.g)).size;x.fillText(`${(d.gems||[]).length} gems · ${kinds} kinds · ${vb[1]}`,W/2,1818);
   if(d.runway){x.font='700 64px sans-serif';x.fillStyle='#ffb400';x.fillText(starsTxt(d.runway.stars),W/2,1890);}
-  else{x.font='600 34px Nunito, sans-serif';x.fillStyle='#8a7896';x.fillText('styled in Jewel Dress ✨',W/2,1880);}
+  else{x.font='600 34px Nunito, sans-serif';x.fillStyle='#8a7896';x.fillText('styled in Kira Kira Closet ✨',W/2,1880);}
   x.textAlign='left';
   return await new Promise(r=>cv.toBlob(r,'image/png'));}
-const cardFileName=d=>((d.name||'jewel-dress').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase()||'jewel-dress')+'-story.png';
+const cardFileName=d=>((d.name||'kira-kira-closet').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase()||'kira-kira-closet')+'-story.png';
 async function openShareCard(d){let blob;try{blob=await makeShareCard(d);}catch(e){console.warn(e);toast('Sorry, the share card could not be made in this browser');return;}
   const url=URL.createObjectURL(blob);const file=window.File?new File([blob],cardFileName(d),{type:'image/png'}):null;
   const canShare=!!(file&&navigator.canShare&&navigator.share&&navigator.canShare({files:[file]}));
@@ -3218,7 +3218,7 @@ async function openShareCard(d){let blob;try{blob=await makeShareCard(d);}catch(
     <p class="small muted">Story-sized (9:16) picture for your stories or your camera roll. It is made on your device; nothing is uploaded.</p>
     <div class="tools">${canShare?'<button class="btn primary" id="scShare">📲 Share</button>':''}<button class="btn ${canShare?'':'primary'}" id="scDl">⬇︎ Download</button></div></div>`,()=>setTimeout(()=>URL.revokeObjectURL(url),500));
   $('#scDl',m.el).onclick=()=>{const a=document.createElement('a');a.href=url;a.download=cardFileName(d);document.body.appendChild(a);a.click();a.remove();toast('Story card saved ⬇︎');};
-  const sb=$('#scShare',m.el);sb&&(sb.onclick=async()=>{try{await navigator.share({files:[file],title:d.name,text:'My Jewel Dress look ✨'});}catch(e){}});
+  const sb=$('#scShare',m.el);sb&&(sb.onclick=async()=>{try{await navigator.share({files:[file],title:d.name,text:'My Kira Kira Closet look ✨'});}catch(e){}});
   return blob;}
 /* =====================================================================
    BOOT

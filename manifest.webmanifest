@@ -1,7 +1,7 @@
 {
-  "name": "Jewel Dress",
-  "short_name": "Jewel Dress",
-  "description": "Design dresses, set real gemstones on them and discover where every gem on Earth comes from.",
+  "name": "Kira Kira Closet",
+  "short_name": "Kira Kira Closet",
+  "description": "Kira Kira Closet: design dresses, set real gemstones on them and discover where every gem on Earth comes from.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

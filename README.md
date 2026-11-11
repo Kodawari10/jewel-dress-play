@@ -1,4 +1,4 @@
-# Jewel Dress
+# Kira Kira Closet
 
 Play it here: https://kodawari10.github.io/jewel-dress-play/
 
